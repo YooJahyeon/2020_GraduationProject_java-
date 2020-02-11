@@ -240,7 +240,7 @@ public class MainActivity extends AppCompatActivity
         @Override
         protected void onProgressUpdate(String... recvMessage) {
 
-            mConversationArrayAdapter.insert(mConnectedDeviceName + ": " + recvMessage[0], 0);
+            mConversationArrayAdapter.insert(recvMessage[0], 0);
         }
 
         @Override
