@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".TranslationFragment">
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <Button
+            android:id="@+id/button_phoneme"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="지화 음소" />
+        <Button
+            android:id="@+id/button_comb"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="지화 조합" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        >
+
+        <TextView
+            android:id="@+id/textview_print"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="지수야 안녕?"
+            />
+
+    </LinearLayout>
+</FrameLayout>
