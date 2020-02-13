@@ -3,9 +3,13 @@ package example.com.slt;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
 import java.util.Set;
 import java.util.UUID;
 
+import android.app.Fragment;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
@@ -15,6 +19,10 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.speech.tts.TextToSpeech;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -22,6 +30,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 public class MainActivity extends AppCompatActivity
@@ -29,7 +38,9 @@ public class MainActivity extends AppCompatActivity
     private final int REQUEST_BLUETOOTH_ENABLE = 100;       // 블루투스 활성화 상태
     private TextView mConnectionStatus;     // 연결상태 텍스트
     private EditText mInputEditText;        // 입력
-
+    private TextToSpeech tts; //TTS
+//    private Button btSpeak;  //출력버튼
+    private TextView getTextToSpeek; //출력할 내용
 
     ConnectedTask mConnectedTask = null;       // 연결
     static BluetoothAdapter mBluetoothAdapter;  // 블루투스 어댑터
@@ -37,6 +48,8 @@ public class MainActivity extends AppCompatActivity
     private ArrayAdapter<String> mConversationArrayAdapter;
     static boolean isConnectionError = false;
     private static final String TAG = "BluetoothClient";
+    private String recvMessage;
+    private ListView mMessageListview;
 
     @Override
     public void onCreate(Bundle savedInstanceState)
@@ -56,6 +69,9 @@ public class MainActivity extends AppCompatActivity
         mConnectionStatus = (TextView)findViewById(R.id.connection_status_textview);
         mInputEditText = (EditText)findViewById(R.id.input_string_edittext);
         ListView mMessageListview = (ListView) findViewById(R.id.message_listview);
+
+        List<String> list = new ArrayList<>();
+       // ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, list);
 
         mConversationArrayAdapter = new ArrayAdapter<>( this,
                 android.R.layout.simple_list_item_1 );
@@ -79,6 +95,37 @@ public class MainActivity extends AppCompatActivity
 
             showPairedDevicesListDialog();
         }
+
+        tts = new TextToSpeech(this, (TextToSpeech.OnInitListener) this); //첫번째는 Context 두번째는 리스너
+        
+//        btSpeak = (Button) findViewById(R.id.bt_speakOut);
+//        btSpeak.setEnabled(false);
+
+
+
+//        //버튼 클릭하면 작동
+//        btSpeak.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                speakOutNow();
+//            }
+//        });
+        getTextToSpeek.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                speakOutNow();
+            }
+        });
     }
 
     @Override
@@ -88,6 +135,11 @@ public class MainActivity extends AppCompatActivity
         if ( mConnectedTask != null ) {
 
             mConnectedTask.cancel(true);
+        }
+        //앱 종료시 tts 종료
+        if (tts != null) {
+            tts.stop();
+            tts.shutdown();
         }
     }
 
@@ -216,7 +268,7 @@ public class MainActivity extends AppCompatActivity
                                 byte[] encodedBytes = new byte[readBufferPosition];
                                 System.arraycopy(readBuffer, 0, encodedBytes, 0,
                                         encodedBytes.length);
-                                String recvMessage = new String(encodedBytes, "UTF-8");
+                                recvMessage = new String(encodedBytes, "UTF-8");
 
                                 readBufferPosition = 0;
 
@@ -391,6 +443,29 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
+    public void onInit(int status) {
+        if (status == TextToSpeech.SUCCESS) {
+            int language = tts.setLanguage(Locale.KOREAN);
+
+            if (language == TextToSpeech.LANG_MISSING_DATA || language == TextToSpeech.LANG_NOT_SUPPORTED) {
+//                btSpeak.setEnabled(false);
+                Toast.makeText(this, "지원하지 않는 언어입니다.", Toast.LENGTH_SHORT).show();
+            } else {
+//                btSpeak.setEnabled(true);
+                speakOutNow();
+            }
+        } else {
+            Toast.makeText(this, "TTS 실패!", Toast.LENGTH_SHORT).show();
+        }
+    }
+    //Speak out...
+    private void speakOutNow() {
+//        int check_position = mMessageListview.getCheckedItemPosition();
+        String text = (String)mMessageListview.getAdapter().getItem(1);
+        //tts.setPitch((float) 0.1); //음량
+        //tts.setSpeechRate((float) 0.5); //재생속도
+        tts.speak(text, TextToSpeech.QUEUE_FLUSH, null);
+    }
 
 }
 

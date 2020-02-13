@@ -46,9 +46,19 @@
             android:text="Send" />
     </LinearLayout>
 
-    <ListView
+        <ListView
+            android:id="@+id/message_listview"
+            android:layout_weight="0.8"
+            android:layout_width="340dp"
+            android:layout_height="wrap_content" />
+
+    <Button
+        android:id="@+id/bt_speakOut"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/message_listview"/>
-
+        android:layout_below="@+id/textView"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="0dp"
+        android:enabled="false"
+        android:text="Speak Out" />
 </LinearLayout>
