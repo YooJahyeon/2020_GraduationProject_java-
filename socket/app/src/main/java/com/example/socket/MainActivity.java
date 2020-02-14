@@ -18,11 +18,11 @@ import java.net.Socket;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
-    Button connect_btn;                 // ip 받아오는 버튼
+    Button connect_btn;                // ip 받아오는 버튼
     Button send_btn;                   // 통신 시작 버튼
-    Button stop_btn;                    // 통신 정지 버튼
+    Button stop_btn;                   // 통신 정지 버튼
 
-    EditText ip_edit;               // ip 에디트
+    EditText ip_edit;                    // ip 에디트
     EditText send_edit;                 // 서버에 송신할 데이터 입력부
     TextView receive_text;             // 서버에서 수신 받은 데이터 보여주는 TextView
     TextView status_text;              // 연결 상태 보여주는 TextView
