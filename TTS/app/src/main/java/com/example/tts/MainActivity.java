@@ -3,6 +3,8 @@ package com.example.tts;
 import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -27,14 +29,34 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
         btSpeak = (Button) findViewById(R.id.bt_speakOut);
         btSpeak.setEnabled(false);
 
+
+        getTextToSpeek.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                speakOutNow();
+            }
+        });
         //버튼 클릭하면 작동
-        btSpeak.setOnClickListener(new View.OnClickListener() {
+       /* btSpeak.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 speakOutNow();
             }
-        });
+        });*/
+
     }
+
+
 
     //앱종료시 tts를 같이 종료해 준다.
     @Override

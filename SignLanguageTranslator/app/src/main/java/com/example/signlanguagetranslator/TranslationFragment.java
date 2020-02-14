@@ -12,12 +12,6 @@ import android.view.ViewGroup;
 public class TranslationFragment extends Fragment {
 
 
-    public TranslationFragment() {
-
-    }
-
-
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

@@ -14,8 +14,10 @@ public class MainActivity extends AppCompatActivity {
 
     private FragmentManager fragmentManager = getSupportFragmentManager();
 
-    FrameLayout fragmentContainer;
-    Fragment translationFragment;
+    private TranslationFragment translationFragment = new TranslationFragment();
+    private ListFragment listFragment = new ListFragment();
+    private SettingFragment settingFragment = new SettingFragment();
+
     BottomNavigationView bottomNavigationView;
 
 
@@ -25,6 +27,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         FragmentTransaction transaction = fragmentManager.beginTransaction();
+        transaction.replace(R.id.layout_container, translationFragment).commitAllowingStateLoss();
 
 
         bottomNavigationView = findViewById(R.id.bottomnavigationview_main);
@@ -41,6 +44,18 @@ public class MainActivity extends AppCompatActivity {
                 case R.id.navigation_translation:
                     transaction.replace(R.id.layout_container, translationFragment).commitAllowingStateLoss();
 
+                    break;
+
+                case R.id.navigation_volume:
+
+                    break;
+
+                case R.id.navigation_list:
+                    transaction.replace(R.id.layout_container, listFragment).commitAllowingStateLoss();
+                    break;
+
+                case R.id.navigation_setting:
+                    transaction.replace(R.id.layout_container, settingFragment).commitAllowingStateLoss();
                     break;
             }
 
