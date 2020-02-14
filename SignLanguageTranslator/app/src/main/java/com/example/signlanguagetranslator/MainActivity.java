@@ -7,6 +7,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.widget.FrameLayout;
 
@@ -27,10 +28,14 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         FragmentTransaction transaction = fragmentManager.beginTransaction();
+
         transaction.replace(R.id.layout_container, translationFragment).commitAllowingStateLoss();
 
 
         bottomNavigationView = findViewById(R.id.bottomnavigationview_main);
+        bottomNavigationView.setOnNavigationItemSelectedListener(new ItemSelectedListener());
+        bottomNavigationView.getMenu().findItem(R.id.navigation_translator).setChecked(true);
+
 
     }
 
@@ -41,13 +46,8 @@ public class MainActivity extends AppCompatActivity {
 
             switch (menuItem.getItemId())
             {
-                case R.id.navigation_translation:
+                case R.id.navigation_translator:
                     transaction.replace(R.id.layout_container, translationFragment).commitAllowingStateLoss();
-
-                    break;
-
-                case R.id.navigation_volume:
-
                     break;
 
                 case R.id.navigation_list:
