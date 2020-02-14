@@ -22,6 +22,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -35,8 +36,6 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
     private TextView mConnectionStatus;     // 연결상태 텍스트
     private EditText mInputEditText;        // 입력
     private TextToSpeech tts;
-    private Button btSpeak;
-    private EditText getTextToSpeek;
 
     ConnectedTask mConnectedTask = null;       // 연결
     static BluetoothAdapter mBluetoothAdapter;  // 블루투스 어댑터
@@ -91,45 +90,7 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
         }
         tts = new TextToSpeech(this, this); //첫번째는 Context 두번째는 리스너
 
-        getTextToSpeek = (EditText) findViewById(R.id.edittext);
-
-//        //버튼 클릭하면 작동
-//        btSpeak.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                speakOutNow();
-//            }
-//        });
-        getTextToSpeek.addTextChangedListener(new TextWatcher() {
-        @Override
-        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-        }
-
-        @Override
-        public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-        }
-
-        @Override
-        public void afterTextChanged(Editable s) {
-            speakOutNow();
-        }
-        });
-//        if (list.size() > 0) {    //데이타가 추가, 수정되었을때
-//
-//            adpater.notifyDataSetChanged();
-//
-//        } else {    //뷰에 표시될 데이타가 없을때
-//
-//            adpater.notifyDataSetInvalidated();
-//
-//        }
-
-//        if (mMessageListview.getAdapter().getItem(1) != null)
-//        {
-//            speakOutNow();
-//        }
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
     }
 
     @Override

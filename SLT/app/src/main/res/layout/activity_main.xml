@@ -32,11 +32,11 @@
         android:layout_height="wrap_content">
 
         <EditText
-            android:id="@+id/input_string_edittext"
-            android:hint="input text here"
-            android:layout_weight="0.8"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"/>
+        android:id="@+id/input_string_edittext"
+        android:hint="input text here"
+        android:layout_weight="0.8"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"/>
 
         <Button
             android:id="@+id/send_button"
@@ -45,16 +45,7 @@
             android:layout_height="wrap_content"
             android:text="Send" />
     </LinearLayout>
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
-        <EditText
-            android:id="@+id/edittext"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
 
-    </LinearLayout>
         <ListView
             android:id="@+id/message_listview"
             android:layout_weight="0.8"
