@@ -44,6 +44,9 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
     private ArrayAdapter<String> mConversationArrayAdapter;
     static boolean isConnectionError = false;
     private static final String TAG = "BluetoothClient";
+    private ListView mMessageListview;
+    private int i;
+    private String recvMessage;
 
     @Override
     public void onCreate(Bundle savedInstanceState)
@@ -62,10 +65,10 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
         });
         mConnectionStatus = (TextView)findViewById(R.id.connection_status_textview);
         mInputEditText = (EditText)findViewById(R.id.input_string_edittext);
-        ListView mMessageListview = (ListView) findViewById(R.id.message_listview);
+        mMessageListview = (ListView) findViewById(R.id.message_listview);
 
         mConversationArrayAdapter = new ArrayAdapter<>( this,
-                android.R.layout.simple_list_item_1 );
+                android.R.layout.simple_list_item_1);
         mMessageListview.setAdapter(mConversationArrayAdapter);
 
 
@@ -112,7 +115,21 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
         public void afterTextChanged(Editable s) {
             speakOutNow();
         }
-    });
+        });
+//        if (list.size() > 0) {    //데이타가 추가, 수정되었을때
+//
+//            adpater.notifyDataSetChanged();
+//
+//        } else {    //뷰에 표시될 데이타가 없을때
+//
+//            adpater.notifyDataSetInvalidated();
+//
+//        }
+
+//        if (mMessageListview.getAdapter().getItem(1) != null)
+//        {
+//            speakOutNow();
+//        }
     }
 
     @Override
@@ -269,7 +286,7 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
                                 byte[] encodedBytes = new byte[readBufferPosition];
                                 System.arraycopy(readBuffer, 0, encodedBytes, 0,
                                         encodedBytes.length);
-                                String recvMessage = new String(encodedBytes, "UTF-8");
+                                recvMessage = new String(encodedBytes, "UTF-8");
 
                                 readBufferPosition = 0;
 
@@ -295,6 +312,7 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
         protected void onProgressUpdate(String... recvMessage) {
 
             mConversationArrayAdapter.insert(recvMessage[0], 0);
+            speakOutNow();
         }
 
         @Override
@@ -361,7 +379,7 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
 
         String[] items;
         items = new String[pairedDevices.length];
-        for (int i=0;i<pairedDevices.length;i++) {
+        for (i=0;i<pairedDevices.length;i++) {
             items[i] = pairedDevices[i].getName();
         }
 
@@ -444,7 +462,7 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
         }
     }
     private void speakOutNow() {
-        String text = getTextToSpeek.getText().toString();
+        String text = (String)recvMessage;
         //tts.setPitch((float) 0.1); //음량
         //tts.setSpeechRate((float) 0.5); //재생속도
         tts.speak(text, TextToSpeech.QUEUE_FLUSH, null);
