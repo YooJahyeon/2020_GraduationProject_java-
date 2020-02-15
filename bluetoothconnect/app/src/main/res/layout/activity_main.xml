@@ -4,7 +4,7 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.airlab.doublebluetooth.MainActivity">
+    tools:context="com.example.bluetoothconnect.MainActivity">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -31,14 +31,20 @@
             android:layout_height="match_parent"
             android:layout_below="@id/connect0btn" />
 
-        <TextView
+        <ListView
             android:id="@+id/value0"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
             android:layout_below="@+id/bluetoothtext0"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
+            android:layout_marginStart="3dp"
+            android:layout_marginLeft="3dp"
+            android:layout_marginTop="25dp"
+            android:layout_weight="0.8"
             android:text="TextView" />
+
+
 
     </RelativeLayout>
 
@@ -62,20 +68,24 @@
             android:elevation="0dp"
             android:text="Connect" />
 
-        <TextView
-            android:id="@+id/value1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_below="@+id/bluetoothtext1"
-            android:text="TextView" />
-
         <RelativeLayout
             android:id="@+id/bluetoothlayout1"
-            android:layout_below="@id/connect1btn"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:layout_below="@id/connect1btn" />
+
+        <ListView
+            android:id="@+id/value1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/bluetoothtext1"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
+            android:layout_marginStart="3dp"
+            android:layout_marginLeft="3dp"
+            android:layout_marginTop="25dp"
+            android:layout_weight="0.8"
+            android:text="TextView" />
 
     </RelativeLayout>
 
