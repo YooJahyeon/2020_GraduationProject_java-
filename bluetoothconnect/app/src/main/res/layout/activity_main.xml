@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.airlab.doublebluetooth.MainActivity">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:padding="3dp">
+
+        <TextView
+            android:id="@+id/bluetoothtext0"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="bluetoothtext0" />
+
+        <Button
+            android:id="@+id/connect0btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:text="Connect" />
+
+        <RelativeLayout
+            android:id="@+id/bluetoothlayout0"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/connect0btn" />
+
+        <TextView
+            android:id="@+id/value0"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/bluetoothtext0"
+            android:text="TextView" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:padding="3dp">
+
+        <TextView
+            android:id="@+id/bluetoothtext1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="bluetoothtext1" />
+
+        <Button
+            android:id="@+id/connect1btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:elevation="0dp"
+            android:text="Connect" />
+
+        <TextView
+            android:id="@+id/value1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/bluetoothtext1"
+            android:text="TextView" />
+
+        <RelativeLayout
+            android:id="@+id/bluetoothlayout1"
+            android:layout_below="@id/connect1btn"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </RelativeLayout>
+
+</LinearLayout>
