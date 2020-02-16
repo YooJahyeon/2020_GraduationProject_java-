@@ -2,23 +2,13 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="1806b024-0e67-40b0-bca9-4a234e079c70" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/runConfigurations.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../SignLanguageTranslator/app/src/main/java/com/example/signlanguagetranslator/BluetoothActivity.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../SignLanguageTranslator/app/src/main/java/com/example/signlanguagetranslator/BluetoothService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../SignLanguageTranslator/app/src/main/java/com/example/signlanguagetranslator/BootReceiver.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../SignLanguageTranslator/app/src/main/res/drawable/ic_check.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../SignLanguageTranslator/app/src/main/res/drawable/ic_refresh.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../SignLanguageTranslator/app/src/main/res/layout/activity_bluetooth.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../SLT/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../SLT/.idea/gradle.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../SLT/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../SLT/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../SignLanguageTranslator/app/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/../SignLanguageTranslator/app/build.gradle" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../bluetoothconnect/app/src/main/java/com/example/bluetoothconnect/TestActivity.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../bluetoothconnect/app/src/main/res/layout/activity_test.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../SignLanguageTranslator/app/src/main/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../SignLanguageTranslator/app/src/main/AndroidManifest.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../bluetoothconnect/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../bluetoothconnect/.idea/gradle.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../bluetoothconnect/app/src/main/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../bluetoothconnect/app/src/main/AndroidManifest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../bluetoothconnect/app/src/main/java/com/example/bluetoothconnect/MainActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/../bluetoothconnect/app/src/main/java/com/example/bluetoothconnect/MainActivity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../bluetoothconnect/app/src/main/res/layout/activity_main.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../bluetoothconnect/app/src/main/res/layout/activity_main.xml" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -55,9 +45,18 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/import-summary.txt">
           <provider selected="true" editor-type-id="text-editor" />
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/app/src/main/AndroidManifest.xml">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="190">
+              <caret line="19" column="53" lean-forward="true" selection-start-line="19" selection-start-column="53" selection-end-line="19" selection-end-column="53" />
+            </state>
+          </provider>
         </entry>
       </file>
     </leaf>
@@ -66,7 +65,7 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="-8" />
+    <option name="x" value="952" />
     <option name="width" value="977" />
     <option name="height" value="1038" />
   </component>
@@ -131,6 +130,23 @@
               <item name="ssm" type="462c0819:PsiDirectoryNode" />
               <item name="bluetooth" type="462c0819:PsiDirectoryNode" />
             </path>
+            <path>
+              <item name="EX_Bluetooth" type="1abcf292:AndroidViewProjectNode" />
+              <item name="EX_Bluetooth" type="462c0819:PsiDirectoryNode" />
+              <item name="app" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="res" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="EX_Bluetooth" type="1abcf292:AndroidViewProjectNode" />
+              <item name="EX_Bluetooth" type="462c0819:PsiDirectoryNode" />
+              <item name="app" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="res" type="462c0819:PsiDirectoryNode" />
+              <item name="layout" type="462c0819:PsiDirectoryNode" />
+            </path>
           </expand>
           <select />
         </subPane>
@@ -167,9 +183,8 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-7" y="-7" width="1550" height="838" extended-state="6" />
-    <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" visible="true" weight="0.20872483" />
+      <window_info active="true" content_ui="combo" id="Project" visible="true" weight="0.20872483" />
       <window_info id="Structure" side_tool="true" />
       <window_info id="Build Variants" side_tool="true" />
       <window_info id="Image Layers" />
@@ -182,7 +197,7 @@
       <window_info anchor="bottom" id="TODO" />
       <window_info anchor="bottom" id="Terminal" />
       <window_info anchor="bottom" id="Event Log" side_tool="true" />
-      <window_info active="true" anchor="bottom" id="Build" visible="true" weight="0.33039647" />
+      <window_info anchor="bottom" id="Build" visible="true" weight="0.105726875" />
       <window_info anchor="right" id="Capture Analysis" />
       <window_info anchor="right" id="Gradle" />
       <window_info anchor="right" id="Theme Preview" />
@@ -208,6 +223,13 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/import-summary.txt">
       <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/AndroidManifest.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="190">
+          <caret line="19" column="53" lean-forward="true" selection-start-line="19" selection-start-column="53" selection-end-line="19" selection-end-column="53" />
+        </state>
+      </provider>
     </entry>
   </component>
 </project>
