@@ -10,36 +10,43 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.os.Handler;
 import android.os.Message;
-import android.speech.tts.TextToSpeech;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
-import android.view.WindowManager;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.Locale;
 import java.util.UUID;
 
+<<<<<<< HEAD
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     private TextToSpeech tts;
+=======
+public class MainActivity extends AppCompatActivity implements View.OnClickListener{
+>>>>>>> parent of 26e8278... 200215 - 2(KJS)
 
     Button connectbtn0; //연결 버튼(connect/disconnect)
     Button connectbtn1; //연결 버튼(connect/disconnect)
     Button nextbutton; //다음 액티비티로 넘어가기 위한 버튼
 
+<<<<<<< HEAD
     TextView Bluetoothtext0; //Bluetooth0
     TextView Bluetoothtext1; //Bluetooth1
+=======
+    TextView Bluetoothtext0;
+    TextView Bluetoothtext1;
+
+
+    TextView Bluetoothvalue0;
+    TextView Bluetoothvalue1;
+>>>>>>> parent of 26e8278... 200215 - 2(KJS)
 
     RelativeLayout Bluetoothlayout0;
     RelativeLayout Bluetoothlayout1;
@@ -63,7 +70,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     final int CONNECTED = 2;
     final int INPUTDATA = 9999;
 
+<<<<<<< HEAD
     private String s;   //message
+=======
+    MyView M0;
+    MyView M1;
+>>>>>>> parent of 26e8278... 200215 - 2(KJS)
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,6 +89,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Bluetoothtext0 = (TextView)findViewById(R.id.bluetoothtext0);
         Bluetoothtext1 = (TextView)findViewById(R.id.bluetoothtext1);
 
+<<<<<<< HEAD
+=======
+
+        Bluetoothvalue0 = (TextView)findViewById(R.id.value0);
+        Bluetoothvalue1 = (TextView)findViewById(R.id.value1);
+
+        Bluetoothlayout0 = (RelativeLayout)findViewById(R.id.bluetoothlayout0);
+        Bluetoothlayout1 = (RelativeLayout)findViewById(R.id.bluetoothlayout1);
+
+>>>>>>> parent of 26e8278... 200215 - 2(KJS)
         //----------------------SET Listener---------------------------------//
         connectbtn0.setOnClickListener(this);
         connectbtn1.setOnClickListener(this);
@@ -90,10 +112,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             startActivityForResult(i,5000);
         }
 
+<<<<<<< HEAD
         bluetoothDevice0 = bluetoothAdapter.getRemoteDevice(B0MA);
         bluetoothDevice1 = bluetoothAdapter.getRemoteDevice(B1MA);
 
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+=======
+        B0 = BA.getRemoteDevice(B0MA);
+        B1 = BA.getRemoteDevice(B1MA);
+
+        M0 = new MyView(this,0);
+        M1 = new MyView(this,1);
+        Bluetoothlayout0.addView(M0);
+        Bluetoothlayout1.addView(M1);
+>>>>>>> parent of 26e8278... 200215 - 2(KJS)
     }
 
     @Override
@@ -112,7 +144,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             if(msg.what == 0){
                 switch (msg.arg1){
                     case DISCONNECT:
+<<<<<<< HEAD
 //                        mConversationArrayAdapter0.insert("-", 0);
+=======
+                        Bluetoothvalue0.setText("-");
+>>>>>>> parent of 26e8278... 200215 - 2(KJS)
                         IsConnect0 = false;
                         connectbtn0.setText("CONNECT");
                         Bluetoothtext0.setTextColor(Color.parseColor("#FF0000"));
@@ -129,6 +165,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         Bluetoothtext0.setTextColor(Color.parseColor("#00FF00"));
                         Bluetoothtext0.setText("CONNECTED");
                         break;
+<<<<<<< HEAD
+=======
+                    case INPUTDATA:
+                        String s = (String)msg.obj;
+                        Bluetoothvalue0.setText(s);
+                        if(!s.equals("")) {
+                            array0.add(s);
+                            M0.invalidate();
+                        }
+                        break;
+>>>>>>> parent of 26e8278... 200215 - 2(KJS)
 
                 }
 
@@ -137,7 +184,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 switch (msg.arg1){
                     case DISCONNECT:
                         IsConnect1 = false;
+<<<<<<< HEAD
 //                        mConversationArrayAdapter1.insert("-", 0);
+=======
+                        Bluetoothvalue1.setText("-");
+>>>>>>> parent of 26e8278... 200215 - 2(KJS)
                         connectbtn1.setText("CONNECT");
                         Bluetoothtext1.setTextColor(Color.parseColor("#FF0000"));
                         Bluetoothtext1.setText("DISCONNECT");
@@ -153,6 +204,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         Bluetoothtext1.setTextColor(Color.parseColor("#00FF00"));
                         Bluetoothtext1.setText("CONNECTED");
                         break;
+<<<<<<< HEAD
+=======
+                    case INPUTDATA:
+                        String s = (String)msg.obj;
+                        Bluetoothvalue1.setText(s);
+                        if(!s.equals("")){
+                            array1.add(s);
+                            M1.invalidate();
+                        }
+                        break;
+>>>>>>> parent of 26e8278... 200215 - 2(KJS)
 
                 }
             }
@@ -211,12 +273,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 //블루투스 끊어지면
                 v.setEnabled(false);
 
+<<<<<<< HEAD
                 connectThread1 = new ConnectThread(bluetoothDevice1,1);
                 connectThread1.start();
             }
         }
     }
 
+=======
+>>>>>>> parent of 26e8278... 200215 - 2(KJS)
     //connect bluetooth
     class ConnectThread extends Thread{
 
@@ -357,6 +422,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             p.setStyle(Paint.Style.STROKE);
         }
     }
+<<<<<<< HEAD
 
     @Override
     protected void onDestroy() {
@@ -371,4 +437,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
+=======
+>>>>>>> parent of 26e8278... 200215 - 2(KJS)
 }
