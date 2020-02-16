@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".TestActivity">
+
+    <RelativeLayout
+        android:id="@+id/messagelayout0"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        >
+
+    <TextView
+        android:id="@+id/messageTextview0"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="bluetoothtext0"
+        />
+
+    <ListView
+        android:id="@+id/messageListView0"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/messageTextview0"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_marginStart="3dp"
+        android:layout_marginLeft="3dp"
+        android:layout_marginTop="25dp"
+        android:layout_weight="0.8"
+        android:text="TextView" />
+    </RelativeLayout>
+
+<RelativeLayout
+        android:id="@+id/messagelayout1"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/connect1btn"
+        android:layout_weight="1"
+    >
+<TextView
+    android:id="@+id/messageTextview1"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="bluetoothtext0" />
+
+<ListView
+    android:id="@+id/messageListView1"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_below="@+id/messageTextview1"
+    android:layout_alignParentStart="true"
+    android:layout_alignParentLeft="true"
+    android:layout_marginStart="3dp"
+    android:layout_marginLeft="3dp"
+    android:layout_marginTop="25dp"
+    android:layout_weight="0.8"
+    android:text="TextView" />
+
+
+
+</RelativeLayout>
+
+
+
+</LinearLayout>
