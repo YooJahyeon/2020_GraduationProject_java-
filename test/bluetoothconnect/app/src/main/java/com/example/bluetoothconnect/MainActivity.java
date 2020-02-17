@@ -1,57 +1,65 @@
 package com.example.bluetoothconnect;
 
-import android.app.Dialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.os.Handler;
 import android.os.Message;
+import android.speech.tts.TextToSpeech;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.Locale;
 import java.util.UUID;
 
-<<<<<<< HEAD
-public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener, TextToSpeech.OnInitListener {
 
     private TextToSpeech tts;
-=======
-public class MainActivity extends AppCompatActivity implements View.OnClickListener{
->>>>>>> parent of 26e8278... 200215 - 2(KJS)
 
-    Button connectbtn0; //연결 버튼(connect/disconnect)
-    Button connectbtn1; //연결 버튼(connect/disconnect)
-    Button nextbutton; //다음 액티비티로 넘어가기 위한 버튼
+    Button connectbtn0; //연결버튼(connect/disconnect)
+    Button connectbtn1;
 
-<<<<<<< HEAD
-    TextView Bluetoothtext0; //Bluetooth0
-    TextView Bluetoothtext1; //Bluetooth1
-=======
-    TextView Bluetoothtext0;
-    TextView Bluetoothtext1;
+    TextView Bluetoothtext0;  //Bluetooth0
+    TextView Bluetoothtext1;   //bluetooth1
 
 
-    TextView Bluetoothvalue0;
-    TextView Bluetoothvalue1;
->>>>>>> parent of 26e8278... 200215 - 2(KJS)
+    ListView Bluetoothvalue0;   //Bluetooth0 출력부
+    ListView Bluetoothvalue1;   //Bluetooth1 출력부
 
     RelativeLayout Bluetoothlayout0;
     RelativeLayout Bluetoothlayout1;
 
     boolean IsConnect0 = false, IsConnect1 = false;
+
+    BluetoothAdapter BA;
+    BluetoothDevice B0,B1;
+
+    ConnectThread BC0;
+    ConnectThread BC1;
+
+    ArrayList array0; //bluetooth0의 출력을 위한
+    ArrayList array1;   //bluetooth1의 출력을 위한
 
     BluetoothAdapter bluetoothAdapter;
     BluetoothDevice bluetoothDevice0,bluetoothDevice1;
@@ -59,8 +67,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     ConnectThread connectThread0;
     ConnectThread connectThread1;
 
-    final String B0MA = "98:D3:41:FD:6A:4E"; //Bluetooth0 Mac주소
-    final String B1MA = "98:D3:91:FD:86:0E"; //Bluetooth1 Mac주소
+    final String B0MA = "98:D3:41:FD:6A:4E"; //Bluetooth0 MacAddress
+    final String B1MA = "98:D3:91:FD:86:0E"; //Bluetooth1 MacAddress
 
     final String SPP_UUID_STRING = "00001101-0000-1000-8000-00805F9B34FB"; //SPP UUID
     final UUID SPP_UUID = UUID.fromString(SPP_UUID_STRING);
@@ -70,12 +78,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     final int CONNECTED = 2;
     final int INPUTDATA = 9999;
 
-<<<<<<< HEAD
-    private String s;   //message
-=======
     MyView M0;
     MyView M1;
->>>>>>> parent of 26e8278... 200215 - 2(KJS)
+    private ArrayAdapter<String> mConversationArrayAdapter0;   //bluetooth0의 리스트뷰 출력을 위한 adapter
+    private ArrayAdapter<String> mConversationArrayAdapter1;    //bluetooth1의 리스트뷰 출력을 위한 adapter
+    private String s;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,40 +92,39 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         //----------------------Find VIEW---------------------------------//
         connectbtn0 = (Button)findViewById(R.id.connect0btn);
         connectbtn1 = (Button)findViewById(R.id.connect1btn);
-        nextbutton = (Button)findViewById(R.id.nextbutton);
+
 
         Bluetoothtext0 = (TextView)findViewById(R.id.bluetoothtext0);
         Bluetoothtext1 = (TextView)findViewById(R.id.bluetoothtext1);
 
-<<<<<<< HEAD
-=======
 
-        Bluetoothvalue0 = (TextView)findViewById(R.id.value0);
-        Bluetoothvalue1 = (TextView)findViewById(R.id.value1);
+        Bluetoothvalue0 = (ListView)findViewById(R.id.value0);
+        Bluetoothvalue1 = (ListView)findViewById(R.id.value1);
+
+        mConversationArrayAdapter0 = new ArrayAdapter<>( this,
+                android.R.layout.simple_list_item_1);
+        mConversationArrayAdapter1 = new ArrayAdapter<>( this,
+                android.R.layout.simple_list_item_1);
+        Bluetoothvalue0.setAdapter(mConversationArrayAdapter0);
+        Bluetoothvalue1.setAdapter(mConversationArrayAdapter1);
+
 
         Bluetoothlayout0 = (RelativeLayout)findViewById(R.id.bluetoothlayout0);
         Bluetoothlayout1 = (RelativeLayout)findViewById(R.id.bluetoothlayout1);
 
->>>>>>> parent of 26e8278... 200215 - 2(KJS)
         //----------------------SET Listener---------------------------------//
         connectbtn0.setOnClickListener(this);
         connectbtn1.setOnClickListener(this);
 
         //----------------------Bluetooth init---------------------------------//
 
-        bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+        BA = BluetoothAdapter.getDefaultAdapter();
 
-        if(!bluetoothAdapter.isEnabled()){
+        if(!BA.isEnabled()){
             Intent i = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
             startActivityForResult(i,5000);
         }
 
-<<<<<<< HEAD
-        bluetoothDevice0 = bluetoothAdapter.getRemoteDevice(B0MA);
-        bluetoothDevice1 = bluetoothAdapter.getRemoteDevice(B1MA);
-
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-=======
         B0 = BA.getRemoteDevice(B0MA);
         B1 = BA.getRemoteDevice(B1MA);
 
@@ -125,7 +132,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         M1 = new MyView(this,1);
         Bluetoothlayout0.addView(M0);
         Bluetoothlayout1.addView(M1);
->>>>>>> parent of 26e8278... 200215 - 2(KJS)
+
+        tts = new TextToSpeech(this, this); //첫번째는 Context 두번째는 리스너
+
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
     }
 
     @Override
@@ -144,11 +154,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             if(msg.what == 0){
                 switch (msg.arg1){
                     case DISCONNECT:
-<<<<<<< HEAD
-//                        mConversationArrayAdapter0.insert("-", 0);
-=======
-                        Bluetoothvalue0.setText("-");
->>>>>>> parent of 26e8278... 200215 - 2(KJS)
+                        mConversationArrayAdapter0.insert("-", 0);
                         IsConnect0 = false;
                         connectbtn0.setText("CONNECT");
                         Bluetoothtext0.setTextColor(Color.parseColor("#FF0000"));
@@ -165,17 +171,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         Bluetoothtext0.setTextColor(Color.parseColor("#00FF00"));
                         Bluetoothtext0.setText("CONNECTED");
                         break;
-<<<<<<< HEAD
-=======
                     case INPUTDATA:
-                        String s = (String)msg.obj;
-                        Bluetoothvalue0.setText(s);
+                        s = (String)msg.obj;
+                        mConversationArrayAdapter0.insert(s, 0);
                         if(!s.equals("")) {
                             array0.add(s);
+                            speakOutNow();
                             M0.invalidate();
                         }
                         break;
->>>>>>> parent of 26e8278... 200215 - 2(KJS)
 
                 }
 
@@ -184,11 +188,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 switch (msg.arg1){
                     case DISCONNECT:
                         IsConnect1 = false;
-<<<<<<< HEAD
-//                        mConversationArrayAdapter1.insert("-", 0);
-=======
-                        Bluetoothvalue1.setText("-");
->>>>>>> parent of 26e8278... 200215 - 2(KJS)
+                        mConversationArrayAdapter1.insert("-", 0);
                         connectbtn1.setText("CONNECT");
                         Bluetoothtext1.setTextColor(Color.parseColor("#FF0000"));
                         Bluetoothtext1.setText("DISCONNECT");
@@ -204,17 +204,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         Bluetoothtext1.setTextColor(Color.parseColor("#00FF00"));
                         Bluetoothtext1.setText("CONNECTED");
                         break;
-<<<<<<< HEAD
-=======
                     case INPUTDATA:
-                        String s = (String)msg.obj;
-                        Bluetoothvalue1.setText(s);
+                        s = (String)msg.obj;
+                        mConversationArrayAdapter1.insert(s, 0);
                         if(!s.equals("")){
                             array1.add(s);
+                            speakOutNow();
                             M1.invalidate();
                         }
                         break;
->>>>>>> parent of 26e8278... 200215 - 2(KJS)
 
                 }
             }
@@ -224,32 +222,28 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onClick(View v) {
-        if(v.getId() == R.id.nextbutton)
-        {
-            Intent intent = new Intent(getApplicationContext(), translateactivity.class);
-            startActivity(intent);
-        }
         if(v.getId() == R.id.connect0btn){
             if(IsConnect0){
                 //블루투스 연결된 상태
-                if(connectThread0 != null){
+                if(BC0 != null){
                     try {
-                        connectThread0.cancel();
+                        BC0.cancel();
 
                         Message m = new Message();
                         m.what = 0;
                         m.arg1 = DISCONNECT;
                         handler.sendMessage(m);
 
-                        connectThread0 = null;
+                        BC0 = null;
                     } catch (IOException e) { }
                 }
             }
             else {
                 //블루투스 끊어진 상태
                 v.setEnabled(false);
-                connectThread0 = new ConnectThread(bluetoothDevice0,0);
-                connectThread0.start();
+                array0 = new ArrayList();
+                BC0 = new ConnectThread(B0,0);
+                BC0.start();
 
             }
         }
@@ -257,43 +251,55 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         else{
             if(IsConnect1){
                 //블루투스 연결된 상태
-                if(connectThread1 != null){
+                if(BC1 != null){
                     try {
-                        connectThread1.cancel();
+                        BC1.cancel();
 
                         Message m = new Message();
                         m.what = 1;
                         m.arg1 = DISCONNECT;
                         handler.sendMessage(m);
 
-                        connectThread1 = null;
+                        BC1 = null;
                     } catch (IOException e) { }
                 }
             }else{
-                //블루투스 끊어지면
+                //블루투스 끊어진
                 v.setEnabled(false);
-
-<<<<<<< HEAD
-                connectThread1 = new ConnectThread(bluetoothDevice1,1);
-                connectThread1.start();
+                array1 = new ArrayList();
+                BC1 = new ConnectThread(B1,1);
+                BC1.start();
             }
         }
     }
 
-=======
->>>>>>> parent of 26e8278... 200215 - 2(KJS)
+    @Override
+    public void onInit(int status) {
+        if (status == TextToSpeech.SUCCESS) {
+            int language = tts.setLanguage(Locale.KOREAN);
+
+            if (language == TextToSpeech.LANG_MISSING_DATA || language == TextToSpeech.LANG_NOT_SUPPORTED) {
+                Toast.makeText(this, "지원하지 않는 언어입니다.", Toast.LENGTH_SHORT).show();
+            } else {
+                speakOutNow();
+            }
+        } else {
+            Toast.makeText(this, "TTS 실패!", Toast.LENGTH_SHORT).show();
+        }
+    }
+
     //connect bluetooth
     class ConnectThread extends Thread{
 
-        BluetoothDevice bluetoothDevice;
-        BluetoothSocket bluetoothSocket;
+        BluetoothDevice BD;
+        BluetoothSocket BS;
 
         int bluetooth_index;
 
         ConnectedThread connectedThread;
 
         ConnectThread(BluetoothDevice device , int index){
-            bluetoothDevice = device;
+            BD = device;
             bluetooth_index = index;
         }
 
@@ -302,10 +308,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             try {
                 sendMessage(CONNECTING);
 
-                bluetoothSocket = bluetoothDevice.createInsecureRfcommSocketToServiceRecord(SPP_UUID);
-                bluetoothSocket.connect();
+                BS = BD.createInsecureRfcommSocketToServiceRecord(SPP_UUID);
+                BS.connect();
 
-                connectedThread = new ConnectedThread(bluetoothSocket, bluetooth_index);
+                connectedThread = new ConnectedThread(BS, bluetooth_index);
                 connectedThread.start();
             } catch (IOException e) {
                 e.printStackTrace();
@@ -321,9 +327,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
 
         public void cancel() throws IOException {
-            if(bluetoothSocket != null) {
-                bluetoothSocket.close();
-                bluetoothSocket = null;
+            if(BS != null) {
+                BS.close();
+                BS = null;
             }
 
             if(connectedThread != null){
@@ -343,7 +349,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     //connected bluetooth - communication
-    public class ConnectedThread extends Thread{
+    class ConnectedThread extends Thread{
+
         InputStream in = null;
 
         int bluetooth_index;
@@ -355,10 +362,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             try {
                 in = bluetoothsocket.getInputStream();
+
                 is = true;
+
                 if(bluetooth_index == 0) IsConnect0 = is;
                 else IsConnect1 = is;
+
                 sendMessage(CONNECTED);
+
             } catch (IOException e) {
                 cancel();
             }
@@ -371,9 +382,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             while (is){
                 try {
                     String s = Buffer_in.readLine();
+
                     if(!s.equals("")){
                         sendMessage(INPUTDATA,s);
                     }
+
                 } catch (IOException e) { }
             }
 
@@ -383,6 +396,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             Message m = new Message();
             m.what = bluetooth_index;
             m.arg1 = arg;
+
             handler.sendMessage(m);
         }
 
@@ -391,13 +405,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             m.what = bluetooth_index;
             m.arg1 = arg;
             m.obj = s;
+
             handler.sendMessage(m);
         }
 
         public void cancel(){
             is = false;
+
             if(bluetooth_index == 0) IsConnect0 = is;
             else IsConnect1 = is;
+
             if(in != null){
                 try {
                     in.close();
@@ -406,6 +423,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     e.printStackTrace();
                 }
             }
+
             sendMessage(DISCONNECT);
         }
     }
@@ -414,15 +432,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         int Bluetooth_index = 0;
         Paint p;
         int dp = 3;
+
         public MyView(Context context, int i) {
             super(context);
+
             Bluetooth_index = i;
             p = new Paint();
             p.setStrokeWidth(10f);
             p.setStyle(Paint.Style.STROKE);
         }
     }
-<<<<<<< HEAD
+    private void speakOutNow() {
+        String text = (String)s;
+        //tts.setPitch((float) 0.1); //음량
+        //tts.setSpeechRate((float) 0.5); //재생속도
+        tts.speak(text, TextToSpeech.QUEUE_FLUSH, null);
+    }
 
     @Override
     protected void onDestroy() {
@@ -437,6 +462,4 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-=======
->>>>>>> parent of 26e8278... 200215 - 2(KJS)
 }
