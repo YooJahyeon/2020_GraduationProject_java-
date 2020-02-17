@@ -28,6 +28,7 @@ public class BluetoothActivity extends AppCompatActivity {
 
     Button button_Lrefresh;
     Button button_Rrefresh;
+    Button button_Next;
 
     TextView textView_leftState;
     TextView textView_rightState;
@@ -61,6 +62,8 @@ public class BluetoothActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bluetooth);
+
+        button_Next =(Button)findViewById(R.id.button_next);
 
         Log.d("test", "BluetoothActivity.java onCreate");
 
