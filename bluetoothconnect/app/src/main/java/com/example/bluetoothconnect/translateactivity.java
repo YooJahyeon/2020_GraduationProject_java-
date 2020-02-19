@@ -3,19 +3,12 @@ package com.example.bluetoothconnect;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
-import android.content.Context;
-import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.Paint;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.speech.tts.TextToSpeech;
 import android.support.v7.app.AppCompatActivity;
-import android.view.View;
-import android.view.WindowManager;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -27,7 +20,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Locale;
-import java.util.UUID;
 
 public class translateactivity extends AppCompatActivity implements TextToSpeech.OnInitListener{
 
@@ -69,6 +61,13 @@ public class translateactivity extends AppCompatActivity implements TextToSpeech
 
         tran_Bluetoothtext0 = (TextView)findViewById(R.id.tran_bluetoothtext0);
         tran_Bluetoothtext1 = (TextView)findViewById(R.id.tran_bluetoothtext1);
+
+        tran_Bluetoothvalue0 = (ListView) findViewById(R.id.value0);
+        tran_Bluetoothvalue1 = (ListView)findViewById(R.id.value1);
+
+        tran_Bluetoothlayout0 = (RelativeLayout)findViewById(R.id.tran_bluetoothlayout0);
+        tran_Bluetoothlayout1 = (RelativeLayout)findViewById(R.id.tran_bluetoothlayout1);
+
 
     }
 
@@ -193,7 +192,7 @@ public class translateactivity extends AppCompatActivity implements TextToSpeech
     private void speakOutNow() {
         String text = (String)s;
         //tts.setPitch((float) 0.1); //음량
-        tts.setSpeechRate((float) 0.7); //재생속도
+        tts.setSpeechRate((float) 0.7); //재생속도 조절하기
         tts.speak(text, TextToSpeech.QUEUE_FLUSH, null);
     }
 
