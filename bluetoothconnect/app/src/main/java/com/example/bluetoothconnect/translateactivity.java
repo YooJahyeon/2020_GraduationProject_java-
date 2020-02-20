@@ -39,11 +39,14 @@ public class translateactivity extends AppCompatActivity implements TextToSpeech
     BluetoothAdapter bluetoothAdapter;
     BluetoothDevice bluetoothDevice0,bluetoothDevice1;
 
-    MainActivity.ConnectThread connectThread0;
-    MainActivity.ConnectThread connectThread1;
+//    MainActivity.ConnectThread connectThread0;
+//    MainActivity.ConnectThread connectThread1;
 
     ArrayList array0; //bluetooth0의 출력을 위한
     ArrayList array1;  //bluetooth1의 출력을 위한
+
+    final String B0MA = "98:D3:41:FD:6A:4E"; //Bluetooth0 Mac주소
+    final String B1MA = "98:D3:91:FD:86:0E"; //Bluetooth1 Mac주소
 
     final int DISCONNECT = 0;
     final int CONNECTED = 2;
@@ -67,6 +70,16 @@ public class translateactivity extends AppCompatActivity implements TextToSpeech
 
         tran_Bluetoothlayout0 = (RelativeLayout)findViewById(R.id.tran_bluetoothlayout0);
         tran_Bluetoothlayout1 = (RelativeLayout)findViewById(R.id.tran_bluetoothlayout1);
+
+        bluetoothDevice0 = bluetoothAdapter.getRemoteDevice(B0MA);
+        bluetoothDevice1 = bluetoothAdapter.getRemoteDevice(B1MA);
+
+        mConversationArrayAdapter0 = new ArrayAdapter<>( this,
+                android.R.layout.simple_list_item_1);
+        mConversationArrayAdapter1 = new ArrayAdapter<>( this,
+                android.R.layout.simple_list_item_1);
+        tran_Bluetoothvalue0.setAdapter(mConversationArrayAdapter0);
+        tran_Bluetoothvalue1.setAdapter(mConversationArrayAdapter1);
 
 
     }
