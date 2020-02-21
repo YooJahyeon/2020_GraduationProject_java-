@@ -1,5 +1,7 @@
 package com.example.bluetoothconnect;
 
+
+//아직 테스트를 못해본 버전
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
@@ -34,13 +36,14 @@ public class translateactivity extends AppCompatActivity implements TextToSpeech
     RelativeLayout tran_Bluetoothlayout0;
     RelativeLayout tran_Bluetoothlayout1;
 
+    MainActivity.ConnectThread connectThread0;
+    MainActivity.ConnectThread connectThread1;
+
     boolean IsConnect0 = false, IsConnect1 = false;
 
     BluetoothAdapter bluetoothAdapter;
     BluetoothDevice bluetoothDevice0,bluetoothDevice1;
 
-//    MainActivity.ConnectThread connectThread0;
-//    MainActivity.ConnectThread connectThread1;
 
     ArrayList array0; //bluetooth0의 출력을 위한
     ArrayList array1;  //bluetooth1의 출력을 위한
@@ -80,7 +83,6 @@ public class translateactivity extends AppCompatActivity implements TextToSpeech
                 android.R.layout.simple_list_item_1);
         tran_Bluetoothvalue0.setAdapter(mConversationArrayAdapter0);
         tran_Bluetoothvalue1.setAdapter(mConversationArrayAdapter1);
-
 
     }
 
@@ -203,10 +205,24 @@ public class translateactivity extends AppCompatActivity implements TextToSpeech
         }
     }
     private void speakOutNow() {
-        String text = (String)s;
+        String text = s;
         //tts.setPitch((float) 0.1); //음량
         tts.setSpeechRate((float) 0.7); //재생속도 조절하기
         tts.speak(text, TextToSpeech.QUEUE_FLUSH, null);
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (tts != null) {
+            tts.stop();
+            tts.shutdown();
+        }
+        if(connectThread0 != null || connectThread1 != null) {
+            connectThread0.connectedThread.cancel();
+            connectThread1.connectedThread.cancel();
+        }
+    }
+
 
 }
