@@ -334,7 +334,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     class MyView extends View{
         int Bluetooth_index = 0;
         Paint p;
-        int dp = 3;
         public MyView(Context context, int i) {
             super(context);
             Bluetooth_index = i;
