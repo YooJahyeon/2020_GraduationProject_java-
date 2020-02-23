@@ -1,6 +1,5 @@
 package com.example.bluetoothconnect;
 
-
 //아직 테스트를 못해본 버전
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
