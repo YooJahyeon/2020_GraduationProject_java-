@@ -1,27 +1,22 @@
 package com.example.signlanguagetranslator;
 
 import android.app.Activity;
-import android.app.PendingIntent;
 import android.app.Service;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothManager;
 import android.bluetooth.BluetoothSocket;
 import android.content.Intent;
-import android.content.Context;
-import android.os.Binder;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
 import android.util.Log;
-import android.widget.ArrayAdapter;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.UUID;
-
 
 public class BluetoothService extends Service {
     private static final String TAG = "BluetoothService: ";
@@ -108,7 +103,7 @@ public class BluetoothService extends Service {
             // 기기의 블루투스 상태가 On인 경우
             Log.d(TAG, "Bluetooth Enable Now");
             // Next Step
-            } else {
+        } else {
             // 기기의 블루투스 상태가 Off인 경우
             Log.d(TAG, "Bluetooth Enable Request");
             Intent i = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
