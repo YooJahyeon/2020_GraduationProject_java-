@@ -36,6 +36,7 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
     private TextView mConnectionStatus;     // 연결상태 텍스트
     private EditText mInputEditText;        // 입력
     private TextToSpeech tts;
+    Button nextbutton;
 
     ConnectedTask mConnectedTask = null;       // 연결
     static BluetoothAdapter mBluetoothAdapter;  // 블루투스 어댑터
@@ -46,6 +47,7 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
     private ListView mMessageListview;
     private int i;
     private String recvMessage;
+
 
 
     @Override
@@ -66,6 +68,7 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
         mConnectionStatus = (TextView)findViewById(R.id.connection_status_textview);
         mInputEditText = (EditText)findViewById(R.id.input_string_edittext);
         mMessageListview = (ListView) findViewById(R.id.message_listview);
+        nextbutton = (Button) findViewById(R.id.nextbutton);
 
         mConversationArrayAdapter = new ArrayAdapter<>( this,
                 android.R.layout.simple_list_item_1);
@@ -94,6 +97,13 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
     }
 
+    @Override
+    public void onClick(View v) {
+        if (v.getId() == R.id.nextbutton) {
+            Intent intent = new Intent(getApplicationContext(), subactivity.class);
+            startActivity(intent);
+        }
+    }
     @Override
     protected void onDestroy() {
         if (tts != null) {
