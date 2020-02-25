@@ -3,7 +3,6 @@ package example.com.slt;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.Locale;
 import java.util.Set;
 import java.util.UUID;
 
@@ -18,8 +17,6 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.speech.tts.TextToSpeech;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
@@ -28,10 +25,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 
-public class MainActivity extends AppCompatActivity implements TextToSpeech.OnInitListener {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     private final int REQUEST_BLUETOOTH_ENABLE = 100;       // 블루투스 활성화 상태
     private TextView mConnectionStatus;     // 연결상태 텍스트
     private EditText mInputEditText;        // 입력
@@ -92,7 +88,7 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
 
             showPairedDevicesListDialog();
         }
-        tts = new TextToSpeech(this, this); //첫번째는 Context 두번째는 리스너
+
 
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
     }
@@ -115,21 +111,6 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
         if ( mConnectedTask != null ) {
 
             mConnectedTask.cancel(true);
-        }
-    }
-
-    @Override
-    public void onInit(int status) {
-        if (status == TextToSpeech.SUCCESS) {
-            int language = tts.setLanguage(Locale.KOREAN);
-
-            if (language == TextToSpeech.LANG_MISSING_DATA || language == TextToSpeech.LANG_NOT_SUPPORTED) {
-                Toast.makeText(this, "지원하지 않는 언어입니다.", Toast.LENGTH_SHORT).show();
-            } else {
-                speakOutNow();
-            }
-        } else {
-            Toast.makeText(this, "TTS 실패!", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -177,17 +158,14 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
                     Log.e(TAG, "unable to close() " +
                             " socket during connection failure", e2);
                 }
-
                 return false;
             }
-
             return true;
         }
 
 
         @Override
         protected void onPostExecute(Boolean isSucess) {
-
             if ( isSucess ) {
                 connected(mBluetoothSocket);
             }
@@ -237,21 +215,13 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
 
 
             while (true) {
-
                 if ( isCancelled() ) return false;
-
                 try {
-
                     int bytesAvailable = mInputStream.available();
-
                     if(bytesAvailable > 0) {
-
                         byte[] packetBytes = new byte[bytesAvailable];
-
                         mInputStream.read(packetBytes);
-
                         for(int i=0;i<bytesAvailable;i++) {
-
                             byte b = packetBytes[i];
                             if(b == '\n')
                             {
@@ -259,9 +229,7 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
                                 System.arraycopy(readBuffer, 0, encodedBytes, 0,
                                         encodedBytes.length);
                                 recvMessage = new String(encodedBytes, "UTF-8");
-
                                 readBufferPosition = 0;
-
                                 Log.d(TAG, "recv message: " + recvMessage);
                                 publishProgress(recvMessage);
                             }
@@ -272,7 +240,6 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
                         }
                     }
                 } catch (IOException e) {
-
                     Log.e(TAG, "disconnected", e);
                     return false;
                 }
@@ -282,7 +249,6 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
 
         @Override
         protected void onProgressUpdate(String... recvMessage) {
-
             mConversationArrayAdapter.insert(recvMessage[0], 0);
             speakOutNow();
         }
@@ -290,10 +256,7 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
         @Override
         protected void onPostExecute(Boolean isSucess) {
             super.onPostExecute(isSucess);
-
             if ( !isSucess ) {
-
-
                 closeSocket();
                 Log.d(TAG, "Device connection was lost");
                 isConnectionError = true;
@@ -304,28 +267,21 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
         @Override
         protected void onCancelled(Boolean aBoolean) {
             super.onCancelled(aBoolean);
-
             closeSocket();
         }
 
         void closeSocket(){
-
             try {
-
                 mBluetoothSocket.close();
                 Log.d(TAG, "close socket()");
-
             } catch (IOException e2) {
-
                 Log.e(TAG, "unable to close() " +
                         " socket during connection failure", e2);
             }
         }
 
         void write(String msg){
-
             msg += "\n";
-
             try {
                 mOutputStream.write(msg.getBytes());
                 mOutputStream.flush();
