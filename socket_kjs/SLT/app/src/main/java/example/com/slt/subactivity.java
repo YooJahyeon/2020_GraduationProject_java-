@@ -55,6 +55,15 @@ public class subactivity extends AppCompatActivity implements TextToSpeech.OnIni
         }
     }
 
+    @Override
+    protected void onDestroy() {
+        if (tts != null) {
+            tts.stop();
+            tts.shutdown();
+        }
+        super.onDestroy();
+    }
+
     private void speakOutNow() {
         String text = (String)recvMessage;
         //tts.setPitch((float) 0.1); //음량
