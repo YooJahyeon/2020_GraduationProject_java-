@@ -16,6 +16,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="tran_bluetoothtext0" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="오른손입니다."/>
 
         <RelativeLayout
             android:id="@+id/tran_bluetoothlayout0"
@@ -50,6 +54,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="tran_bluetoothtext1" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="왼손입니다."/>
 
         <RelativeLayout
             android:id="@+id/tran_bluetoothlayout1"
@@ -72,5 +80,12 @@
             android:text="TextView" />
 
     </RelativeLayout>
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/setting"
+        android:text="setting"
+        android:layout_gravity="right"/>
+    
 
 </LinearLayout>
