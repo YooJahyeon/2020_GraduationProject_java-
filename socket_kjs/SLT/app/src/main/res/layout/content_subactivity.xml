@@ -86,6 +86,6 @@
         android:id="@+id/setting"
         android:text="setting"
         android:layout_gravity="right"/>
-    
+
 
 </LinearLayout>
