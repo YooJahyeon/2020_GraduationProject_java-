@@ -1,5 +1,0 @@
-<application>
-  <component name="IntentionManagerSettings">
-    <ignoreAction name="Kotlin/Introduce local variable" />
-  </component>
-</application>
