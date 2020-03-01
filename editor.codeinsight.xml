@@ -1,6 +1,0 @@
-<application>
-  <component name="CodeInsightSettings">
-    <option name="AUTO_POPUP_JAVADOC_INFO" value="true" />
-    <EXCLUDED_PACKAGE NAME="java.util" />
-  </component>
-</application>
