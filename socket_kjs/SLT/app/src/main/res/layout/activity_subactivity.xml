@@ -1,33 +1,92 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".subactivity">
 
-    <com.google.android.material.appbar.AppBarLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:theme="@style/AppTheme.AppBarOverlay">
-
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
-            app:popupTheme="@style/AppTheme.PopupOverlay" />
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:padding="3dp">
 
-    </com.google.android.material.appbar.AppBarLayout>
+            <TextView
+                android:id="@+id/tran_bluetoothtext0"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="tran_bluetoothtext0" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="오른손입니다."/>
 
-    <include layout="@layout/content_subactivity" />
+            <RelativeLayout
+                android:id="@+id/tran_bluetoothlayout0"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@id/tran_bluetoothtext0" />
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="@dimen/fab_margin"
-        app:srcCompat="@android:drawable/ic_dialog_email" />
+            <ListView
+                android:id="@+id/value0"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tran_bluetoothtext0"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentLeft="true"
+                android:layout_marginStart="3dp"
+                android:layout_marginLeft="3dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="5dp"
+                android:layout_weight="0.8"
+                android:text="TextView" />
 
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:padding="3dp">
+
+            <TextView
+                android:id="@+id/tran_bluetoothtext1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="tran_bluetoothtext1" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="왼손입니다."/>
+
+            <RelativeLayout
+                android:id="@+id/tran_bluetoothlayout1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@id/tran_bluetoothtext1"
+                />
+
+            <ListView
+                android:id="@+id/value1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tran_bluetoothtext1"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentLeft="true"
+                android:layout_marginStart="3dp"
+                android:layout_marginLeft="3dp"
+                android:layout_marginTop="20dp"
+                android:layout_weight="0.8"
+                android:text="TextView" />
+
+        </RelativeLayout>
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/setting"
+            android:text="setting"
+            android:layout_gravity="right"/>
+
+
+    </LinearLayout>

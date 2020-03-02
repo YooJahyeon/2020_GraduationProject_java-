@@ -25,18 +25,7 @@ public class subactivity extends AppCompatActivity implements TextToSpeech.OnIni
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_subactivity);
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
-        FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
-
+        
         tts = new TextToSpeech(this, this); //첫번째는 Context 두번째는 리스너
     }
 
@@ -67,7 +56,7 @@ public class subactivity extends AppCompatActivity implements TextToSpeech.OnIni
     private void speakOutNow() {
         String text = (String)recvMessage;
         //tts.setPitch((float) 0.1); //음량
-        //tts.setSpeechRate((float) 0.5); //재생속도
+        tts.setSpeechRate((float) 0.7); //재생속도
         tts.speak(text, TextToSpeech.QUEUE_FLUSH, null);
     }
 
