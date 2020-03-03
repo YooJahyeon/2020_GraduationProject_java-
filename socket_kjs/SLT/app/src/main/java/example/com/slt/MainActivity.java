@@ -16,7 +16,6 @@ import android.os.Bundle;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.speech.tts.TextToSpeech;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
@@ -245,7 +244,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         @Override
         protected void onProgressUpdate(String... recvMessage) {
             mConversationArrayAdapter.insert(recvMessage[0], 0);
-
+            subactivity.speakOutNow();
         }
 
         @Override
