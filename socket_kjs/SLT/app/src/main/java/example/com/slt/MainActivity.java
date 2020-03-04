@@ -16,7 +16,6 @@ import android.os.Bundle;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.speech.tts.TextToSpeech;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
@@ -31,7 +30,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private final int REQUEST_BLUETOOTH_ENABLE = 100;       // 블루투스 활성화 상태
     private TextView mConnectionStatus;     // 연결상태 텍스트
     private EditText mInputEditText;        // 입력
-    private TextToSpeech tts;
     Button nextbutton;
 
     ConnectedTask mConnectedTask = null;       // 연결
@@ -102,10 +100,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
     @Override
     protected void onDestroy() {
-        if (tts != null) {
-            tts.stop();
-            tts.shutdown();
-        }
         super.onDestroy();
 
         if ( mConnectedTask != null ) {
@@ -250,7 +244,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         @Override
         protected void onProgressUpdate(String... recvMessage) {
             mConversationArrayAdapter.insert(recvMessage[0], 0);
-            speakOutNow();
+            subactivity.speakOutNow();
         }
 
         @Override
@@ -388,12 +382,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 showQuitDialog("You need to enable bluetooth");
             }
         }
-    }
-    private void speakOutNow() {
-        String text = (String)recvMessage;
-        //tts.setPitch((float) 0.1); //음량
-        //tts.setSpeechRate((float) 0.5); //재생속도
-        tts.speak(text, TextToSpeech.QUEUE_FLUSH, null);
     }
 
 
