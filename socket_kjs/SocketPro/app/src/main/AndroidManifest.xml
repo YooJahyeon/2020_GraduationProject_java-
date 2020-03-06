@@ -7,7 +7,7 @@
         android:label="@string/app_name" >
 
         <activity
-            android:name=".NewClient"
+            android:name=".MainActivity"
             android:label="@string/app_name" >
 
             <intent-filter>

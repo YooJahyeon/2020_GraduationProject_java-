@@ -6,12 +6,12 @@
 
     <TextView
         android:id="@+id/TextView01"
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
     <EditText
         android:id="@+id/EditText01"
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
     <Button
@@ -22,6 +22,7 @@
 
     <TextView
         android:id="@+id/chatting"
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content" />
+
 </LinearLayout>

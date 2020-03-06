@@ -1,10 +1,8 @@
 package com.example.socketpro;
 
-import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
@@ -31,7 +29,7 @@ public class MainActivity extends Activity {
     private BufferedReader networkReader;
     private BufferedWriter networkWriter;
 
-    private String ip = "xxx.xxx.xxx.xxx"; // IP
+    private String ip = "211.179.100.77"; // IP
     private int port = 9999; // PORT번호
 
     @Override
