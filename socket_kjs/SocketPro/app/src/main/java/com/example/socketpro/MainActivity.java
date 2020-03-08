@@ -87,7 +87,8 @@ public class MainActivity extends Activity {
                     mHandler.post(showUpdate);
                 }
             } catch (Exception e) {
-
+                System.out.println(e);
+                e.printStackTrace();
             }
         }
     };
