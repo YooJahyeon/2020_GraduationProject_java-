@@ -30,7 +30,7 @@ public class MainActivity extends Activity {
     private BufferedWriter networkWriter;
 
     private String ip = "211.179.100.77"; // IP
-    private int port = 9999; // PORT번호
+    private int port = 9998; // PORT번호
 
     @Override
     protected void onStop() {
@@ -52,8 +52,8 @@ public class MainActivity extends Activity {
 
         try {
             setSocket(ip, port);
-        } catch (IOException e1) {
-            e1.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
 
         checkUpdate.start();
