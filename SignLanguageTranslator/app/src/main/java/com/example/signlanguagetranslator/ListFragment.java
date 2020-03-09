@@ -7,12 +7,24 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
+import android.widget.ListView;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
-public class ListFragment extends Fragment {
+public class ListFragment extends Fragment  {
+    ListView listView;
+    ArrayList<list_item> arrayList;
+    MyListAdapter adapter;
+    Context mContext;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
 
     }
 
@@ -20,6 +32,22 @@ public class ListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_list, container, false);
+        View view = inflater.inflate(R.layout.fragment_list, container, false);
+        listView = (ListView)view.findViewById(R.id.listview);
+
+        mContext = getContext();
+
+        arrayList = new ArrayList<>();
+
+        adapter = new MyListAdapter(mContext, arrayList);
+
+        listView.setAdapter(adapter);
+
+
+
+
+        return view;
+
     }
+
 }

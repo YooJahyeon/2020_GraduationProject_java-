@@ -1,10 +1,8 @@
 package com.example.socketpro;
 
-import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
@@ -31,8 +29,8 @@ public class MainActivity extends Activity {
     private BufferedReader networkReader;
     private BufferedWriter networkWriter;
 
-    private String ip = "xxx.xxx.xxx.xxx"; // IP
-    private int port = 9999; // PORT번호
+    private String ip = "211.179.100.77"; // IP
+    private int port = 9998; // PORT번호
 
     @Override
     protected void onStop() {
@@ -54,8 +52,8 @@ public class MainActivity extends Activity {
 
         try {
             setSocket(ip, port);
-        } catch (IOException e1) {
-            e1.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
 
         checkUpdate.start();
@@ -89,7 +87,8 @@ public class MainActivity extends Activity {
                     mHandler.post(showUpdate);
                 }
             } catch (Exception e) {
-
+                System.out.println(e);
+                e.printStackTrace();
             }
         }
     };
