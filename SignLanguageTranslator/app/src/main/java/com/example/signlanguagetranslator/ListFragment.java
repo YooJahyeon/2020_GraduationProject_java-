@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
 import android.widget.ListView;
 
 import java.util.ArrayList;
@@ -16,8 +17,9 @@ import java.util.List;
 
 public class ListFragment extends Fragment  {
     ListView listView;
-    ArrayList<String> item;
-    ArrayAdapter<String> mAdapter;
+    ArrayList<list_item> arrayList;
+    MyListAdapter adapter;
+    Context mContext;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -33,10 +35,19 @@ public class ListFragment extends Fragment  {
         View view = inflater.inflate(R.layout.fragment_list, container, false);
         listView = (ListView)view.findViewById(R.id.listview);
 
-        String[] items = new String[]{"item1", "item2", "item3"};
-        
+        mContext = getContext();
+
+        arrayList = new ArrayList<>();
+
+        adapter = new MyListAdapter(mContext, arrayList);
+
+        listView.setAdapter(adapter);
+
+
+
 
         return view;
 
     }
+
 }
