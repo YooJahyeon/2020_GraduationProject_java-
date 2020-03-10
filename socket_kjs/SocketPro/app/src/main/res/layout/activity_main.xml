@@ -5,18 +5,18 @@
     android:orientation="vertical" >
 
     <TextView
-        android:id="@+id/TextView01"
+        android:id="@+id/Sendmessage"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="보내는 메세지" />
 
     <EditText
-        android:id="@+id/EditText01"
+        android:id="@+id/send_edit"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
     <Button
-        android:id="@+id/Button01"
+        android:id="@+id/send_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Send" />
