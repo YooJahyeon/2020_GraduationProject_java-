@@ -17,10 +17,7 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.UUID;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
@@ -51,7 +48,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     final int DISCONNECT = 0;
     final int CONNECTING = 1;
     final int CONNECTED = 2;
-    final int INPUTDATA = 9999;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -262,74 +258,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             handler.sendMessage(m);
         }
     }
-
-    //connected bluetooth - communication
-//    public class ConnectedThread extends Thread{
-//        InputStream in = null;
-//
-//        int bluetooth_index;
-//
-//        boolean is =false;
-//
-//        public ConnectedThread(BluetoothSocket bluetoothsocket, int index) {
-//            bluetooth_index = index;
-//
-//            try {
-//                in = bluetoothsocket.getInputStream();
-//                is = true;
-//                if(bluetooth_index == 0) IsConnect0 = is;
-//                else IsConnect1 = is;
-//                sendMessage(CONNECTED);
-//            } catch (IOException e) {
-//                cancel();
-//            }
-//        }
-//
-//        @Override
-//        public void run() {
-//            BufferedReader Buffer_in = new BufferedReader(new InputStreamReader(in));
-//
-//            while (is){
-//                try {
-//                    String s = Buffer_in.readLine();
-//                    if(!s.equals("")){
-//                        sendMessage(INPUTDATA,s);
-//                    }
-//                } catch (IOException e) { }
-//            }
-//
-//        }
-//
-//        public void sendMessage(int arg){
-//            Message m = new Message();
-//            m.what = bluetooth_index;
-//            m.arg1 = arg;
-//            handler.sendMessage(m);
-//        }
-//
-//        public void sendMessage(int arg, String s){
-//            Message m = new Message();
-//            m.what = bluetooth_index;
-//            m.arg1 = arg;
-//            m.obj = s;
-//            handler.sendMessage(m);
-//        }
-//
-//        public void cancel(){
-//            is = false;
-//            if(bluetooth_index == 0) IsConnect0 = is;
-//            else IsConnect1 = is;
-//            if(in != null){
-//                try {
-//                    in.close();
-//                    in=null;
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//            sendMessage(DISCONNECT);
-//        }
-//    }
 
     class MyView extends View{
         int Bluetooth_index = 0;
