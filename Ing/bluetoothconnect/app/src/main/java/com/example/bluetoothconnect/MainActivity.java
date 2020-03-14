@@ -9,7 +9,6 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.os.Handler;
 import android.os.Message;
-import android.speech.tts.TextToSpeech;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -21,8 +20,6 @@ import java.io.IOException;
 import java.util.UUID;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
-
-    private TextToSpeech tts;
 
     Button connectbtn0; //연결 버튼(connect/disconnect)
     Button connectbtn1; //연결 버튼(connect/disconnect)
@@ -274,10 +271,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (tts != null) {
-            tts.stop();
-            tts.shutdown();
-        }
         if(connectThread0 != null || connectThread1 != null) {
             connectThread0.connectedThread.cancel();
             connectThread1.connectedThread.cancel();

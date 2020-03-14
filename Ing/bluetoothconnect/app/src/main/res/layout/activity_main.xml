@@ -12,19 +12,34 @@
         android:layout_weight="1"
         android:padding="3dp">
 
-        <TextView
-            android:id="@+id/bluetoothtext0"
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="bluetoothtext0" />
+            android:orientation="vertical">
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <TextView
+                    android:id="@+id/bluetoothtext0"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="bluetoothtext0" />
 
-        <Button
-            android:id="@+id/connect0btn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:text="Connect" />
+                <Button
+                    android:id="@+id/connect0btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:text="Connect" />
+            </LinearLayout>
 
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/lefthand"/>
+
+        </LinearLayout>
     </RelativeLayout>
 
     <RelativeLayout
@@ -46,6 +61,10 @@
             android:layout_alignParentRight="true"
             android:elevation="0dp"
             android:text="Connect" />
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            />
 
     </RelativeLayout>
     <Button
