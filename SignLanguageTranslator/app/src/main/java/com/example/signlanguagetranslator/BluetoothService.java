@@ -270,10 +270,6 @@ public class BluetoothService extends Service {
         }
     }
 
-    public void stop_main(){
-
-
-    }
 
 
     @Override
