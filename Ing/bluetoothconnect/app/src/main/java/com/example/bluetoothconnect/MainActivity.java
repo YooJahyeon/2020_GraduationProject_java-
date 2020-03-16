@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.media.Image;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
@@ -14,6 +15,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.io.IOException;
@@ -24,6 +26,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     Button connectbtn0; //연결 버튼(connect/disconnect)
     Button connectbtn1; //연결 버튼(connect/disconnect)
     Button nextbutton; //다음 액티비티로 넘어가기 위한 버튼
+
+    ImageView lefthand; //왼손
+    ImageView righthand; //오른손
 
     TextView Bluetoothtext0; //Bluetooth0
     TextView Bluetoothtext1; //Bluetooth1
@@ -57,6 +62,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         Bluetoothtext0 = (TextView)findViewById(R.id.bluetoothtext0);
         Bluetoothtext1 = (TextView)findViewById(R.id.bluetoothtext1);
+
+        lefthand = (ImageView)findViewById(R.id.lefthand);
+        righthand = (ImageView)findViewById(R.id.righthand);
 
         //----------------------SET Listener---------------------------------//
         connectbtn0.setOnClickListener(this);
@@ -108,6 +116,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         connectbtn0.setText("DISCONNECT");
                         Bluetoothtext0.setTextColor(Color.parseColor("#00FF00"));
                         Bluetoothtext0.setText("CONNECTED");
+
                         break;
 
                 }

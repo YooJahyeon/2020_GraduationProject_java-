@@ -31,7 +31,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
-                    android:layout_marginLeft="200dp"
+                    android:layout_marginLeft="220dp"
                     android:elevation="0dp"
                     android:text="Connect" />
             </LinearLayout>
@@ -39,7 +39,9 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/lefthand"/>
+                android:id="@+id/lefthand"
+                android:src="@drawable/redhand"
+                android:layout_gravity="center"/>
 
         </LinearLayout>
     </RelativeLayout>
@@ -68,16 +70,20 @@
                     android:id="@+id/connect1btn"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="200dp"
-                    android:layout_alignParentRight="true"
+                    android:layout_marginLeft="220dp"
                     android:elevation="0dp"
                     android:text="Connect" />
             </LinearLayout>
-        </LinearLayout>
+
+
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:id="@+id/righthand"
+            android:src="@drawable/redhand"
+            android:layout_gravity="center"
             />
+        </LinearLayout>
 
     </RelativeLayout>
     <Button
