@@ -40,7 +40,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/lefthand"
-                android:src="@drawable/redhand"
+                android:src="@drawable/left_redhand"
                 android:layout_gravity="center"/>
 
         </LinearLayout>
@@ -80,7 +80,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/righthand"
-            android:src="@drawable/redhand"
+            android:src="@drawable/right_redhand"
             android:layout_gravity="center"
             />
         </LinearLayout>

@@ -116,7 +116,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         connectbtn0.setText("DISCONNECT");
                         Bluetoothtext0.setTextColor(Color.parseColor("#00FF00"));
                         Bluetoothtext0.setText("CONNECTED");
-                        lefthand.setImageResource(R.drawable.greenhand);
+                        lefthand.setImageResource(R.drawable.left_greenhand);
 
                         break;
 
@@ -141,7 +141,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         connectbtn1.setText("DISCONNECT");
                         Bluetoothtext1.setTextColor(Color.parseColor("#00FF00"));
                         Bluetoothtext1.setText("CONNECTED");
-                        righthand.setImageResource(R.drawable.greenhand);
+                        righthand.setImageResource(R.drawable.right_greenhand);
                         break;
 
                 }
