@@ -22,7 +22,7 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Locale;
 
-public class translateactivity extends AppCompatActivity implements TextToSpeech.OnInitListener{
+public class TranslateActivity extends AppCompatActivity implements TextToSpeech.OnInitListener{
 
     private static TextToSpeech tts;
 

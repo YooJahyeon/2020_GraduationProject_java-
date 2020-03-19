@@ -7,7 +7,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.media.Image;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
@@ -154,7 +153,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v) {
         if(v.getId() == R.id.nextbutton)
         {
-            Intent intent = new Intent(getApplicationContext(), translateactivity.class);
+            Intent intent = new Intent(getApplicationContext(), TranslateActivity.class);
             startActivity(intent);
         }
         if(v.getId() == R.id.connect0btn){
@@ -215,7 +214,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         int bluetooth_index;
 
-        translateactivity.ConnectedThread connectedThread;
+        TranslateActivity.ConnectedThread connectedThread;
 
         ConnectThread(BluetoothDevice device , int index){
             bluetoothDevice = device;
@@ -230,7 +229,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 bluetoothSocket = bluetoothDevice.createInsecureRfcommSocketToServiceRecord(SPP_UUID);
                 bluetoothSocket.connect();
 
-                connectedThread = new translateactivity.ConnectedThread(bluetoothSocket, bluetooth_index);
+                connectedThread = new TranslateActivity.ConnectedThread(bluetoothSocket, bluetooth_index);
                 connectedThread.start();
             } catch (IOException e) {
                 e.printStackTrace();
