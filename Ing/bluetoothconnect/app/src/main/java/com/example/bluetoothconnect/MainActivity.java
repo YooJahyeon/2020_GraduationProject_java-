@@ -14,6 +14,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.io.IOException;
@@ -24,6 +25,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     Button connectbtn0; //연결 버튼(connect/disconnect)
     Button connectbtn1; //연결 버튼(connect/disconnect)
     Button nextbutton; //다음 액티비티로 넘어가기 위한 버튼
+
+    ImageView lefthand; //왼손
+    ImageView righthand; //오른손
 
     TextView Bluetoothtext0; //Bluetooth0
     TextView Bluetoothtext1; //Bluetooth1
@@ -57,6 +61,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         Bluetoothtext0 = (TextView)findViewById(R.id.bluetoothtext0);
         Bluetoothtext1 = (TextView)findViewById(R.id.bluetoothtext1);
+
+        lefthand = (ImageView)findViewById(R.id.lefthand);
+        righthand = (ImageView)findViewById(R.id.righthand);
 
         //----------------------SET Listener---------------------------------//
         connectbtn0.setOnClickListener(this);
@@ -108,6 +115,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         connectbtn0.setText("DISCONNECT");
                         Bluetoothtext0.setTextColor(Color.parseColor("#00FF00"));
                         Bluetoothtext0.setText("CONNECTED");
+                        lefthand.setImageResource(R.drawable.left_greenhand);
+
                         break;
 
                 }
@@ -131,6 +140,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         connectbtn1.setText("DISCONNECT");
                         Bluetoothtext1.setTextColor(Color.parseColor("#00FF00"));
                         Bluetoothtext1.setText("CONNECTED");
+                        righthand.setImageResource(R.drawable.right_greenhand);
                         break;
 
                 }
@@ -143,7 +153,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v) {
         if(v.getId() == R.id.nextbutton)
         {
-            Intent intent = new Intent(getApplicationContext(), translateactivity.class);
+            Intent intent = new Intent(getApplicationContext(), TranslateActivity.class);
             startActivity(intent);
         }
         if(v.getId() == R.id.connect0btn){
@@ -204,7 +214,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         int bluetooth_index;
 
-        translateactivity.ConnectedThread connectedThread;
+        TranslateActivity.ConnectedThread connectedThread;
 
         ConnectThread(BluetoothDevice device , int index){
             bluetoothDevice = device;
@@ -219,7 +229,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 bluetoothSocket = bluetoothDevice.createInsecureRfcommSocketToServiceRecord(SPP_UUID);
                 bluetoothSocket.connect();
 
-                connectedThread = new translateactivity.ConnectedThread(bluetoothSocket, bluetooth_index);
+                connectedThread = new TranslateActivity.ConnectedThread(bluetoothSocket, bluetooth_index);
                 connectedThread.start();
             } catch (IOException e) {
                 e.printStackTrace();
