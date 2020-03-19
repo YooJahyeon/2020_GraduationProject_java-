@@ -7,6 +7,7 @@ import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothManager;
 import android.bluetooth.BluetoothSocket;
 import android.content.Intent;
+import android.os.Binder;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
@@ -281,7 +282,7 @@ public class BluetoothService extends Service {
 
 
 
-/* 버린 코드
+
    class LocalBinder extends Binder {
         BluetoothService getService() {
             return BluetoothService.this;
@@ -293,7 +294,8 @@ public class BluetoothService extends Service {
         // Service 객체와 데이터를 주고받을 때 사용하는 메서드
         return mBinder;
     }
-
+   }
+/*
     @Override
     public void onCreate() {
         super.onCreate();
@@ -327,9 +329,8 @@ public class BluetoothService extends Service {
             e.printStackTrace();
         }
     }
+*/
+   /* public void stop_main(){
 
-    public void stop_main(){
 
-
-    }
- */
+    }*/
