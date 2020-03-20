@@ -282,7 +282,7 @@ public class BluetoothService extends Service {
 
 
 
-
+/*
    class LocalBinder extends Binder {
         BluetoothService getService() {
             return BluetoothService.this;
@@ -294,8 +294,7 @@ public class BluetoothService extends Service {
         // Service 객체와 데이터를 주고받을 때 사용하는 메서드
         return mBinder;
     }
-   }
-/*
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -329,8 +328,8 @@ public class BluetoothService extends Service {
             e.printStackTrace();
         }
     }
-*/
-   /* public void stop_main(){
+
+    public void stop_main(){
 
 
     }*/
