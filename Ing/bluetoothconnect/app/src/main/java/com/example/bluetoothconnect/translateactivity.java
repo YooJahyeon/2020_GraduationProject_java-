@@ -4,12 +4,15 @@ package com.example.bluetoothconnect;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.speech.tts.TextToSpeech;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -22,9 +25,11 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Locale;
 
-public class TranslateActivity extends AppCompatActivity implements TextToSpeech.OnInitListener{
+public class TranslateActivity extends AppCompatActivity implements TextToSpeech.OnInitListener, View.OnClickListener{
 
     private static TextToSpeech tts;
+
+    Button previous_button; //이전 버튼
 
     TextView tran_Bluetoothtext0; //Bluetooth0
     TextView tran_Bluetoothtext1; //Bluetooth1
@@ -74,8 +79,11 @@ public class TranslateActivity extends AppCompatActivity implements TextToSpeech
         tran_Bluetoothlayout0 = (RelativeLayout)findViewById(R.id.tran_bluetoothlayout0);
         tran_Bluetoothlayout1 = (RelativeLayout)findViewById(R.id.tran_bluetoothlayout1);
 
+        previous_button = (Button)findViewById(R.id.previous);
+
         bluetoothDevice0 = bluetoothAdapter.getRemoteDevice(B0MA);
         bluetoothDevice1 = bluetoothAdapter.getRemoteDevice(B1MA);
+
 
         mConversationArrayAdapter0 = new ArrayAdapter<>( this,
                 android.R.layout.simple_list_item_1);
@@ -84,6 +92,14 @@ public class TranslateActivity extends AppCompatActivity implements TextToSpeech
         tran_Bluetoothvalue0.setAdapter(mConversationArrayAdapter0);
         tran_Bluetoothvalue1.setAdapter(mConversationArrayAdapter1);
 
+    }
+
+    @Override
+    public void onClick(View v) {
+        if (v.getId() == R.id.previous) {
+            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+            startActivity(intent);
+        }
     }
 
     //Bluetooth state -> View Change
