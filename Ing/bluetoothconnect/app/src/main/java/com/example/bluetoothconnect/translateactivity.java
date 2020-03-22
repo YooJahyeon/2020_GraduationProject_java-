@@ -13,6 +13,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -30,6 +31,7 @@ public class TranslateActivity extends AppCompatActivity implements TextToSpeech
     private static TextToSpeech tts;
 
     Button previous_button; //이전 버튼
+    ImageButton setting_button; //setting 버튼
 
     TextView tran_Bluetoothtext0; //Bluetooth0
     TextView tran_Bluetoothtext1; //Bluetooth1
@@ -80,6 +82,7 @@ public class TranslateActivity extends AppCompatActivity implements TextToSpeech
         tran_Bluetoothlayout1 = (RelativeLayout)findViewById(R.id.tran_bluetoothlayout1);
 
         previous_button = (Button)findViewById(R.id.previous);
+        setting_button = (ImageButton)findViewById(R.id.setting_button);
 
         bluetoothDevice0 = bluetoothAdapter.getRemoteDevice(B0MA);
         bluetoothDevice1 = bluetoothAdapter.getRemoteDevice(B1MA);

@@ -86,15 +86,29 @@
         </LinearLayout>
 
     </RelativeLayout>
-    <Button
-        android:id="@+id/nextbutton"
-        android:layout_gravity="right"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_marginTop="50dp"
-        android:elevation="0dp"
-        android:text="next"
-        android:onClick="onClick"/>
+        android:orientation="horizontal">
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/setting_button"
+            android:src="@drawable/ic_settings_black_24dp"
+            android:background="#FFFFFF"
+            android:layout_gravity="left"/>
+
+        <Button
+            android:id="@+id/nextbutton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:layout_marginTop="50dp"
+            android:layout_marginLeft="300dp"
+            android:elevation="0dp"
+            android:onClick="onClick"
+            android:text="next" />
+    </LinearLayout>
 
 </LinearLayout>
