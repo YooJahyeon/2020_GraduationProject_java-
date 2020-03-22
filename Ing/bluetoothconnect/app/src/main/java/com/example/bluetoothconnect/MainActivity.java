@@ -14,6 +14,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -25,6 +26,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     Button connectbtn0; //연결 버튼(connect/disconnect)
     Button connectbtn1; //연결 버튼(connect/disconnect)
     Button nextbutton; //다음 액티비티로 넘어가기 위한 버튼
+
+    ImageButton setting_button; //setting 버튼
 
     ImageView lefthand; //왼손
     ImageView righthand; //오른손
@@ -58,6 +61,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         connectbtn0 = (Button)findViewById(R.id.connect0btn);
         connectbtn1 = (Button)findViewById(R.id.connect1btn);
         nextbutton = (Button)findViewById(R.id.nextbutton);
+        setting_button = (ImageButton)findViewById(R.id.setting_button);
 
         Bluetoothtext0 = (TextView)findViewById(R.id.bluetoothtext0);
         Bluetoothtext1 = (TextView)findViewById(R.id.bluetoothtext1);
