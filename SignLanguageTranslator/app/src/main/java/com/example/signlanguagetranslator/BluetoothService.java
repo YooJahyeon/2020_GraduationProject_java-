@@ -282,7 +282,7 @@ public class BluetoothService extends Service {
 
 
 
-
+/*
    class LocalBinder extends Binder {
         BluetoothService getService() {
             return BluetoothService.this;
@@ -332,4 +332,4 @@ public class BluetoothService extends Service {
     public void stop_main(){
 
 
-    }
+    }*/
