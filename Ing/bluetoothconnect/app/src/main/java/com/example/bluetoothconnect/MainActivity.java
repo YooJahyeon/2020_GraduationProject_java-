@@ -160,6 +160,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             Intent intent = new Intent(getApplicationContext(), TranslateActivity.class);
             startActivity(intent);
         }
+        if(v.getId() == R.id.setting_button){
+            Intent intent = new Intent(getApplicationContext(), SettingActivity.class);
+            startActivity(intent);
+        }
         if(v.getId() == R.id.connect0btn){
             if(IsConnect0){
                 //블루투스 연결된 상태
