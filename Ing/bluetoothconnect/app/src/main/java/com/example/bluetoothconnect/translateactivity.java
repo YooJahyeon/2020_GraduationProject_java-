@@ -67,6 +67,7 @@ public class TranslateActivity extends AppCompatActivity implements TextToSpeech
     private static ArrayAdapter<String> mConversationArrayAdapter0;  //bluetooth0의 리스트뷰 출력을 위한 adapter
     private static ArrayAdapter<String> mConversationArrayAdapter1;  //bluetooth1의 리스트뷰 출력을 위한 adapter
     private static String s;   //message
+    static float speed; //재생속도를 위한 변수
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -230,7 +231,7 @@ public class TranslateActivity extends AppCompatActivity implements TextToSpeech
     private static void speakOutNow() {
         String text = s;
         //tts.setPitch((float) 0.1); //음량
-        tts.setSpeechRate((float) 0.7); //재생속도 조절하기
+        tts.setSpeechRate(speed); //재생속도 조절하기
         tts.speak(text, TextToSpeech.QUEUE_FLUSH, null);
     }
 

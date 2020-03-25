@@ -32,23 +32,28 @@
             <RadioButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="0.50   " />
+                android:text="0.50   "
+                android:id="@+id/button_050"/>
             <RadioButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="0.75   "/>
+                android:text="0.75   "
+                android:id="@+id/button_075"/>
             <RadioButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="1.00   "/>
+                android:text="1.00   "
+                android:id="@+id/button_100"/>
             <RadioButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="1.25   "/>
+                android:text="1.25   "
+                android:id="@+id/button_125"/>
             <RadioButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="1.50   "/>
+                android:text="1.50   "
+                android:id="@+id/button_150"/>
         </LinearLayout>
     </LinearLayout>
 
