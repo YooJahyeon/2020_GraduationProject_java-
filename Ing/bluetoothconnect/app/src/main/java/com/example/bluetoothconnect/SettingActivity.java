@@ -2,9 +2,11 @@ package com.example.bluetoothconnect;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.View;
 import android.widget.RadioButton;
 
-public class SettingActivity extends AppCompatActivity {
+public class SettingActivity extends AppCompatActivity implements View.OnClickListener{
 
     RadioButton button_050;
     RadioButton button_075;
@@ -17,5 +19,17 @@ public class SettingActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setting);
+
+        button_050 = (RadioButton)findViewById(R.id.button_050);
+        button_075 = (RadioButton)findViewById(R.id.button_075);
+        button_100 = (RadioButton)findViewById(R.id.button_100);
+        button_125 = (RadioButton)findViewById(R.id.button_125);
+        button_150 = (RadioButton)findViewById(R.id.button_150);
+    }
+
+
+    @Override
+    public void onClick(View v) {
+
     }
 }
