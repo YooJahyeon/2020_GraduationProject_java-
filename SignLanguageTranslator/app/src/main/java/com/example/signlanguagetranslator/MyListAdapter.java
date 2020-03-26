@@ -19,7 +19,7 @@ public class MyListAdapter extends BaseAdapter{
         this.list_itemArrayList = list_itemArrayList;
     }
 
-/*
+
     @Override
     public int getCount() {
         if (this.list_itemArrayList.size()<=0)
@@ -40,7 +40,7 @@ public class MyListAdapter extends BaseAdapter{
     public long getItemId(int position) {
         return 0;
     }
-    */
+
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
