@@ -30,6 +30,25 @@ public class SettingActivity extends AppCompatActivity implements View.OnClickLi
 
     @Override
     public void onClick(View v) {
-
+        if(v.getId()==R.id.button_050)
+        {
+            TranslateActivity.speed = (float) 0.5;
+        }
+        else if(v.getId()==R.id.button_075)
+        {
+            TranslateActivity.speed = (float)0.75;
+        }
+        else if(v.getId()==R.id.button_100)
+        {
+            TranslateActivity.speed = (float)1.00;
+        }
+        else if(v.getId()==R.id.button_125)
+        {
+            TranslateActivity.speed = (float)1.25;
+        }
+        else if(v.getId()==R.id.button_150)
+        {
+            TranslateActivity.speed = (float)1.50;
+        }
     }
 }
