@@ -20,7 +20,7 @@ public class MyListAdapter extends BaseAdapter{
     }
 
 
-   /* @Override
+    @Override
     public int getCount() {
         if (this.list_itemArrayList.size()<=0)
         {
@@ -47,5 +47,4 @@ public class MyListAdapter extends BaseAdapter{
         // 나중에
         return null;
     }
-    */
 }
