@@ -13,6 +13,9 @@ public class SettingActivity extends AppCompatActivity implements View.OnClickLi
     RadioButton button_125;
     RadioButton button_150;
 
+    RadioButton total;
+    RadioButton individual;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,6 +27,9 @@ public class SettingActivity extends AppCompatActivity implements View.OnClickLi
         button_100 = (RadioButton)findViewById(R.id.button_100);
         button_125 = (RadioButton)findViewById(R.id.button_125);
         button_150 = (RadioButton)findViewById(R.id.button_150);
+
+        total = (RadioButton)findViewById(R.id.total);
+        individual = (RadioButton)findViewById(R.id.individual);
     }
 
 
