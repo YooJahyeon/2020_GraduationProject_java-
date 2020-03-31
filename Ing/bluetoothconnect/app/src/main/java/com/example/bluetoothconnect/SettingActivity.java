@@ -3,6 +3,7 @@ package com.example.bluetoothconnect;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.CheckBox;
 import android.widget.RadioButton;
 
 public class SettingActivity extends AppCompatActivity implements View.OnClickListener{
@@ -13,8 +14,8 @@ public class SettingActivity extends AppCompatActivity implements View.OnClickLi
     RadioButton button_125;
     RadioButton button_150;
 
-    RadioButton total;
-    RadioButton individual;
+    CheckBox total;
+    CheckBox individual;
 
 
     @Override
@@ -28,8 +29,8 @@ public class SettingActivity extends AppCompatActivity implements View.OnClickLi
         button_125 = (RadioButton)findViewById(R.id.button_125);
         button_150 = (RadioButton)findViewById(R.id.button_150);
 
-        total = (RadioButton)findViewById(R.id.total);
-        individual = (RadioButton)findViewById(R.id.individual);
+        total = (CheckBox)findViewById(R.id.total);
+        individual = (CheckBox)findViewById(R.id.individual);
     }
 
 
