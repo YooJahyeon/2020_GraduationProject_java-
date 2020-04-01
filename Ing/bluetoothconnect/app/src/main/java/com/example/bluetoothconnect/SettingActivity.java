@@ -57,11 +57,11 @@ public class SettingActivity extends AppCompatActivity implements View.OnClickLi
             TranslateActivity.speed = (float)1.50;
         }
 
-        else if(v.getId()==R.id.individual)
+        if(v.getId()==R.id.individual)
         {
 
         }
-        else if(v.getId()==R.id.total)
+        if(v.getId()==R.id.total)
         {
 
         }
