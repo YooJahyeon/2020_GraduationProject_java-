@@ -3,7 +3,9 @@ package com.example.bluetoothconnect;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.CheckBox;
 import android.widget.RadioButton;
+import android.widget.SeekBar;
 
 public class SettingActivity extends AppCompatActivity implements View.OnClickListener{
 
@@ -13,8 +15,10 @@ public class SettingActivity extends AppCompatActivity implements View.OnClickLi
     RadioButton button_125;
     RadioButton button_150;
 
-    RadioButton total;
-    RadioButton individual;
+    CheckBox total;
+    CheckBox individual;
+
+    SeekBar seekbar_volume;
 
 
     @Override
@@ -28,9 +32,14 @@ public class SettingActivity extends AppCompatActivity implements View.OnClickLi
         button_125 = (RadioButton)findViewById(R.id.button_125);
         button_150 = (RadioButton)findViewById(R.id.button_150);
 
-        total = (RadioButton)findViewById(R.id.total);
-        individual = (RadioButton)findViewById(R.id.individual);
+        total = (CheckBox)findViewById(R.id.total);
+        individual = (CheckBox)findViewById(R.id.individual);
+
+        seekbar_volume = (SeekBar)findViewById(R.id.seekbar_volume);
+        
     }
+
+
 
 
     @Override
@@ -56,11 +65,11 @@ public class SettingActivity extends AppCompatActivity implements View.OnClickLi
             TranslateActivity.speed = (float)1.50;
         }
 
-        else if(v.getId()==R.id.individual)
+        if(v.getId()==R.id.individual)
         {
 
         }
-        else if(v.getId()==R.id.total)
+        if(v.getId()==R.id.total)
         {
 
         }
