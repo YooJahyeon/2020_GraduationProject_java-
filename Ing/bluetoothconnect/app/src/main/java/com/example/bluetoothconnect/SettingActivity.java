@@ -1,5 +1,6 @@
 package com.example.bluetoothconnect;
 
+import android.media.AudioManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -36,7 +37,37 @@ public class SettingActivity extends AppCompatActivity implements View.OnClickLi
         individual = (CheckBox)findViewById(R.id.individual);
 
         seekbar_volume = (SeekBar)findViewById(R.id.seekbar_volume);
-        
+
+        final AudioManager audioManager = (AudioManager) getSystemService(AUDIO_SERVICE);
+        int nMax = audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
+        int nCurrentVolumn = audioManager
+                .getStreamVolume(AudioManager.STREAM_MUSIC);
+
+        seekbar_volume.setMax(nMax);
+        seekbar_volume.setProgress(nCurrentVolumn);
+
+        seekbar_volume.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                // TODO Auto-generated method stub
+
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+                // TODO Auto-generated method stub
+
+            }
+
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress,
+                                          boolean fromUser) {
+                // TODO Auto-generated method stub
+                audioManager.setStreamVolume(AudioManager.STREAM_MUSIC,
+                        progress, 0);
+            }
+        });
     }
 
 
