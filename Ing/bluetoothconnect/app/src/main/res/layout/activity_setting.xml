@@ -96,11 +96,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="음량 조절"/>
-            <SeekBar
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/seekbar_volume"/>
+                android:text="음량"/>
 
         </LinearLayout>
 
