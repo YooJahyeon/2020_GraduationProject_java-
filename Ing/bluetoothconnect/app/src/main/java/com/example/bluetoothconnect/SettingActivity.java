@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.RadioButton;
+import android.widget.SeekBar;
 
 public class SettingActivity extends AppCompatActivity implements View.OnClickListener{
 
@@ -16,6 +17,8 @@ public class SettingActivity extends AppCompatActivity implements View.OnClickLi
 
     CheckBox total;
     CheckBox individual;
+
+    SeekBar seekbar_volume;
 
 
     @Override
@@ -31,7 +34,12 @@ public class SettingActivity extends AppCompatActivity implements View.OnClickLi
 
         total = (CheckBox)findViewById(R.id.total);
         individual = (CheckBox)findViewById(R.id.individual);
+
+        seekbar_volume = (SeekBar)findViewById(R.id.seekbar_volume);
+        
     }
+
+
 
 
     @Override
