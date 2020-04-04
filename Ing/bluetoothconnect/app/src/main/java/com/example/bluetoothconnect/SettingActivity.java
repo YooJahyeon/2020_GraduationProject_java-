@@ -40,30 +40,25 @@ public class SettingActivity extends AppCompatActivity implements View.OnClickLi
 
         final AudioManager audioManager = (AudioManager) getSystemService(AUDIO_SERVICE);
         int nMax = audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
-        int nCurrentVolumn = audioManager
-                .getStreamVolume(AudioManager.STREAM_MUSIC);
+        int nCurrentVolume = audioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
 
         seekbar_volume.setMax(nMax);
-        seekbar_volume.setProgress(nCurrentVolumn);
+        seekbar_volume.setProgress(nCurrentVolume);
 
         seekbar_volume.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                // TODO Auto-generated method stub
 
             }
 
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
-                // TODO Auto-generated method stub
 
             }
 
             @Override
-            public void onProgressChanged(SeekBar seekBar, int progress,
-                                          boolean fromUser) {
-                // TODO Auto-generated method stub
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 audioManager.setStreamVolume(AudioManager.STREAM_MUSIC,
                         progress, 0);
             }
@@ -77,7 +72,7 @@ public class SettingActivity extends AppCompatActivity implements View.OnClickLi
     public void onClick(View v) {
         if(v.getId()==R.id.button_050)
         {
-            TranslateActivity.speed = (float) 0.5;
+            TranslateActivity.speed = (float)0.5;
         }
         else if(v.getId()==R.id.button_075)
         {
