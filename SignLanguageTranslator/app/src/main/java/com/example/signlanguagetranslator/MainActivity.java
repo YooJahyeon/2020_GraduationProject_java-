@@ -44,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
         public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
             FragmentTransaction transaction = fragmentManager.beginTransaction();
 
-            switch (menuItem.getItemId())
+            /*switch (menuItem.getItemId())
             {
                 case R.id.navigation_translator:
                     transaction.replace(R.id.layout_container, translationFragment).commitAllowingStateLoss();
@@ -57,7 +57,7 @@ public class MainActivity extends AppCompatActivity {
                 case R.id.navigation_setting:
                     transaction.replace(R.id.layout_container, settingFragment).commitAllowingStateLoss();
                     break;
-            }
+            }*/
 
             return true;
         }
