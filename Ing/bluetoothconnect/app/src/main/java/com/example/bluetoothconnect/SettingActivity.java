@@ -59,13 +59,10 @@ public class SettingActivity extends AppCompatActivity implements View.OnClickLi
 
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                audioManager.setStreamVolume(AudioManager.STREAM_MUSIC,
-                        progress, 0);
+                audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, progress, 0);
             }
         });
     }
-
-
 
 
     @Override
