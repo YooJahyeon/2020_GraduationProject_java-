@@ -36,6 +36,7 @@ public class SettingActivity extends AppCompatActivity implements View.OnClickLi
         total = (CheckBox)findViewById(R.id.total);
         individual = (CheckBox)findViewById(R.id.individual);
 
+        //seekBar로 음량조절하기
         seekbar_volume = (SeekBar)findViewById(R.id.seekbar_volume);
 
         final AudioManager audioManager = (AudioManager) getSystemService(AUDIO_SERVICE);
@@ -49,12 +50,10 @@ public class SettingActivity extends AppCompatActivity implements View.OnClickLi
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-
             }
 
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
-
             }
 
             @Override

@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
@@ -6,6 +6,13 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+    </style>
+
+    <style name="seekbar_volume" parent="Widget.AppCompat.SeekBar">
+        <item name="android:progressBackgroundTint" tools:targetApi="lollipop">#FFFFFF</item>
+        <item name="android:progressTint" tools:targetApi="lollipop">#000000</item>
+        <item name="android:colorControlActivated" tools:targetApi="lollipop">#888888</item>
+
     </style>
 
 </resources>
