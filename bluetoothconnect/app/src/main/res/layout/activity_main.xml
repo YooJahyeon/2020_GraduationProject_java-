@@ -37,7 +37,9 @@
             android:id="@+id/bluetoothtext1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="bluetoothtext1" />
+            android:text="CONNECT"
+            android:textColor="#40FF00"
+            />
 
         <Button
             android:id="@+id/connect1btn"
@@ -46,6 +48,14 @@
             android:layout_alignParentRight="true"
             android:elevation="0dp"
             android:text="Connect" />
+
+        <ListView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/connect1btn"
+            >
+
+        </ListView>
 
     </RelativeLayout>
     <Button
