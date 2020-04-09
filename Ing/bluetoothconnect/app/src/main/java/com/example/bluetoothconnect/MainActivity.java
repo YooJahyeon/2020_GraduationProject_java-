@@ -82,6 +82,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             startActivityForResult(i,5000);
         }
 
+
         bluetoothDevice0 = bluetoothAdapter.getRemoteDevice(B0MA);
         bluetoothDevice1 = bluetoothAdapter.getRemoteDevice(B1MA);
 
@@ -155,15 +156,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onClick(View v) {
+        if(v.getId() == R.id.setting_button){
+            Intent intent = new Intent(getApplicationContext(), SettingActivity.class);
+            startActivity(intent);
+        }
         if(v.getId() == R.id.nextbutton)
         {
             Intent intent = new Intent(getApplicationContext(), TranslateActivity.class);
             startActivity(intent);
         }
-        if(v.getId() == R.id.setting_button){
-            Intent intent = new Intent(getApplicationContext(), SettingActivity.class);
-            startActivity(intent);
-        }
+
         if(v.getId() == R.id.connect0btn){
             if(IsConnect0){
                 //블루투스 연결된 상태
