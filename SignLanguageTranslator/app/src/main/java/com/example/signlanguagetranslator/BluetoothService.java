@@ -7,6 +7,7 @@ import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothManager;
 import android.bluetooth.BluetoothSocket;
 import android.content.Intent;
+import android.os.Binder;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
@@ -271,6 +272,7 @@ public class BluetoothService extends Service {
     }
 
 
+
     @Override
     public void onDestroy() {
 
@@ -280,7 +282,7 @@ public class BluetoothService extends Service {
 
 
 
-/* 버린 코드
+/*
    class LocalBinder extends Binder {
         BluetoothService getService() {
             return BluetoothService.this;
@@ -330,5 +332,4 @@ public class BluetoothService extends Service {
     public void stop_main(){
 
 
-    }
- */
+    }*/

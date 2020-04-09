@@ -58,9 +58,9 @@ public class MainActivity extends Activity {
 
         checkUpdate.start();
 
-        final EditText et = (EditText) findViewById(R.id.EditText01);
-        Button btn = (Button) findViewById(R.id.Button01);
-        final TextView tv = (TextView) findViewById(R.id.TextView01);
+        final EditText et = (EditText) findViewById(R.id.send_edit);
+        Button btn = (Button) findViewById(R.id.send_button);
+        final TextView tv = (TextView) findViewById(R.id.Sendmessage);
 
         btn.setOnClickListener(new OnClickListener() {
 

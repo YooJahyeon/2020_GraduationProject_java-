@@ -6,25 +6,23 @@
     android:orientation="vertical"
     tools:context=".SettingFragment">
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Setting" />
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="설정" />
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="100dp"
-        android:text="음성 속도"
+        android:layout_marginTop="50dp"
+        android:text="재생속도"
         />
 
     <TableLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         >
-        <TableRow
-            android:gravity="center">
+        <TableRow>
             <RadioButton
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
@@ -62,9 +60,60 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:text="음소 조합 여부 선택"
+        />
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TableRow>
+            <CheckBox /> <TextView android:text="지화 조합 안함"/>
+            <CheckBox /> <TextView android:text="지화 조합"/>
+        </TableRow>
+
+    </TableLayout>
+
+
+
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="음량조절"
+        android:layout_marginTop="50dp"
+        />
+    <SeekBar
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:max="100"
+        android:progress="50"
+        />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:text="블루투스 연결"
-        android:layout_marginTop="20dp"
-    />
+        android:layout_marginTop="50dp"
+        />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="왼손"
+            />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="280dp"
+            android:text="CONNECT" />
+
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -72,9 +121,15 @@
         android:orientation="horizontal"
         >
         <TextView
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="왼손"
+            android:text="오른손"
+            />
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="250dp"
+            android:text="DISCONNECT"
             />
 
     </LinearLayout>

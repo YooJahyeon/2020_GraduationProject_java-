@@ -19,6 +19,8 @@ public class MainActivity extends AppCompatActivity {
     private ListFragment listFragment = new ListFragment();
     private SettingFragment settingFragment = new SettingFragment();
 
+    private ListViewFragment listViewFragment = new ListViewFragment();
+
     BottomNavigationView bottomNavigationView;
 
 
@@ -47,11 +49,11 @@ public class MainActivity extends AppCompatActivity {
             switch (menuItem.getItemId())
             {
                 case R.id.navigation_translator:
-                    transaction.replace(R.id.layout_container, translationFragment).commitAllowingStateLoss();
+                    transaction.replace(R.id.layout_container, listViewFragment).commitAllowingStateLoss();
                     break;
 
                 case R.id.navigation_list:
-                    transaction.replace(R.id.layout_container, listFragment).commitAllowingStateLoss();
+                    transaction.replace(R.id.layout_container, listViewFragment).commitAllowingStateLoss();
                     break;
 
                 case R.id.navigation_setting:
