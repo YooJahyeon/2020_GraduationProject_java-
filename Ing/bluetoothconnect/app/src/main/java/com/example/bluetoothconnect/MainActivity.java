@@ -156,17 +156,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onClick(View v) {
-//        if(v.getId() == R.id.setting_button){
-//            Intent intent = new Intent(getApplicationContext(), SettingActivity.class);
-//            startActivity(intent);
-//        }
-        if(v.getId() == R.id.nextbutton)
+        if(v.getId() == R.id.setting_button){
+            Intent intent = new Intent(getApplicationContext(), SettingActivity.class);
+            startActivity(intent);
+        }
+        else if(v.getId() == R.id.nextbutton)
         {
             Intent intent = new Intent(getApplicationContext(), TranslateActivity.class);
             startActivity(intent);
         }
 
-        if(v.getId() == R.id.connect0btn){
+        else if(v.getId() == R.id.connect0btn){
             if(IsConnect0){
                 //블루투스 연결된 상태
                 if(connectThread0 != null){
