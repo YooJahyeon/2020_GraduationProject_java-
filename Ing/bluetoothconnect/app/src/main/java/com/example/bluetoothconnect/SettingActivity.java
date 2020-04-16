@@ -4,6 +4,7 @@ import android.media.AudioManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.RadioButton;
 import android.widget.SeekBar;
@@ -21,6 +22,9 @@ public class SettingActivity extends AppCompatActivity implements View.OnClickLi
 
     SeekBar seekbar_volume;
 
+    Button left_connect;
+    Button right_connect;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +39,9 @@ public class SettingActivity extends AppCompatActivity implements View.OnClickLi
 
         total = (CheckBox)findViewById(R.id.total);
         individual = (CheckBox)findViewById(R.id.individual);
+
+        left_connect = (Button)findViewById(R.id.left_connect);
+        right_connect = (Button)findViewById(R.id.right_connect);
 
         //seekBar로 음량조절하기
         seekbar_volume = (SeekBar)findViewById(R.id.seekbar_volume);
@@ -87,13 +94,16 @@ public class SettingActivity extends AppCompatActivity implements View.OnClickLi
             TranslateActivity.speed = (float)1.50;
         }
 
-        if(v.getId()==R.id.individual)
+        else if(v.getId()==R.id.individual)
         {
 
         }
-        if(v.getId()==R.id.total)
+        else if(v.getId()==R.id.total)
         {
 
         }
+
+
+
     }
 }

@@ -123,19 +123,33 @@
                 android:orientation="horizontal">
                 <TextView
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" 
+                    android:layout_height="wrap_content"
                     android:text="오른손"/>
+
                 <Button
+                    android:id="@+id/right_connect"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/right"
-                    android:layout_gravity="right"/>
+                    android:layout_gravity="right" />
             </LinearLayout>
             <TextView
                 android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="왼손"/>
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="왼손"/>
 
+                <Button
+                    android:id="@+id/left_connect"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right" />
+            </LinearLayout>
 
         </LinearLayout>
 
