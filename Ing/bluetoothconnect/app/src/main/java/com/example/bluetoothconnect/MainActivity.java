@@ -35,7 +35,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     TextView Bluetoothtext0; //Bluetooth0
     TextView Bluetoothtext1; //Bluetooth1
 
-    boolean IsConnect0 = false, IsConnect1 = false;
+    static boolean IsConnect0 = false;
+    static boolean IsConnect1 = false;
 
     BluetoothAdapter bluetoothAdapter;
     BluetoothDevice bluetoothDevice0,bluetoothDevice1;
