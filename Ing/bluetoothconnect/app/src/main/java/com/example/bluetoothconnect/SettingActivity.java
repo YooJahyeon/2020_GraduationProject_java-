@@ -1,12 +1,19 @@
 package com.example.bluetoothconnect;
 
+import android.graphics.Color;
 import android.media.AudioManager;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.RadioButton;
 import android.widget.SeekBar;
+
+import static com.example.bluetoothconnect.TranslateActivity.CONNECTED;
+import static com.example.bluetoothconnect.TranslateActivity.DISCONNECT;
 
 public class SettingActivity extends AppCompatActivity implements View.OnClickListener{
 
@@ -20,6 +27,9 @@ public class SettingActivity extends AppCompatActivity implements View.OnClickLi
     CheckBox individual;
 
     SeekBar seekbar_volume;
+
+    Button left_connect;
+    Button right_connect;
 
 
     @Override
@@ -35,6 +45,9 @@ public class SettingActivity extends AppCompatActivity implements View.OnClickLi
 
         total = (CheckBox)findViewById(R.id.total);
         individual = (CheckBox)findViewById(R.id.individual);
+
+        left_connect = (Button)findViewById(R.id.left_connect);
+        right_connect = (Button)findViewById(R.id.right_connect);
 
         //seekBar로 음량조절하기
         seekbar_volume = (SeekBar)findViewById(R.id.seekbar_volume);
@@ -63,6 +76,58 @@ public class SettingActivity extends AppCompatActivity implements View.OnClickLi
         });
     }
 
+    Handler handler = new Handler(new Handler.Callback() {
+        @Override
+        public boolean handleMessage(Message msg) {
+            if(msg.what == 0){
+                switch (msg.arg1){
+                    case DISCONNECT:
+                        MainActivity.IsConnect0 = false;
+                        left_connect.setText("CONNECT");
+                        Bluetoothtext0.setTextColor(Color.parseColor("#FF0000"));
+                        Bluetoothtext0.setText("DISCONNECT");
+                        break;
+                    case CONNECTING:
+                        Bluetoothtext0.setTextColor(Color.parseColor("#FF0000"));
+                        Bluetoothtext0.setText("CONNECTING");
+                        break;
+                    case CONNECTED:
+                        MainActivity.IsConnect0 = true;
+                        left_connect.setEnabled(true);
+                        right_connect.setText("DISCONNECT");
+                        Bluetoothtext0.setTextColor(Color.parseColor("#00FF00"));
+                        Bluetoothtext0.setText("CONNECTED");
+                        break;
+
+                }
+
+            }
+            else{
+                switch (msg.arg1){
+                    case DISCONNECT:
+                        MainActivity.IsConnect1 = false;
+                        right_connect.setText("CONNECT");
+                        Bluetoothtext1.setTextColor(Color.parseColor("#FF0000"));
+                        Bluetoothtext1.setText("DISCONNECT");
+                        break;
+                    case CONNECTING:
+                        Bluetoothtext1.setTextColor(Color.parseColor("#FF0000"));
+                        Bluetoothtext1.setText("CONNECTING");
+                        break;
+                    case CONNECTED:
+                        MainActivity.IsConnect1 = true;
+                        right_connect.setEnabled(true);
+                        right_connect.setText("DISCONNECT");
+                        Bluetoothtext1.setTextColor(Color.parseColor("#00FF00"));
+                        Bluetoothtext1.setText("CONNECTED");
+                        break;
+
+                }
+            }
+            return true;
+        }
+    });
+
 
     @Override
     public void onClick(View v) {
@@ -87,13 +152,24 @@ public class SettingActivity extends AppCompatActivity implements View.OnClickLi
             TranslateActivity.speed = (float)1.50;
         }
 
-        if(v.getId()==R.id.individual)
+        else if(v.getId()==R.id.individual)
         {
 
         }
-        if(v.getId()==R.id.total)
+        else if(v.getId()==R.id.total)
         {
 
         }
+
+        else if(v.getId()==R.id.left_connect)
+        {
+
+        }
+
+        else if(v.getId()==R.id.right_connect)
+        {
+
+        }
+
     }
 }

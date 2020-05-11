@@ -35,7 +35,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     TextView Bluetoothtext0; //Bluetooth0
     TextView Bluetoothtext1; //Bluetooth1
 
-    boolean IsConnect0 = false, IsConnect1 = false;
+    static boolean IsConnect0 = false;
+    static boolean IsConnect1 = false;
 
     BluetoothAdapter bluetoothAdapter;
     BluetoothDevice bluetoothDevice0,bluetoothDevice1;
@@ -160,13 +161,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             Intent intent = new Intent(getApplicationContext(), SettingActivity.class);
             startActivity(intent);
         }
-        if(v.getId() == R.id.nextbutton)
+        else if(v.getId() == R.id.nextbutton)
         {
             Intent intent = new Intent(getApplicationContext(), TranslateActivity.class);
             startActivity(intent);
         }
 
-        if(v.getId() == R.id.connect0btn){
+        else if(v.getId() == R.id.connect0btn){
             if(IsConnect0){
                 //블루투스 연결된 상태
                 if(connectThread0 != null){

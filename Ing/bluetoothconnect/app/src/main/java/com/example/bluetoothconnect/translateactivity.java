@@ -104,7 +104,7 @@ public class TranslateActivity extends AppCompatActivity implements TextToSpeech
             Intent intent = new Intent(getApplicationContext(), MainActivity.class);
             startActivity(intent);
         }
-        if(v.getId() == R.id.setting_button){
+        else if(v.getId() == R.id.setting_button){
             Intent intent = new Intent(getApplicationContext(), SettingActivity.class);
             startActivity(intent);
         }
