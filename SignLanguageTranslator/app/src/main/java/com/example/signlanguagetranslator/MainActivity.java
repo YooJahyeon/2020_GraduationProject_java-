@@ -15,11 +15,12 @@ public class MainActivity extends AppCompatActivity {
 
     private FragmentManager fragmentManager = getSupportFragmentManager();
 
+
+    private  ListViewFragment listViewFragment = new ListViewFragment();
     private TranslationFragment translationFragment = new TranslationFragment();
     private ListFragment listFragment = new ListFragment();
     private SettingFragment settingFragment = new SettingFragment();
 
-    private ListViewFragment listViewFragment = new ListViewFragment();
 
     BottomNavigationView bottomNavigationView;
 
@@ -53,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
                     break;
 
                 case R.id.navigation_list:
-                    transaction.replace(R.id.layout_container, listViewFragment).commitAllowingStateLoss();
+                    transaction.replace(R.id.layout_container, listFragment).commitAllowingStateLoss();
                     break;
 
                 case R.id.navigation_setting:

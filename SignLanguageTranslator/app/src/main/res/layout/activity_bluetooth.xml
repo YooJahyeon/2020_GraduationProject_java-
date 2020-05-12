@@ -5,100 +5,126 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:gravity="center"
     tools:context=".BluetoothActivity">
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="top|center"
+        android:layout_gravity="center"
         android:gravity="center"
-        android:text="블루투스 페어링"
+        android:layout_marginTop="80dp"
+        android:text="장치연결"
+        android:textSize="20dp"
         />
 
 
     <LinearLayout
-        android:id="@+id/leftLayout"
+        android:id="@+id/handLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="right"
-        android:layout_marginTop="200dp"
-        android:layout_marginRight="30dp"
-        >
-        <ImageView
-            android:layout_width="125dp"
-            android:layout_height="100dp"
-            android:src="@drawable/ic_left_red"
-            />
-        <ImageView
-            android:layout_width="wrap_content"
+    android:layout_marginTop="120dp"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_check"
-            />
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Left"
-            />
-        <TextView
-            android:id="@+id/textview_leftState"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="연결 상태"
-            />
-        <ImageButton
-            android:id="@+id/button_leftRefresh"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_refresh"
-            />
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="150dp"
+                android:layout_height="120dp"
+                android:layout_marginRight="30dp"
+                android:src="@drawable/ic_left_green" />
+
+            <ImageView
+                android:layout_width="150dp"
+                android:layout_height="120dp"
+                android:src="@drawable/ic_right_green" />
+
+        </LinearLayout>
+
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/rightLayout"
+        android:id="@+id/connectLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="right"
-        android:layout_marginTop="100dp"
-        android:layout_marginRight="30dp"
+        android:layout_marginTop="20dp"
+        android:orientation="vertical">
 
-        >
-        <ImageView
-            android:layout_width="125dp"
-            android:layout_height="100dp"
-            android:src="@drawable/ic_right_green" />
-        <ImageView
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_check"
-            />
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Right"
-            />
-        <TextView
-            android:id="@+id/textview_rightState"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="연결 상태"
-            />
-        <ImageButton
-            android:id="@+id/button_rightRefresh"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_refresh"
-            />
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/button_leftConnect"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="80dp"
+                android:background="@drawable/connected_button"
+                android:text="connected"
+                android:textColor="#FFFFFF"
+                />
+
+            <Button
+                android:id="@+id/button_RightConnect"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/connected_button"
+                android:text="connected"
+                android:textColor="#FFFFFF"
+                />
+
+            <!--<ImageView-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:src="@drawable/ic_check" />-->
+
+            <!--<TextView-->
+                <!--android:id="@+id/textview_leftState"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:text="DISCONNECT" />-->
+
+            <!--<ImageButton-->
+                <!--android:id="@+id/button_leftRefresh"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:src="@drawable/ic_refresh" />-->
+
+
+            <!--<ImageView-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:src="@drawable/ic_check" />-->
+
+
+            <!--<TextView-->
+                <!--android:id="@+id/textview_rightState"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:text="DISCONNECT" />-->
+
+            <!--<ImageButton-->
+                <!--android:id="@+id/button_rightRefresh"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:src="@drawable/ic_refresh" />-->
+
+
+        </LinearLayout>
+
+
     </LinearLayout>
 
     <Button
         android:id="@+id/button_next"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginTop="140dp"
-        android:text="NEXT"
-        />
-
+        android:layout_marginTop="200dp"
+        android:text="NEXT" />
 </LinearLayout>
