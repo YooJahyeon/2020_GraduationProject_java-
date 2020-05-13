@@ -35,12 +35,9 @@ private ListView listview;
 
         listview.setAdapter(adapter);
 
-        list.add("ㄱ");
-        list.add("ㄴ");
-        list.add("ㄷ");
-        list.add("ㄹ");
-        list.add("ㅁ");
-        list.add("ㅂ");
+        list.add("안녕하세요");
+        list.add("반갑습니다");
+        list.add("감사합니다");
         return view;
     }
 
