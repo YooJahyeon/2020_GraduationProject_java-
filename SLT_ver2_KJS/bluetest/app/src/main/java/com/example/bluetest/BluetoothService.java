@@ -202,23 +202,29 @@ public class BluetoothService extends Service {
 
         public void run() {
             Log.i(TAG, "BEGIN mConnectedThread");
-//            BufferedReader Buffer_in = new BufferedReader(new InputStreamReader(in));
-            byte[] buffer = new byte[1024];
-            int bytes = 0;
+            BufferedReader Buffer_in = new BufferedReader(new InputStreamReader(in));
+//            byte[] buffer = new byte[1024];
+//            int bytes = 0;
             // Keep listening to the InputStream while connected
             while (is) {
                 try {
-//                    String s = Buffer_in.readLine();
-                    bytes = in.read(buffer);
-//                    int nul = Integer.parseInt((String)null);
-                    int r = 0;
-
+                    String s = Buffer_in.readLine();
+                    Message msg = new Message();
+                    msg.what = MainActivity.MESSAGE_READ;
+                    msg.obj = s;
+//                    mHandler.sendEmptyMessage(MainActivity.MESSAGE_READ);
+                    mHandler.sendMessage(msg);
+//                    int int_s = Integer.valueOf(s);
+//                    mHandler.obtainMessage(MainActivity.MESSAGE_READ, int_s).sendToTarget();
+//                    bytes = in.readLine(buffer);
 //                    Log.d("========  ", );
-
-
 //                    mHandler.obtainMessage(bluetooth_index);
+//                    byte[] readBuf = (byte[])buffer;
 
-                    mHandler.obtainMessage(MainActivity.MESSAGE_READ, bytes, r, buffer).sendToTarget();
+//                    String string_buffer = new String(readBuf, 0, bytes-1);
+//                    Log.d("BS obtainMessage: ", string_buffer);
+
+//                    mHandler.obtainMessage(MainActivity.MESSAGE_READ, bytes-1, -1, buffer).sendToTarget();
 //                    mHandler.sendMessage(MainActivity.MESSAGE_READ, s);
                 } catch (IOException e) {
                     Log.e(TAG, "disconnected", e);

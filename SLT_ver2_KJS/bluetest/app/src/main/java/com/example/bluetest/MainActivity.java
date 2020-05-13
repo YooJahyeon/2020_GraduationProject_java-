@@ -181,8 +181,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         break;
 
                     case MESSAGE_READ:
-                        byte[] readBuf = (byte[]) msg.obj;
-                        readMessage = new String(readBuf, 0, msg.arg1);
+                        readMessage = (String)msg.obj;
                         Log.d("=== 왔어!== ", readMessage);
 
                         mConversationArrayAdapter0.add(readMessage);
