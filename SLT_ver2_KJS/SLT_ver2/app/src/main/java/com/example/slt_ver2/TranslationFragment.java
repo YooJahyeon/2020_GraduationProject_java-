@@ -37,11 +37,7 @@ import static com.example.slt_ver2.BluetoothService.B1;
 public class TranslationFragment extends Fragment implements TextToSpeech.OnInitListener {
 
     private static final String TAG = "Translation";
-    private static final boolean D = true;
     private BluetoothService bluetoothService = null;
-
-
-    ArrayList array; //bluetooth의 출력을 위한
 
     public static final int MESSAGE_STATE_CHANGE = 1;
     public static final int MESSAGE_READ = 9999;
@@ -53,8 +49,7 @@ public class TranslationFragment extends Fragment implements TextToSpeech.OnInit
     final String B1MA = "98:D3:C1:FD:69:59";
 
     private ArrayAdapter<String> mConversationArrayAdapter;   //리스트뷰 출력을 위한 adapter
-    private String readMessage;
-    private String readMessage1, readMessage0;
+//    private String readMessage1, readMessage0;
     private String recv_data;
 
    private BluetoothAdapter mBluetoothAdapter = null;
@@ -67,13 +62,8 @@ public class TranslationFragment extends Fragment implements TextToSpeech.OnInit
    private Socket socket;  //소켓생성
     BufferedReader in;      //서버로부터 온 데이터를 읽는다.
     PrintWriter out;        //서버에 데이터를 전송한다.
-//    PrintWriter out2;
-    EditText input;         //화면구성
-    Button button;          //화면구성
-    TextView output;        //화면구성
     static String data;
-
-
+    static String readMessage0, readMessage1;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -84,7 +74,6 @@ public class TranslationFragment extends Fragment implements TextToSpeech.OnInit
                     //소켓을 생성하고 입출력 스트립을 소켓에 연결한다.
                     socket = new Socket("115.85.173.148", 9999); //소켓생성
                     out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(socket.getOutputStream())), true); //데이터를 전송시 stream 형태로 변환하여 전송한다.
-//                    out2 = new PrintWriter(new BufferedWriter(new OutputStreamWriter(socket.getOutputStream())), true);
                     in = new BufferedReader(new InputStreamReader(socket.getInputStream())); //데이터 수신시 stream을 받아들인다.
 
                 } catch (IOException e) {
@@ -117,11 +106,6 @@ public class TranslationFragment extends Fragment implements TextToSpeech.OnInit
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
 
         bluetoothService.getDeviceInfo(B0MA, 0);
-//        try {
-//            Thread.sleep(200);
-//        } catch (InterruptedException e) {
-//            e.printStackTrace();
-//        }
         bluetoothService.getDeviceInfo_right(B1MA, 1);
 
         tts = new TextToSpeech(getContext(), this); //첫번째는 Context 두번째는 리스너
@@ -153,41 +137,42 @@ public class TranslationFragment extends Fragment implements TextToSpeech.OnInit
                 switch (msg.what) {
                     case 0:
                         if (msg.arg1 == MESSAGE_READ) {
-                            data = (String) msg.obj;
-                            readMessage0 = data;
+                            readMessage0 = (String) msg.obj;
+//                            readMessage0 = data;
                         }
                         break;
                     case 1:
                         if(msg.arg1 == MESSAGE_READ) {
-                            data = (String) msg.obj;
-                            readMessage1 = data;
+                            readMessage1 = (String) msg.obj;
+//                            readMessage1 = data;
                             break;
                         }
                 }
 
             new Thread(){
                 public void run(){
-                    if (readMessage0 != null) {
+                    if(readMessage0 != null && readMessage1 != null){
                         Log.d("=== in net0", readMessage0);
-                        out.println(readMessage0); //data를   stream 형태로 변형하여 전송.  변환내용은 쓰레드에 담겨 있다.
-                    }
-                    if (readMessage1 != null) {
                         Log.d("=== in net1", readMessage1);
+                        out.println(readMessage0); //data를   stream 형태로 변형하여 전송.  변환내용은 쓰레드에 담겨 있다.
                         out.println(readMessage1); //data를   stream 형태로 변형하여 전송.  변환내용은 쓰레드에 담겨 있다.
+                        Log.d("=== in net0 OK", readMessage0);
+                        Log.d("=== in net1 OK", readMessage1);
+                        System.out.println();
                     }
+//                    if (readMessage0 != null) {
+//                        Log.d("=== in net0", readMessage0);
+//                        out.println(readMessage0); //data를   stream 형태로 변형하여 전송.  변환내용은 쓰레드에 담겨 있다.
+//                        Log.d("=== in net0 OK", readMessage0);
+//                    }
+//                    if (readMessage1 != null) {
+//                        Log.d("=== in net1", readMessage1);
+//                        out.println(readMessage1); //data를   stream 형태로 변형하여 전송.  변환내용은 쓰레드에 담겨 있다.
+//                        Log.d("=== in net1 OK", readMessage1);
+//                    }
                 }
             }.start();
             return true;
-//                System.out.println(readMessage);
-//                new Thread(){
-//                    public void run(){
-//                        if (readMessage != null) {
-//                            Log.d("=== in net1", readMessage);
-//                            out.println(readMessage); //data를   stream 형태로 변형하여 전송.  변환내용은 쓰레드에 담겨 있다.
-//                        }
-//                    }
-//                }.start();
-//                return true;
         }
     });
     @Override
