@@ -2,9 +2,11 @@ package com.example.slt_ver2;
 
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Message;
 import android.speech.tts.TextToSpeech;
 import android.support.v4.app.Fragment;
@@ -37,7 +39,7 @@ import static com.example.slt_ver2.BluetoothService.B1;
 public class TranslationFragment extends Fragment implements TextToSpeech.OnInitListener {
 
     private static final String TAG = "Translation";
-    private BluetoothService bluetoothService = null;
+    static BluetoothService bluetoothService = null;
 
     public static final int MESSAGE_STATE_CHANGE = 1;
     public static final int MESSAGE_READ = 9999;
@@ -45,28 +47,43 @@ public class TranslationFragment extends Fragment implements TextToSpeech.OnInit
     public static final int MESSAGE_DEVICE_NAME = 4;
     public static final int MESSAGE_TOAST = 5;
 
-    final String B0MA = "98:D3:71:FD:9D:1F"; //Bluetooth0 MacAddress
-    final String B1MA = "98:D3:C1:FD:69:59";
+//    final String B0MA = "98:D3:71:FD:9D:1F"; //Bluetooth0 MacAddress
+//    final String B1MA = "98:D3:C1:FD:69:59";
 
     private ArrayAdapter<String> mConversationArrayAdapter;   //리스트뷰 출력을 위한 adapter
-//    private String readMessage1, readMessage0;
+    //    private String readMessage1, readMessage0;
     private String recv_data;
 
-   private BluetoothAdapter mBluetoothAdapter = null;
+    private BluetoothAdapter mBluetoothAdapter = null;
 
-   private TextToSpeech tts;
+    private TextToSpeech tts;
 
-   ListView listview;
+    ListView listview;
 
-   //소켓 코드
-   private Socket socket;  //소켓생성
+    //소켓 코드
+    private Socket socket;  //소켓생성
     BufferedReader in;      //서버로부터 온 데이터를 읽는다.
-    PrintWriter out;        //서버에 데이터를 전송한다.
+    static PrintWriter out;        //서버에 데이터를 전송한다.
     static String data;
     static String readMessage0, readMessage1;
+    static String buffer0;
+    static String buffer1;
+
+    static boolean startTrans = false;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        if(!startTrans) {
+            startActivity(new Intent(getContext(),BluetoothDialog.class));
+        }
+//        else
+//            bluetoothService.startConnectedThread();
+//
+//        if(startTrans) {
+//            bluetoothService.startConnectedThread();
+//        }
 
         Thread worker = new Thread() {    //worker 를 Thread 로 생성
             public void run() { //스레드 실행구문
@@ -104,13 +121,13 @@ public class TranslationFragment extends Fragment implements TextToSpeech.OnInit
             bluetoothService = new BluetoothService(this, handler);
         }
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-
-        bluetoothService.getDeviceInfo(B0MA, 0);
-        bluetoothService.getDeviceInfo_right(B1MA, 1);
+//
+//        bluetoothService.getDeviceInfo(B0MA, 0);
+//        bluetoothService.getDeviceInfo_right(B1MA, 1);
 
         tts = new TextToSpeech(getContext(), this); //첫번째는 Context 두번째는 리스너
 
-       getActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        getActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
     }
 
@@ -126,52 +143,95 @@ public class TranslationFragment extends Fragment implements TextToSpeech.OnInit
         mConversationArrayAdapter = new ArrayAdapter(getActivity(),android.R.layout.simple_list_item_1, list);
 
         listview.setAdapter(mConversationArrayAdapter);
+        listview.setSelection(mConversationArrayAdapter.getCount() - 1);
         return view;
     }
 
+
     //Bluetooth state -> View Change
-    private final Handler handler = new Handler(new Handler.Callback() {
+    public static final Handler handler = new Handler(new Handler.Callback() {
         @Override
         public boolean handleMessage(Message msg) {
 //            if(blue_index1 == 1){
-                switch (msg.what) {
-                    case 0:
-                        if (msg.arg1 == MESSAGE_READ) {
-                            readMessage0 = (String) msg.obj;
+            switch (msg.what) {
+                case 0:
+                    if (msg.arg1 == MESSAGE_READ) {
+                        readMessage0 = (String) msg.obj;
 //                            readMessage0 = data;
-                        }
-                        break;
-                    case 1:
-                        if(msg.arg1 == MESSAGE_READ) {
-                            readMessage1 = (String) msg.obj;
-//                            readMessage1 = data;
-                            break;
-                        }
-                }
-
-            new Thread(){
-                public void run(){
-                    if(readMessage0 != null && readMessage1 != null){
-                        Log.d("=== in net0", readMessage0);
-                        Log.d("=== in net1", readMessage1);
-                        out.println(readMessage0); //data를   stream 형태로 변형하여 전송.  변환내용은 쓰레드에 담겨 있다.
-                        out.println(readMessage1); //data를   stream 형태로 변형하여 전송.  변환내용은 쓰레드에 담겨 있다.
-                        Log.d("=== in net0 OK", readMessage0);
-                        Log.d("=== in net1 OK", readMessage1);
-                        System.out.println();
                     }
-//                    if (readMessage0 != null) {
-//                        Log.d("=== in net0", readMessage0);
-//                        out.println(readMessage0); //data를   stream 형태로 변형하여 전송.  변환내용은 쓰레드에 담겨 있다.
-//                        Log.d("=== in net0 OK", readMessage0);
+                    break;
+                case 1:
+                    if(msg.arg1 == MESSAGE_READ) {
+                        readMessage1 = (String) msg.obj;
+//                            readMessage1 = data;
+                        break;
+                    }
+            }
+
+            if(startTrans) {
+                new Thread() {
+                    public void run() {
+//                    if (readMessage0 != null && readMessage1 != null) {
+////                        if(readMessage1 != buffer1 && readMessage0 != buffer0) {
+////                            Log.d("=== in net0", readMessage0);
+////                            Log.d("=== in net1", readMessage1);
+////                            out.println(readMessage0); //data를   stream 형태로 변형하여 전송.  변환내용은 쓰레드에 담겨 있다.
+////                            buffer0 = readMessage0;
+////                            out.println(readMessage1);
+////                            buffer1 = readMessage1;
+//////                            Log.d("=== in net0 OK", readMessage0);
+//////                            Log.d("=== in net1 OK", readMessage1);
+////                        }
+////                    }
+
+//                    try {
+//                        Thread.sleep(100);
+//                    } catch (InterruptedException e) {
+//                        e.printStackTrace();
 //                    }
-//                    if (readMessage1 != null) {
+
+//                    if (readMessage1 != null && readMessage1 != buffer1) {
 //                        Log.d("=== in net1", readMessage1);
 //                        out.println(readMessage1); //data를   stream 형태로 변형하여 전송.  변환내용은 쓰레드에 담겨 있다.
+//                        buffer1 = readMessage1;
 //                        Log.d("=== in net1 OK", readMessage1);
 //                    }
-                }
-            }.start();
+//                    handler.postDelayed(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            if (readMessage1 != null) {
+//                                Log.d("=== in net1", readMessage1);
+//                                out.println(readMessage1); //data를   stream 형태로 변형하여 전송.  변환내용은 쓰레드에 담겨 있다.
+//                                Log.d("=== in net1 OK", readMessage1);
+//                            }
+//                        }
+//                    }, 50);
+
+//                    new Handler().postDelayed(new Runnable()
+//                    {
+//                        @Override
+//                        public void run()
+//                        {
+//                            if (readMessage1 != null) {
+//                                Log.d("=== in net1", readMessage1);
+//                                out.println(readMessage1); //data를   stream 형태로 변형하여 전송.  변환내용은 쓰레드에 담겨 있다.
+//                                Log.d("=== in net1 OK", readMessage1);
+//                            }
+//                        }
+//                    }, 500);
+
+                        if (readMessage0 != null && readMessage1 != null) {
+//                        Log.d("=== in net0", readMessage0);
+//                        Log.d("=== in net1", readMessage1);
+                            out.println(readMessage0); //data를   stream 형태로 변형하여 전송.  변환내용은 쓰레드에 담겨 있다.
+                            out.println(readMessage1); //data를   stream 형태로 변형하여 전송.  변환내용은 쓰레드에 담겨 있다.
+                            Log.d("=== in net0", readMessage0);
+                            Log.d("=== in net1", readMessage1);
+                            System.out.println();
+                        }
+                    }
+                }.start();
+            }
             return true;
         }
     });

@@ -47,7 +47,7 @@ public class BluetoothActivity extends AppCompatActivity implements View.OnClick
     static ConnectThread connectThread1;
 
     final String B0MA = "98:D3:41:FD:6A:4E"; //Bluetooth0 Mac주소
-    final String B1MA = "98:D3:91:FD:86:0E"; //Bluetooth1 Mac주소
+    final String B1MA = "98:D3:C1:FD:69:59"; //Bluetooth1 Mac주소
 
     final String SPP_UUID_STRING = "00001101-0000-1000-8000-00805F9B34FB"; //SPP UUID
     final UUID SPP_UUID = UUID.fromString(SPP_UUID_STRING);
