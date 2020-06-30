@@ -5,6 +5,7 @@ import android.bluetooth.BluetoothDevice;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
@@ -17,6 +18,7 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -29,36 +31,32 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import static com.example.slt_ver2.BluetoothService.B1;
 
 
 public class TranslationFragment extends Fragment implements TextToSpeech.OnInitListener {
-
     private static final String TAG = "Translation";
     static BluetoothService bluetoothService = null;
 
     public static final int MESSAGE_STATE_CHANGE = 1;
     public static final int MESSAGE_READ = 9999;
-    public static final int MESSAGE_WRITE = 3;
-    public static final int MESSAGE_DEVICE_NAME = 4;
-    public static final int MESSAGE_TOAST = 5;
-
-//    final String B0MA = "98:D3:71:FD:9D:1F"; //Bluetooth0 MacAddress
-//    final String B1MA = "98:D3:C1:FD:69:59";
 
     private ArrayAdapter<String> mConversationArrayAdapter;   //리스트뷰 출력을 위한 adapter
-    //    private String readMessage1, readMessage0;
-    private String recv_data;
+    private String recv_data = "";
 
     private BluetoothAdapter mBluetoothAdapter = null;
 
     private TextToSpeech tts;
 
     ListView listview;
+    CheckBox check_comb;
 
     //소켓 코드
     private Socket socket;  //소켓생성
@@ -66,13 +64,17 @@ public class TranslationFragment extends Fragment implements TextToSpeech.OnInit
     static PrintWriter out;        //서버에 데이터를 전송한다.
     static String data;
     static String readMessage0, readMessage1;
-    static String buffer0;
-    static String buffer1;
+    static float speed;
+    float pitch;
+    ByteBuffer message_buffer;
+    List<String> jasoList;
+
+    long start = 0;
+    long end = 0;
+
+    Boolean runTimer = false;
 
     static boolean startTrans = false;
-
-    //tts 속도 조절
-    static double ttsSpeed = 1.0;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -81,12 +83,8 @@ public class TranslationFragment extends Fragment implements TextToSpeech.OnInit
         if(!startTrans) {
             startActivity(new Intent(getContext(),BluetoothDialog.class));
         }
-//        else
-//            bluetoothService.startConnectedThread();
-//
-//        if(startTrans) {
-//            bluetoothService.startConnectedThread();
-//        }
+
+        message_buffer = ByteBuffer.allocate(1024);
 
         Thread worker = new Thread() {    //worker 를 Thread 로 생성
             public void run() { //스레드 실행구문
@@ -99,12 +97,20 @@ public class TranslationFragment extends Fragment implements TextToSpeech.OnInit
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-
                 //소켓에서 데이터를 읽어서 화면에 표시한다.
                 try {
                     while (true) {
-                        data = in.readLine(); // in으로 받은 데이타를 String 형태로 읽어 data 에 저장
+                        data = in.readLine(); // in으로 받은 데이타를 String 형태로 읽어 data에 저장
+
+                        start = System.currentTimeMillis();
+                        Log.d("==start: ", Long.toString(start));
+                        runTimer = false;
+
                         recv_data = data;
+                        if(check_comb.isChecked()){  //데이터 버퍼에 넣기
+                            message_buffer.put(recv_data.getBytes());
+                            System.out.println(message_buffer.position());
+                        }
                         listview.post(new Runnable() {
                             public void run() {
                                 mConversationArrayAdapter.add(recv_data);
@@ -119,14 +125,36 @@ public class TranslationFragment extends Fragment implements TextToSpeech.OnInit
         };
         worker.start();  //onResume()에서 실행.
 
+        Thread timer = new Thread() {
+            public void run() {
+                try {
+                    while(true) {
+                        end = System.currentTimeMillis();
+
+                        if((end - start) > 3000 && !recv_data.equals("") && !runTimer) {
+                            Log.d("3초 지났어용", "YES");
+                            runTimer  = true;
+                            String result = "";
+                            while (message_buffer.hasRemaining()) {
+                                result += message_buffer.get();
+                            }
+                            System.out.println(result);
+                            speakOutNow();
+                        }
+                    }
+
+                } catch (Exception e) {
+
+                }
+            }
+        };
+        timer.start();
+
         //BluetoothService 클래스 생성
         if(bluetoothService == null) {
             bluetoothService = new BluetoothService(this, handler);
         }
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-//
-//        bluetoothService.getDeviceInfo(B0MA, 0);
-//        bluetoothService.getDeviceInfo_right(B1MA, 1);
 
         tts = new TextToSpeech(getContext(), this); //첫번째는 Context 두번째는 리스너
 
@@ -142,6 +170,9 @@ public class TranslationFragment extends Fragment implements TextToSpeech.OnInit
 
         //리스트뷰
         listview = (ListView)view.findViewById(R.id.listview_translator);
+        check_comb = (CheckBox)view.findViewById(R.id.check_comb);
+
+
         List<String> list = new ArrayList<>();
         mConversationArrayAdapter = new ArrayAdapter(getActivity(),android.R.layout.simple_list_item_1, list);
 
@@ -155,18 +186,15 @@ public class TranslationFragment extends Fragment implements TextToSpeech.OnInit
     public static final Handler handler = new Handler(new Handler.Callback() {
         @Override
         public boolean handleMessage(Message msg) {
-//            if(blue_index1 == 1){
             switch (msg.what) {
                 case 0:
                     if (msg.arg1 == MESSAGE_READ) {
                         readMessage0 = (String) msg.obj;
-//                            readMessage0 = data;
                     }
                     break;
                 case 1:
                     if(msg.arg1 == MESSAGE_READ) {
                         readMessage1 = (String) msg.obj;
-//                            readMessage1 = data;
                         break;
                     }
             }
@@ -174,58 +202,7 @@ public class TranslationFragment extends Fragment implements TextToSpeech.OnInit
             if(startTrans) {
                 new Thread() {
                     public void run() {
-//                    if (readMessage0 != null && readMessage1 != null) {
-////                        if(readMessage1 != buffer1 && readMessage0 != buffer0) {
-////                            Log.d("=== in net0", readMessage0);
-////                            Log.d("=== in net1", readMessage1);
-////                            out.println(readMessage0); //data를   stream 형태로 변형하여 전송.  변환내용은 쓰레드에 담겨 있다.
-////                            buffer0 = readMessage0;
-////                            out.println(readMessage1);
-////                            buffer1 = readMessage1;
-//////                            Log.d("=== in net0 OK", readMessage0);
-//////                            Log.d("=== in net1 OK", readMessage1);
-////                        }
-////                    }
-
-//                    try {
-//                        Thread.sleep(100);
-//                    } catch (InterruptedException e) {
-//                        e.printStackTrace();
-//                    }
-
-//                    if (readMessage1 != null && readMessage1 != buffer1) {
-//                        Log.d("=== in net1", readMessage1);
-//                        out.println(readMessage1); //data를   stream 형태로 변형하여 전송.  변환내용은 쓰레드에 담겨 있다.
-//                        buffer1 = readMessage1;
-//                        Log.d("=== in net1 OK", readMessage1);
-//                    }
-//                    handler.postDelayed(new Runnable() {
-//                        @Override
-//                        public void run() {
-//                            if (readMessage1 != null) {
-//                                Log.d("=== in net1", readMessage1);
-//                                out.println(readMessage1); //data를   stream 형태로 변형하여 전송.  변환내용은 쓰레드에 담겨 있다.
-//                                Log.d("=== in net1 OK", readMessage1);
-//                            }
-//                        }
-//                    }, 50);
-
-//                    new Handler().postDelayed(new Runnable()
-//                    {
-//                        @Override
-//                        public void run()
-//                        {
-//                            if (readMessage1 != null) {
-//                                Log.d("=== in net1", readMessage1);
-//                                out.println(readMessage1); //data를   stream 형태로 변형하여 전송.  변환내용은 쓰레드에 담겨 있다.
-//                                Log.d("=== in net1 OK", readMessage1);
-//                            }
-//                        }
-//                    }, 500);
-
                         if (readMessage0 != null && readMessage1 != null) {
-//                        Log.d("=== in net0", readMessage0);
-//                        Log.d("=== in net1", readMessage1);
                             out.println(readMessage0); //data를   stream 형태로 변형하여 전송.  변환내용은 쓰레드에 담겨 있다.
                             out.println(readMessage1); //data를   stream 형태로 변형하여 전송.  변환내용은 쓰레드에 담겨 있다.
                             Log.d("=== in net0", readMessage0);
@@ -242,7 +219,6 @@ public class TranslationFragment extends Fragment implements TextToSpeech.OnInit
     public void onInit(int status) {
         if (status == TextToSpeech.SUCCESS) {
             int language = tts.setLanguage(Locale.KOREAN);
-
             if (language == TextToSpeech.LANG_MISSING_DATA || language == TextToSpeech.LANG_NOT_SUPPORTED) {
                 Toast.makeText(getActivity(), "지원하지 않는 언어입니다.", Toast.LENGTH_SHORT).show();
             } else {
@@ -255,10 +231,8 @@ public class TranslationFragment extends Fragment implements TextToSpeech.OnInit
     }
 
     private void speakOutNow() {
-        float speed = (float)ttsSpeed;
         String text = (String)recv_data;
-
-        //tts.setPitch((float) 0.1); //음량
+        tts.setPitch(pitch); //음량
         tts.setSpeechRate(speed); //재생속도
         tts.speak(text, TextToSpeech.QUEUE_FLUSH, null);
     }
@@ -272,4 +246,5 @@ public class TranslationFragment extends Fragment implements TextToSpeech.OnInit
         }
 
     }
+
 }

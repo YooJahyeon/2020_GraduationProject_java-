@@ -12,13 +12,15 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         >
-        <Button
-            android:id="@+id/button_phoneme"
+
+        <android.support.v7.widget.AppCompatCheckBox
+            android:id="@+id/check_comb"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="지화 음소" />
-        <Button
-            android:id="@+id/button_comb"
+            android:onClick="onClick"
+            />
+        <TextView
+            android:id="@+id/testview_comb"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="지화 조합" />
