@@ -30,7 +30,6 @@ import static android.support.v4.app.ActivityCompat.startActivityForResult;
 
 public class BluetoothDialog extends AppCompatActivity implements View.OnClickListener {
     private static Context context;
-//    BluetoothSocket bluetoothSocket;
 
     static Button connectbtn0; //연결 버튼(connect/disconnect)
     static Button connectbtn1; //연결 버튼(connect/disconnect)
@@ -39,16 +38,8 @@ public class BluetoothDialog extends AppCompatActivity implements View.OnClickLi
     static ImageView lefthand; //왼손
     static ImageView righthand; //오른손
 
-//    private BluetoothService bluetoothService = null;
-
     static boolean IsConnect0 = false;
     static boolean IsConnect1 = false;
-
-    BluetoothAdapter bluetoothAdapter;
-    static BluetoothDevice bluetoothDevice0, bluetoothDevice1;
-
-//    static ConnectThread connectThread0;
-//    static ConnectThread connectThread1;
 
     final String B0MA = "98:D3:71:FD:9D:1F"; //Bluetooth0 Mac주소
     final String B1MA = "98:D3:C1:FD:69:59";
@@ -65,13 +56,11 @@ public class BluetoothDialog extends AppCompatActivity implements View.OnClickLi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bluetooth_dialog);
         context = getApplicationContext();
+
         //----------------------Find VIEW---------------------------------//
         connectbtn0 = (Button) findViewById(R.id.LeftConnectButton);
         connectbtn1 = (Button) findViewById(R.id.RightConnectButton);
         nextbutton = (Button) findViewById(R.id.NextButton);
-
-//        TranslationFragment.startTrans = true;
-
         lefthand = (ImageView) findViewById(R.id.LeftHand);
         righthand = (ImageView) findViewById(R.id.RightHand);
 
@@ -79,31 +68,9 @@ public class BluetoothDialog extends AppCompatActivity implements View.OnClickLi
         connectbtn0.setOnClickListener(this);
         connectbtn1.setOnClickListener(this);
 
-        //----------------------Bluetooth init---------------------------------//
-
-//        bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-//
-//        if(!bluetoothAdapter.isEnabled()){
-//            Intent i = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-//            startActivityForResult(i,5000);
-//        }
-
-//        if (bluetoothService == null) {
-//            bluetoothService = new BluetoothService(this, handler);
-//        }
-//        bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
     }
-
-
-//        bluetoothDevice0 = bluetoothAdapter.getRemoteDevice(B0MA);
-//        bluetoothDevice1 = bluetoothAdapter.getRemoteDevice(B1MA);
-
-//        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-//
-//    }
 
     // 바깥 레이어 클릭시 안 닫힘
     @Override
@@ -187,8 +154,6 @@ public class BluetoothDialog extends AppCompatActivity implements View.OnClickLi
         switch (v.getId()) {
             case R.id.NextButton:
                 TranslationFragment.startTrans = true;
-//                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-//                startActivity(intent);
                 onBackPressed();
                 break;
 

@@ -15,7 +15,9 @@ import android.widget.LinearLayout;
 import java.util.UUID;
 
 public class MainActivity extends AppCompatActivity {
+    static BluetoothService bluetoothService = null;
 
+    private BluetoothAdapter mBluetoothAdapter = null;
     private FragmentManager fragmentManager = getSupportFragmentManager();
 
         private  ListViewFragment listViewFragment = new ListViewFragment();
@@ -32,6 +34,11 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+//        if(bluetoothService == null) {
+//            bluetoothService = new BluetoothService(this, handler);
+//        }
+//        mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
 
         FragmentTransaction transaction = fragmentManager.beginTransaction();
 
