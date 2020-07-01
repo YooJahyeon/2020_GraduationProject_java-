@@ -1,12 +1,9 @@
 package com.example.slt_ver2;
 
 import android.bluetooth.BluetoothAdapter;
-import android.bluetooth.BluetoothDevice;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Looper;
 import android.os.Message;
 import android.speech.tts.TextToSpeech;
 import android.support.v4.app.Fragment;
@@ -16,11 +13,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.github.kimkevin.hangulparser.HangulParser;
@@ -33,19 +27,10 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.Socket;
-import java.net.URLDecoder;
-import java.net.URLEncoder;
-import java.nio.Buffer;
 import java.nio.ByteBuffer;
-import java.nio.CharBuffer;
-import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-import java.util.Timer;
-import java.util.TimerTask;
-
-import static java.lang.Integer.parseInt;
 
 public class TranslationFragment extends Fragment implements TextToSpeech.OnInitListener {
 
@@ -83,7 +68,8 @@ public class TranslationFragment extends Fragment implements TextToSpeech.OnInit
     static boolean startTrans = false;
 
     List<String> jasoList = new ArrayList<>();
-    List<String> jasoList_fin = new ArrayList<>();
+    List<String> jasoList_ver1 = new ArrayList<>();
+    List<String> jasoList_ver2 = new ArrayList<>();
     String comb_message = "";
 
     @Override
@@ -152,12 +138,13 @@ public class TranslationFragment extends Fragment implements TextToSpeech.OnInit
                                     Log.d("==", "pass1");
                                     if(jasoList.size() > 2) {
                                         Log.d("==", "pass2");
-                                        jasoList_fin = ssang(jasoList);
+                                        jasoList_ver1 = ssang(jasoList);
+                                        jasoList_ver2 = mo_ssang(jasoList_ver1);
                                     }
                                     else
-                                        jasoList_fin = jasoList;
+                                        jasoList_ver2 = jasoList;
 
-                                    comb_message = HangulParser.assemble(jasoList_fin);
+                                    comb_message = HangulParser.assemble(jasoList_ver2);
                                     Log.d("========조합 :  ", comb_message);
                                 } catch (HangulParserException e) {
 //                                    e.printStackTrace();
@@ -165,7 +152,7 @@ public class TranslationFragment extends Fragment implements TextToSpeech.OnInit
                                     jasoList.clear();
                                     comb_message = "";
                                 }
-
+                                
                                 if(comb_message != "") {
                                     listview.post(new Runnable() {
                                         public void run() {
@@ -310,7 +297,7 @@ public class TranslationFragment extends Fragment implements TextToSpeech.OnInit
                     jasoList.set(0, "ㅉ");
                     jasoList.remove(1);
                 }
-                System.out.println("ssang : "+jasoList);
+//                System.out.println("ssang : "+jasoList);
             }
 //            else if(parseInt(element1,16)<12623 && parseInt(element2,16)<12623 && parseInt(element3,16)<12623){
             else if(c1 < 12623 && c2 < 12623 && c3 < 12623) {
@@ -369,60 +356,92 @@ public class TranslationFragment extends Fragment implements TextToSpeech.OnInit
             }
             else if(i==jasoList.size() -3 && c2<12623 && c3 < 12623) {
 //            else if(i == jasoList.size() - 3 && parseInt(element2,16)<12623 && parseInt(element3,16)<12623){
-                if(element1.equals("ㄱ")&&element2.equals("ㅅ")) {
-                    jasoList.set(i, "ㄳ");
-                    jasoList.remove(i+1);
+                if(element2.equals("ㄱ")&&element3.equals("ㅅ")) {
+                    jasoList.set(i+1, "ㄳ");
+                    jasoList.remove(i+2);
                 }
                 else if(element2.equals("ㄴ")&&element3.equals("ㅈ")) {
-                    jasoList.set(i, "ㄵ");
-                    jasoList.remove(i+1);
+                    jasoList.set(i+1, "ㄵ");
+                    jasoList.remove(i+2);
                 }
                 else if(element2.equals("ㄴ")&&element3.equals("ㅎ")) {
-                    jasoList.set(i, "ㄶ");
-                    jasoList.remove(i+1);
+                    jasoList.set(i+1, "ㄶ");
+                    jasoList.remove(i+2);
                 }
                 else if(element2.equals("ㄹ")&&element3.equals("ㄱ")) {
-                    jasoList.set(i, "ㄺ");
-                    jasoList.remove(i+1);
+                    jasoList.set(i+1, "ㄺ");
+                    jasoList.remove(i+2);
                 }
                 else if(element2.equals("ㄹ")&&element3.equals("ㅁ")) {
-                    jasoList.set(i, "ㄻ");
-                    jasoList.remove(i+1);
+                    jasoList.set(i+1, "ㄻ");
+                    jasoList.remove(i+2);
                 }
                 else if(element2.equals("ㄹ")&&element3.equals("ㅂ")) {
-                    jasoList.set(i, "ㄼ");
-                    jasoList.remove(i+1);
+                    jasoList.set(i+1, "ㄼ");
+                    jasoList.remove(i+2);
                 }
                 else if(element2.equals("ㄹ")&&element3.equals("ㅅ")) {
-                    jasoList.set(i, "ㄽ");
-                    jasoList.remove(i+1);
+                    jasoList.set(i+1, "ㄽ");
+                    jasoList.remove(i+2);
                 }
                 else if(element2.equals("ㄹ")&&element3.equals("ㅌ")) {
-                    jasoList.set(i, "ㄾ");
-                    jasoList.remove(i+1);
+                    jasoList.set(i+1, "ㄾ");
+                    jasoList.remove(i+2);
                 }
                 else if(element2.equals("ㄹ")&&element3.equals("ㅍ")) {
-                    jasoList.set(i, "ㄿ");
-                    jasoList.remove(i+1);
+                    jasoList.set(i+1, "ㄿ");
+                    jasoList.remove(i+2);
                 }
                 else if(element2.equals("ㄹ")&&element3.equals("ㅎ")) {
-                    jasoList.set(i, "ㅀ");
-                    jasoList.remove(i+1);
+                    jasoList.set(i+1, "ㅀ");
+                    jasoList.remove(i+2);
                 }
                 else if(element2.equals("ㅂ")&&element3.equals("ㅅ")) {
-                    jasoList.set(i, "ㅄ");
-                    jasoList.remove(i+1);
+                    jasoList.set(i+1, "ㅄ");
+                    jasoList.remove(i+2);
                 }
                 else if(element2.equals("ㄱ")&&element3.equals("ㄱ")) {
-                    jasoList.set(i, "ㄲ");
-                    jasoList.remove(i+1);
+                    jasoList.set(i+1, "ㄲ");
+                    jasoList.remove(i+2);
                 }
                 else if(element2.equals("ㅅ")&&element3.equals("ㅅ")) {
-                    jasoList.set(i, "ㅆ");
+                    jasoList.set(i+1, "ㅆ");
+                    jasoList.remove(i+2);
+                }
+            }
+        }
+        System.out.println("ver_1 : " + jasoList);
+        return jasoList;
+    }
+
+    private List<String> mo_ssang(List<String> jasoList) {
+        for (int i = 0; i < jasoList.size() - 1; i++) {
+            String element1 = jasoList.get(i);
+            String element2 = jasoList.get(i + 1);
+
+            char c1 = element1.charAt(0);
+            char c2 = element2.charAt(0);
+
+            if (c1 >= 12623 && c2 >= 12623) {
+                if(element1.equals("ㅗ")&&element2.equals("ㅏ")) {
+                    jasoList.set(i, "ㅘ");
+                    jasoList.remove(i+1);
+                }
+                else if(element1.equals("ㅗ")&&element2.equals("ㅐ")) {
+                    jasoList.set(i, "ㅙ");
+                    jasoList.remove(i+1);
+                }
+                else if(element1.equals("ㅜ")&&element2.equals("ㅓ")) {
+                    jasoList.set(i, "ㅝ");
+                    jasoList.remove(i+1);
+                }
+                else if(element1.equals("ㅜ")&&element2.equals("ㅔ")) {
+                    jasoList.set(i, "ㅞ");
                     jasoList.remove(i+1);
                 }
             }
         }
+        System.out.println("ver_2 : " + jasoList);
         return jasoList;
     }
 

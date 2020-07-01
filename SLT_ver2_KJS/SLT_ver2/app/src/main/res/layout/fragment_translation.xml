@@ -12,11 +12,6 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         >
-        <CheckBox
-            android:id="@+id/check_phoneme"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="지화 음소" />
 
         <CheckBox
             android:id="@+id/check_comb"
@@ -36,7 +31,6 @@
             android:id="@+id/listview_translator"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
-
         </ListView>
     </LinearLayout>
 
