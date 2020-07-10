@@ -1,18 +1,15 @@
 package com.example.slt_ver2;
 
 import android.bluetooth.BluetoothAdapter;
-import android.bluetooth.BluetoothDevice;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
-import android.text.Layout;
 import android.view.MenuItem;
-import android.widget.LinearLayout;
 
-import java.util.UUID;
+import static com.example.slt_ver2.TranslationFragment.handler;
 
 public class MainActivity extends AppCompatActivity {
     static BluetoothService bluetoothService = null;
@@ -35,10 +32,10 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-//        if(bluetoothService == null) {
-//            bluetoothService = new BluetoothService(this, handler);
-//        }
-//        mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+        if(bluetoothService == null) {
+            bluetoothService = new BluetoothService(this, handler);
+        }
+        mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
 
         FragmentTransaction transaction = fragmentManager.beginTransaction();
 

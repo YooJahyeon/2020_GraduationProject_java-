@@ -7,32 +7,87 @@
     tools:context=".TranslationFragment">
 
     <LinearLayout
-        android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center"
-        >
-
-        <CheckBox
-            android:id="@+id/check_comb"
-            android:layout_width="wrap_content"
+        android:orientation="vertical">
+        <FrameLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="지화 조합" />
+            android:id="@+id/first_print">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:background="@color/colorPrimary"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="안녕하세요"
+                android:textSize="30sp"
+                android:textColor="#ffffff"
+                android:textStyle="bold"
+                android:layout_gravity="center"/>
 
+            <ImageButton
+                android:layout_width=""
+                android:layout_height=""
+                android:adjustViewBounds="true"
+                android:src="@drawable/ic_unmute" />
+
+        </FrameLayout>
     </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/layout_translator"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <ListView
-            android:transcriptMode="alwaysScroll"
-            android:id="@+id/listview_translator"
+        <LinearLayout
+            android:id="@+id/layout_translator"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-        </ListView>
-    </LinearLayout>
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="50dp"
+            >
 
+            <ListView
+                android:id="@+id/listview_translator"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="15sp"
+                android:transcriptMode="alwaysScroll"></ListView>
+        </LinearLayout>
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:src="@drawable/gray_background"
+                android:layout_marginBottom="-3mm"
+                android:layout_marginTop="-3mm"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_gravity="center_vertical">
+            <Switch
+                android:id="@+id/switch_comb"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="지화조합" />
+
+            <Switch
+                android:id="@+id/switch_print"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="30dp"
+                android:text="지화출력" />
+            </LinearLayout>
+        </FrameLayout>
+
+    </RelativeLayout>
 
 </LinearLayout>

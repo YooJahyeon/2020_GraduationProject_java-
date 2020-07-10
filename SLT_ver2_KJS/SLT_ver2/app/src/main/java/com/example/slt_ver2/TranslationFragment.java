@@ -15,6 +15,7 @@ import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.ListView;
+import android.widget.Switch;
 import android.widget.Toast;
 
 import com.github.kimkevin.hangulparser.HangulParser;
@@ -48,7 +49,7 @@ public class TranslationFragment extends Fragment implements TextToSpeech.OnInit
     private TextToSpeech tts;
 
     ListView listview;
-    CheckBox check_comb;
+    Switch switch_comb, switch_print;
 
     //소켓 코드
     private Socket socket;  //소켓생성
@@ -103,7 +104,7 @@ public class TranslationFragment extends Fragment implements TextToSpeech.OnInit
                         runTimer = false;
 
                         recv_data = data;
-                        if(check_comb.isChecked()){  //데이터 버퍼에 넣기
+                        if(switch_comb.isChecked()){  //데이터 버퍼에 넣기
                             jasoList.add(recv_data);
                             System.out.print(jasoList);
                             System.out.println( jasoList.size());
@@ -133,7 +134,7 @@ public class TranslationFragment extends Fragment implements TextToSpeech.OnInit
                             Log.d("3초 경과", "YES");
                             runTimer = true;
 
-                            if( !jasoList.isEmpty() && check_comb.isChecked()) {
+                            if( !jasoList.isEmpty() && switch_comb.isChecked()) {
                                 try {
                                     Log.d("==", "pass1");
                                     if(jasoList.size() > 2) {
@@ -152,13 +153,12 @@ public class TranslationFragment extends Fragment implements TextToSpeech.OnInit
                                     jasoList.clear();
                                     comb_message = "";
                                 }
-                                
+
                                 if(comb_message != "") {
                                     listview.post(new Runnable() {
                                         public void run() {
                                             mConversationArrayAdapter.add(comb_message);
                                             speakOutNow(comb_message);
-//                                        Log.d("========  ", comb_message);
                                             jasoList.clear();
                                             comb_message = "";
                                         }
@@ -179,15 +179,14 @@ public class TranslationFragment extends Fragment implements TextToSpeech.OnInit
         timer.start();
 
         //BluetoothService 클래스 생성
-        if(bluetoothService == null) {
-            bluetoothService = new BluetoothService(this, handler);
-        }
-        mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+//        if(bluetoothService == null) {
+//            bluetoothService = new BluetoothService(this, handler);
+//        }
+//        mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
 
         tts = new TextToSpeech(getContext(), this); //첫번째는 Context 두번째는 리스너
 
         getActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-
     }
 
     @Override
@@ -198,8 +197,8 @@ public class TranslationFragment extends Fragment implements TextToSpeech.OnInit
 
         //리스트뷰
         listview = (ListView)view.findViewById(R.id.listview_translator);
-        check_comb = (CheckBox)view.findViewById(R.id.check_comb);
-
+        switch_comb = (Switch)view.findViewById(R.id.switch_comb);
+        switch_print = (Switch)view.findViewById(R.id.switch_print);
 
         List<String> list = new ArrayList<>();
         mConversationArrayAdapter = new ArrayAdapter(getActivity(),android.R.layout.simple_list_item_1, list);

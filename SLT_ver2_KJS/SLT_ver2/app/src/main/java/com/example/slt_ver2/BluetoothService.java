@@ -31,7 +31,8 @@ public class BluetoothService extends Service {
     final String SPP_UUID_STRING = "00001101-0000-1000-8000-00805F9B34FB"; //SPP UUID
     final UUID SPP_UUID = UUID.fromString(SPP_UUID_STRING);
 
-    private Fragment mFragment;
+//    private Fragment mFragment;
+    private Activity mActivity;
     private Handler mHandler;
 
     private  ConnectThread ConnectThread0;
@@ -51,16 +52,15 @@ public class BluetoothService extends Service {
     boolean IsConnect1 = false;
 
     // Constructors
-    public BluetoothService(Fragment fr, Handler handler) {
-//        mActivity = ac;
-        mFragment = fr;
+    public BluetoothService(Activity ac, Handler handler) {
+        mActivity = ac;
         mHandler = handler;
         mState = STATE_NONE;
         // BluetoothAdapter 얻기
         BA = BluetoothAdapter.getDefaultAdapter();
         if(!BA.isEnabled()){
             Intent i = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-            mFragment.startActivityForResult(i,5000);
+            mActivity.startActivityForResult(i,5000);
         }
     }
 
@@ -87,7 +87,6 @@ public class BluetoothService extends Service {
         Log.d(TAG, "Get Device Info(1) \n" + "address : " + address + "index: " + index);
         try {
             connect(B1, index);
-//            IsConnect1 = true;
             Log.d(TAG, "Connect B1 \n" + "address : " + address);
         } catch (IOException e) {
             e.printStackTrace();

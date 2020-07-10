@@ -1,12 +1,7 @@
 package com.example.slt_ver2;
 
-import android.bluetooth.BluetoothAdapter;
-import android.bluetooth.BluetoothDevice;
-import android.bluetooth.BluetoothSocket;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.content.ContextCompat;
@@ -14,19 +9,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.UUID;
 
-import static android.app.Activity.RESULT_CANCELED;
-import static android.support.v4.app.ActivityCompat.startActivityForResult;
 
 public class BluetoothDialog extends AppCompatActivity implements View.OnClickListener {
     private static Context context;
@@ -160,7 +149,7 @@ public class BluetoothDialog extends AppCompatActivity implements View.OnClickLi
             case R.id.LeftConnectButton:
                 if (IsConnect0) {
                     try {
-                        TranslationFragment.bluetoothService.DIsconnectThread(0);
+                        MainActivity.bluetoothService.DIsconnectThread(0);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -175,14 +164,14 @@ public class BluetoothDialog extends AppCompatActivity implements View.OnClickLi
                     m.what = 0;
                     m.arg1 = CONNECTING;
                     handler.sendMessage(m);
-                    TranslationFragment.bluetoothService.getDeviceInfo(B0MA, 0);
+                    MainActivity.bluetoothService.getDeviceInfo(B0MA, 0);
                     break;
                 }
 
             case R.id.RightConnectButton:
                 if (IsConnect1) {
                     try {
-                        TranslationFragment.bluetoothService.DIsconnectThread(1);
+                        MainActivity.bluetoothService.DIsconnectThread(1);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -197,7 +186,7 @@ public class BluetoothDialog extends AppCompatActivity implements View.OnClickLi
                     m.what = 1;
                     m.arg1 = CONNECTING;
                     handler.sendMessage(m);
-                    TranslationFragment.bluetoothService.getDeviceInfo_right(B1MA, 1);
+                    MainActivity.bluetoothService.getDeviceInfo_right(B1MA, 1);
                     break;
                 }
         }
