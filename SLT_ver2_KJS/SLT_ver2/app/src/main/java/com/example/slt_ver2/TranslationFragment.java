@@ -1,6 +1,5 @@
 package com.example.slt_ver2;
 
-import android.bluetooth.BluetoothAdapter;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -13,9 +12,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ArrayAdapter;
-import android.widget.CheckBox;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.Switch;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.github.kimkevin.hangulparser.HangulParser;
@@ -35,21 +35,19 @@ import java.util.Locale;
 
 public class TranslationFragment extends Fragment implements TextToSpeech.OnInitListener {
 
-    private static final String TAG = "Translation";
-    static BluetoothService bluetoothService = null;
-
     public static final int MESSAGE_STATE_CHANGE = 1;
     public static final int MESSAGE_READ = 9999;
 
     private ArrayAdapter<String> mConversationArrayAdapter;   //리스트뷰 출력을 위한 adapter
     private String recv_data = "";
-
-    private BluetoothAdapter mBluetoothAdapter = null;
+    private String pre_data = "";
 
     private TextToSpeech tts;
 
     ListView listview;
     Switch switch_comb, switch_print;
+    TextView first_print;
+    ImageButton image_mute;
 
     //소켓 코드
     private Socket socket;  //소켓생성
@@ -65,6 +63,8 @@ public class TranslationFragment extends Fragment implements TextToSpeech.OnInit
     long end = 0;
 
     Boolean runTimer = false;
+    Boolean check_tts = true;
+    Boolean check_mute = false;
 
     static boolean startTrans = false;
 
@@ -104,20 +104,91 @@ public class TranslationFragment extends Fragment implements TextToSpeech.OnInit
                         runTimer = false;
 
                         recv_data = data;
-                        if(switch_comb.isChecked()){  //데이터 버퍼에 넣기
+                        if(switch_comb.isChecked() && (recv_data.equals("ㄱ") || recv_data.equals("ㄴ") || recv_data.equals("ㄷ")|| recv_data.equals("ㄹ") || recv_data.equals("ㅁ")
+                                || recv_data.equals("ㅂ") || recv_data.equals("ㅅ") || recv_data.equals("ㅇ") || recv_data.equals("ㅈ") || recv_data.equals("ㅊ") || recv_data.equals("ㅋ")
+                                || recv_data.equals("ㅌ") || recv_data.equals("ㅍ") || recv_data.equals("ㅎ") || recv_data.equals("ㅏ") || recv_data.equals("ㅑ") || recv_data.equals("ㅓ")
+                                || recv_data.equals("ㅕ") || recv_data.equals("ㅗ") || recv_data.equals("ㅛ") || recv_data.equals("ㅜ") || recv_data.equals("ㅠ") || recv_data.equals("ㅡ")
+                                || recv_data.equals("ㅣ") || recv_data.equals("ㅐ") || recv_data.equals("ㅒ") || recv_data.equals("ㅔ") || recv_data.equals("ㅖ") || recv_data.equals("ㅚ")
+                                || recv_data.equals("ㅟ") || recv_data.equals("ㅢ")))
+                        {  //데이터 버퍼에 넣기
                             jasoList.add(recv_data);
                             System.out.print(jasoList);
                             System.out.println( jasoList.size());
                         }
-                        listview.post(new Runnable() {
+
+                        Log.d("========처음  ", recv_data);
+
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
                             public void run() {
-                                mConversationArrayAdapter.add(recv_data);
-                                speakOutNow(recv_data);
-                                Log.d("========  ", recv_data);
+                                Log.d("========1  ", recv_data);
+                                if(switch_print.isChecked())
+                                {
+                                    first_print.setText(recv_data);  //텍스트뷰에 출력
+                                }
+
+                                else if( !switch_print.isChecked() && !recv_data.equals("ㄱ") && !recv_data.equals("ㄴ") && !recv_data.equals("ㄷ") && !recv_data.equals("ㄹ") && !recv_data.equals("ㅁ")
+                                        && !recv_data.equals("ㅂ") && !recv_data.equals("ㅅ") && !recv_data.equals("ㅇ") && !recv_data.equals("ㅈ") && !recv_data.equals("ㅊ") && !recv_data.equals("ㅋ")
+                                        && !recv_data.equals("ㅌ") && !recv_data.equals("ㅍ") && !recv_data.equals("ㅎ") && !recv_data.equals("ㅏ") && !recv_data.equals("ㅑ") && !recv_data.equals("ㅓ")
+                                        && !recv_data.equals("ㅕ") && !recv_data.equals("ㅗ") && !recv_data.equals("ㅛ") && !recv_data.equals("ㅜ") && !recv_data.equals("ㅠ") && !recv_data.equals("ㅡ")
+                                        && !recv_data.equals("ㅣ") && !recv_data.equals("ㅐ") && !recv_data.equals("ㅒ") && !recv_data.equals("ㅔ") && !recv_data.equals("ㅖ") && !recv_data.equals("ㅚ")
+                                        && !recv_data.equals("ㅟ") && !recv_data.equals("ㅢ"))
+                                {
+                                    first_print.setText(recv_data);  //텍스트뷰에 출력
+                                }
+
+                                first_print.post(new Runnable() {
+                                    public void run() {
+                                        if(check_tts && !switch_print.isChecked() && !recv_data.equals("ㄱ") && !recv_data.equals("ㄴ") && !recv_data.equals("ㄷ") && !recv_data.equals("ㄹ") && !recv_data.equals("ㅁ")
+                                                && !recv_data.equals("ㅂ") && !recv_data.equals("ㅅ") && !recv_data.equals("ㅇ") && !recv_data.equals("ㅈ") && !recv_data.equals("ㅊ") && !recv_data.equals("ㅋ")
+                                                && !recv_data.equals("ㅌ") && !recv_data.equals("ㅍ") && !recv_data.equals("ㅎ") && !recv_data.equals("ㅏ") && !recv_data.equals("ㅑ") && !recv_data.equals("ㅓ")
+                                                && !recv_data.equals("ㅕ") && !recv_data.equals("ㅗ") && !recv_data.equals("ㅛ") && !recv_data.equals("ㅜ") && !recv_data.equals("ㅠ") && !recv_data.equals("ㅡ")
+                                                && !recv_data.equals("ㅣ") && !recv_data.equals("ㅐ") && !recv_data.equals("ㅒ") && !recv_data.equals("ㅔ") && !recv_data.equals("ㅖ") && !recv_data.equals("ㅚ")
+                                                && !recv_data.equals("ㅟ") && !recv_data.equals("ㅢ"))
+                                        {
+                                            speakOutNow(recv_data); //tts 출력
+                                        }
+
+                                        else if(check_tts && switch_print.isChecked())
+                                        {
+                                            speakOutNow(recv_data);
+                                        }
+
+                                        Log.d("========2  ", recv_data);
+
+                                        if(!pre_data.equals("")){
+                                            listview.post(new Runnable() { //리스트뷰에 있는거 출력하기
+                                                public void run() {
+                                                    if(switch_print.isChecked())
+                                                    {
+                                                        mConversationArrayAdapter.add(pre_data);
+                                                    }
+
+                                                    else if( !switch_print.isChecked() && !pre_data.equals("ㄱ") && !pre_data.equals("ㄴ") && !pre_data.equals("ㄷ") && !pre_data.equals("ㄹ") && !pre_data.equals("ㅁ")
+                                                            && !pre_data.equals("ㅂ") && !pre_data.equals("ㅅ") && !pre_data.equals("ㅇ") && !pre_data.equals("ㅈ") && !pre_data.equals("ㅊ") && !pre_data.equals("ㅋ")
+                                                            && !pre_data.equals("ㅌ") && !pre_data.equals("ㅍ") && !pre_data.equals("ㅎ") && !pre_data.equals("ㅏ") && !pre_data.equals("ㅑ") && !pre_data.equals("ㅓ")
+                                                            && !pre_data.equals("ㅕ") && !pre_data.equals("ㅗ") && !pre_data.equals("ㅛ") && !pre_data.equals("ㅜ") && !pre_data.equals("ㅠ") && !pre_data.equals("ㅡ")
+                                                            && !pre_data.equals("ㅣ") && !pre_data.equals("ㅐ") && !pre_data.equals("ㅒ") && !pre_data.equals("ㅔ") && !pre_data.equals("ㅖ") && !pre_data.equals("ㅚ")
+                                                            && !pre_data.equals("ㅟ") && !pre_data.equals("ㅢ"))
+                                                    {
+                                                        mConversationArrayAdapter.add(pre_data);
+                                                    }
+
+                                                    pre_data = recv_data;
+                                                }
+
+                                            });
+                                        }
+                                        else {
+                                            pre_data = recv_data; //이전의 데이터를 리스트뷰에 출력하기 위해서
+                                        }
+                                        Log.d("======pre_data: ", pre_data);
+                                    }
+                                });
                             }
                         });
                     }
-                } catch (Exception e) {
+                } catch (Exception ignored) {
                 }
             }
         };
@@ -128,13 +199,13 @@ public class TranslationFragment extends Fragment implements TextToSpeech.OnInit
                 try {
                     while(true) {
                         end = System.currentTimeMillis();
-//                        System.out.println("END: "  + end);
 
                         if((end - start) > 3000 && !recv_data.equals("") && !runTimer) {
                             Log.d("3초 경과", "YES");
                             runTimer = true;
 
-                            if( !jasoList.isEmpty() && switch_comb.isChecked()) {
+                            //
+                            if( !jasoList.isEmpty() && switch_comb.isChecked()) {  //3초 시간이 경과되면 출력
                                 try {
                                     Log.d("==", "pass1");
                                     if(jasoList.size() > 2) {
@@ -154,11 +225,13 @@ public class TranslationFragment extends Fragment implements TextToSpeech.OnInit
                                     comb_message = "";
                                 }
 
-                                if(comb_message != "") {
+                                if(!comb_message.equals("")) {
                                     listview.post(new Runnable() {
                                         public void run() {
-                                            mConversationArrayAdapter.add(comb_message);
-                                            speakOutNow(comb_message);
+                                            mConversationArrayAdapter.add(comb_message); //출력부
+                                            if(check_tts){
+                                                speakOutNow(comb_message);
+                                            }
                                             jasoList.clear();
                                             comb_message = "";
                                         }
@@ -171,18 +244,12 @@ public class TranslationFragment extends Fragment implements TextToSpeech.OnInit
                             }
                         }
                     }
-                } catch (Exception e) {
+                } catch (Exception ignored) {
 
                 }
             }
         };
         timer.start();
-
-        //BluetoothService 클래스 생성
-//        if(bluetoothService == null) {
-//            bluetoothService = new BluetoothService(this, handler);
-//        }
-//        mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
 
         tts = new TextToSpeech(getContext(), this); //첫번째는 Context 두번째는 리스너
 
@@ -199,6 +266,24 @@ public class TranslationFragment extends Fragment implements TextToSpeech.OnInit
         listview = (ListView)view.findViewById(R.id.listview_translator);
         switch_comb = (Switch)view.findViewById(R.id.switch_comb);
         switch_print = (Switch)view.findViewById(R.id.switch_print);
+        first_print = (TextView)view.findViewById(R.id.first_print);
+        image_mute = (ImageButton)view.findViewById(R.id.image_mute);
+        image_mute.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(!check_mute) {
+                    image_mute.setImageResource(R.drawable.ic_mute);
+                    check_tts = false;
+                    check_mute = true;
+                }
+                else{
+                    image_mute.setImageResource(R.drawable.ic_unmute);
+                    check_tts = true;
+                    check_mute = false;
+                }
+
+            }
+        });
 
         List<String> list = new ArrayList<>();
         mConversationArrayAdapter = new ArrayAdapter(getActivity(),android.R.layout.simple_list_item_1, list);
@@ -273,26 +358,25 @@ public class TranslationFragment extends Fragment implements TextToSpeech.OnInit
             char c3 = element3.charAt(0);
             Log.d("==", "pass3");
 
-            //if(i == 0 && parseInt(element1,16)<0x314F && parseInt(element2,16)<0x314F){
             if( i == 0 && c1 < 12623 && c2 < 12623) {
                 Log.d("==", "pass4");
-                if(element1.equals("ㄱ")){
+                if(element1.equals("ㄱ") && element2.equals("ㄱ")){
                     jasoList.set(0, "ㄲ");
                     jasoList.remove(1);
                 }
-                else if(element1.equals("ㄷ")){
+                else if(element1.equals("ㄷ") && element2.equals("ㄷ")){
                     jasoList.set(0, "ㄸ");
                     jasoList.remove(1);
                 }
-                else if(element1.equals("ㅂ")){
+                else if(element1.equals("ㅂ") && element2.equals("ㅂ")){
                     jasoList.set(0, "ㅃ");
                     jasoList.remove(1);
                 }
-                else if(element1.equals("ㅅ")){
+                else if(element1.equals("ㅅ") && element2.equals("ㅅ")){
                     jasoList.set(0, "ㅆ");
                     jasoList.remove(1);
                 }
-                else if(element1.equals("ㅈ")){
+                else if(element1.equals("ㅈ") && element2.equals("ㅈ")){
                     jasoList.set(0, "ㅉ");
                     jasoList.remove(1);
                 }
@@ -414,29 +498,72 @@ public class TranslationFragment extends Fragment implements TextToSpeech.OnInit
     }
 
     private List<String> mo_ssang(List<String> jasoList) {
-        for (int i = 0; i < jasoList.size() - 1; i++) {
+        for (int i = 0; i < jasoList.size() - 3; i++) {
             String element1 = jasoList.get(i);
             String element2 = jasoList.get(i + 1);
+            String element3 = jasoList.get(i + 2);
+            String element4 = jasoList.get(i + 3);
 
             char c1 = element1.charAt(0);
             char c2 = element2.charAt(0);
+            char c3 = element3.charAt(0);
+            char c4 = element4.charAt(0);
 
-            if (c1 >= 12623 && c2 >= 12623) {
-                if(element1.equals("ㅗ")&&element2.equals("ㅏ")) {
-                    jasoList.set(i, "ㅘ");
-                    jasoList.remove(i+1);
+            if (c1 < 12623 && c2 >= 12623 && c3 >= 12623 && c4 >= 12623) {
+                if (element2.equals("ㅗ") && element3.equals("ㅏ") && element4.equals("ㅣ")) {
+                    jasoList.set(i+1, "ㅙ");
+                    jasoList.remove(i + 2);
+                    jasoList.remove(i + 2);
+                } else if (element2.equals("ㅜ") && element3.equals("ㅓ") && element4.equals("ㅣ")) {
+                    jasoList.set(i+1, "ㅞ");
+                    jasoList.remove(i + 2);
+                    jasoList.remove(i + 2);
                 }
-                else if(element1.equals("ㅗ")&&element2.equals("ㅐ")) {
-                    jasoList.set(i, "ㅙ");
-                    jasoList.remove(i+1);
+            }
+            else if (c1 <12623 && c2 >= 12623 && c3 >= 12623 && c4 < 12623) {
+                if(element2.equals("ㅗ")&&element3.equals("ㅏ")) {
+                    jasoList.set(i+1, "ㅘ");
+                    jasoList.remove(i+2);
                 }
-                else if(element1.equals("ㅜ")&&element2.equals("ㅓ")) {
-                    jasoList.set(i, "ㅝ");
-                    jasoList.remove(i+1);
+                else if(element2.equals("ㅗ")&&element3.equals("ㅐ")) {
+                    jasoList.set(i+1, "ㅙ");
+                    jasoList.remove(i+2);
                 }
-                else if(element1.equals("ㅜ")&&element2.equals("ㅔ")) {
-                    jasoList.set(i, "ㅞ");
-                    jasoList.remove(i+1);
+                else if(element2.equals("ㅜ")&&element3.equals("ㅓ")) {
+                    jasoList.set(i+1, "ㅝ");
+                    jasoList.remove(i+2);
+                }
+                else if(element2.equals("ㅜ")&&element3.equals("ㅔ")) {
+                    jasoList.set(i+1, "ㅞ");
+                    jasoList.remove(i+2);
+                }
+                else if(element2.equals("ㅏ")&&element3.equals("ㅣ")) {
+                    jasoList.set(i+1, "ㅐ");
+                    jasoList.remove(i+2);
+                }
+                else if(element2.equals("ㅑ")&&element3.equals("ㅣ")) {
+                    jasoList.set(i+1, "ㅒ");
+                    jasoList.remove(i+2);
+                }
+                else if(element2.equals("ㅓ")&&element3.equals("ㅣ")) {
+                    jasoList.set(i+1, "ㅔ");
+                    jasoList.remove(i+2);
+                }
+                else if(element2.equals("ㅕ")&&element3.equals("ㅣ")) {
+                    jasoList.set(i+1, "ㅖ");
+                    jasoList.remove(i+2);
+                }
+                else if(element2.equals("ㅗ")&&element3.equals("ㅣ")) {
+                    jasoList.set(i+1, "ㅚ");
+                    jasoList.remove(i+2);
+                }
+                else if(element2.equals("ㅜ")&&element3.equals("ㅣ")) {
+                    jasoList.set(i+1, "ㅟ");
+                    jasoList.remove(i+2);
+                }
+                else if(element2.equals("ㅡ")&&element3.equals("ㅣ")) {
+                    jasoList.set(i+1, "ㅢ");
+                    jasoList.remove(i+2);
                 }
             }
         }

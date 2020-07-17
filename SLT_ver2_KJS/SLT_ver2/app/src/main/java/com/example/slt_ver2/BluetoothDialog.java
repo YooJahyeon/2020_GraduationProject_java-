@@ -16,7 +16,6 @@ import android.widget.ImageView;
 import java.io.IOException;
 import java.util.UUID;
 
-
 public class BluetoothDialog extends AppCompatActivity implements View.OnClickListener {
     private static Context context;
 
