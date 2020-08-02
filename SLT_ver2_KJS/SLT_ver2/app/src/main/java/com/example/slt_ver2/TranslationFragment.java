@@ -50,9 +50,9 @@ public class TranslationFragment extends Fragment implements TextToSpeech.OnInit
     ImageButton image_mute;
 
     //소켓 코드
-    private Socket socket;  //소켓생성
-    BufferedReader in;      //서버로부터 온 데이터를 읽는다.
-    static PrintWriter out;        //서버에 데이터를 전송한다.
+//    private Socket socket;  //소켓생성
+//    BufferedReader in;      //서버로부터 온 데이터를 읽는다.
+//    static PrintWriter out;        //서버에 데이터를 전송한다.
     static String data;
     static String readMessage0, readMessage1;
     static float speed;
@@ -85,19 +85,19 @@ public class TranslationFragment extends Fragment implements TextToSpeech.OnInit
 
         Thread worker = new Thread() {    //worker 를 Thread 로 생성
             public void run() { //스레드 실행구문
-                try {
-                    //소켓을 생성하고 입출력 스트립을 소켓에 연결한다.
-                    socket = new Socket("220.64.200.73", 9999); //소켓생성
-                    out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(socket.getOutputStream())), true); //데이터를 전송시 stream 형태로 변환하여 전송한다.
-                    in = new BufferedReader(new InputStreamReader(socket.getInputStream())); //데이터 수신시 stream을 받아들인다.
-
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+//                try {
+//                    //소켓을 생성하고 입출력 스트립을 소켓에 연결한다.
+//                    socket = new Socket("220.64.200.73", 9999); //소켓생성
+//                    out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(socket.getOutputStream())), true); //데이터를 전송시 stream 형태로 변환하여 전송한다.
+//                    in = new BufferedReader(new InputStreamReader(socket.getInputStream())); //데이터 수신시 stream을 받아들인다.
+//
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                }
                 //소켓에서 데이터를 읽어서 화면에 표시한다.
                 try {
                     while (true) {
-                        data = in.readLine(); // in으로 받은 데이타를 String 형태로 읽어 data에 저장
+                        data = MainActivity.in.readLine(); // in으로 받은 데이타를 String 형태로 읽어 data에 저장
 
                         start = System.currentTimeMillis();
                         Log.d("==start: ", Long.toString(start));
@@ -315,8 +315,8 @@ public class TranslationFragment extends Fragment implements TextToSpeech.OnInit
                 new Thread() {
                     public void run() {
                         if (readMessage0 != null && readMessage1 != null) {
-                            out.println(readMessage0); //data를   stream 형태로 변형하여 전송.  변환내용은 쓰레드에 담겨 있다.
-                            out.println(readMessage1); //data를   stream 형태로 변형하여 전송.  변환내용은 쓰레드에 담겨 있다.
+                            MainActivity.out.println(readMessage0); //data를   stream 형태로 변형하여 전송.  변환내용은 쓰레드에 담겨 있다.
+                            MainActivity.out.println(readMessage1); //data를   stream 형태로 변형하여 전송.  변환내용은 쓰레드에 담겨 있다.
                             Log.d("=== in net0", readMessage0);
                             Log.d("=== in net1", readMessage1);
                             System.out.println();

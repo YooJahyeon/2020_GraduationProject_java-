@@ -16,6 +16,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
+        <activity android:name=".SocketManager" />
         <activity
             android:name=".BluetoothDialog"
             android:theme="@style/Theme.AppCompat.Light.Dialog.MinWidth" />
