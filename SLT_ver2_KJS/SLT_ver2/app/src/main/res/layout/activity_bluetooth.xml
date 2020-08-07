@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:gravity="center"
+    android:background="@color/bg"
     tools:context=".BluetoothActivity">
 
     <TextView
@@ -84,44 +85,6 @@
 
 
                 />
-
-            <!--<ImageView-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:src="@drawable/ic_check" />-->
-
-            <!--<TextView-->
-                <!--android:id="@+id/textview_leftState"-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:text="DISCONNECT" />-->
-
-            <!--<ImageButton-->
-                <!--android:id="@+id/button_leftRefresh"-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:src="@drawable/ic_refresh" />-->
-
-
-            <!--<ImageView-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:src="@drawable/ic_check" />-->
-
-
-            <!--<TextView-->
-                <!--android:id="@+id/textview_rightState"-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:text="DISCONNECT" />-->
-
-            <!--<ImageButton-->
-                <!--android:id="@+id/button_rightRefresh"-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:src="@drawable/ic_refresh" />-->
-
-
         </LinearLayout>
 
 

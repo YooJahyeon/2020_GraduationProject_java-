@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="@color/bg"
     tools:context=".SettingFragment">
 
     <TextView
@@ -27,44 +28,31 @@
                 android:orientation="horizontal"
                 >
                 <RadioButton
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="0.5배"
-                    />
-
+                    android:text="0.50배"
+                    android:id="@+id/Button_050"/>
                 <RadioButton
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
                     android:text="0.75배"
-                    />
-
+                    android:id="@+id/Button_075"/>
                 <RadioButton
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="1.0배"
-                    />
-
+                    android:text="1.00배"
+                    android:id="@+id/Button_100"/>
                 <RadioButton
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
                     android:text="1.25배"
-                    />
-
+                    android:id="@+id/Button_125"/>
                 <RadioButton
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="1.5배"
-                    />
+                    android:text="1.50배"
+                    android:id="@+id/Button_150"/>
             </RadioGroup>
-
-
-
-
 
     <!--<TextView-->
         <!--android:layout_width="match_parent"-->
@@ -84,8 +72,6 @@
     <!--</TableLayout>-->
 
 
-
-
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -98,7 +84,35 @@
         android:layout_height="wrap_content"
         android:max="100"
         android:progress="50"
+        android:id="@+id/seekbar_volume"
         />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="폰트 크기 조절"
+        android:layout_marginTop="70dp"
+        android:drawableLeft="@drawable/pen"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Font Size :  "/>
+
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="15"
+            android:id="@+id/edit_fontsize"
+            />
+
+    </LinearLayout>
+
 
     <TextView
         android:layout_width="match_parent"

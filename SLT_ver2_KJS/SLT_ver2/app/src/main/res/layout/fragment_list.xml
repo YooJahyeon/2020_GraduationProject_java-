@@ -4,21 +4,20 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="@color/bg"
     tools:context=".ListFragment">
 
 
     <TextView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:text="리스트">
-
     </TextView>
 
     <ListView
         android:id="@+id/listview"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-
     </ListView>
 
     <LinearLayout

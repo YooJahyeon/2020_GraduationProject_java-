@@ -1,22 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
         android:id="@+id/navigation_list"
-        android:title="list"
-        android:icon="@drawable/ic_list"
+        android:title="리스트"
+        android:icon="@drawable/ic_list2_xml"
         />
 
     <item
         android:id="@+id/navigation_translator"
-        android:title="translator"
-        android:icon="@drawable/ic_home"
+        app:showAsAction="always"
+        android:title="번역"
+        android:icon="@drawable/ic_translator_xml"
+        android:enabled="true"
         />
 
     <item
         android:id="@+id/navigation_setting"
-        android:title="setting"
-        android:icon="@drawable/ic_setting"
+        android:title="설정"
+        android:icon="@drawable/ic_setting_xml"
         />
 
 
