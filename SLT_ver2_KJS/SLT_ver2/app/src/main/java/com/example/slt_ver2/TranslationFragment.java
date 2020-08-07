@@ -21,13 +21,6 @@ import android.widget.Toast;
 import com.github.kimkevin.hangulparser.HangulParser;
 import com.github.kimkevin.hangulparser.HangulParserException;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
-import java.net.Socket;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
@@ -156,12 +149,13 @@ public class TranslationFragment extends Fragment implements TextToSpeech.OnInit
 
                                         Log.d("========2  ", recv_data);
 
+
                                         if(!pre_data.equals("")){
                                             listview.post(new Runnable() { //리스트뷰에 있는거 출력하기
                                                 public void run() {
                                                     if(switch_print.isChecked())
                                                     {
-                                                        mConversationArrayAdapter.add(pre_data);
+                                                        mConversationArrayAdapter.insert(pre_data, 0);
                                                     }
 
                                                     else if( !switch_print.isChecked() && !pre_data.equals("ㄱ") && !pre_data.equals("ㄴ") && !pre_data.equals("ㄷ") && !pre_data.equals("ㄹ") && !pre_data.equals("ㅁ")
@@ -171,7 +165,7 @@ public class TranslationFragment extends Fragment implements TextToSpeech.OnInit
                                                             && !pre_data.equals("ㅣ") && !pre_data.equals("ㅐ") && !pre_data.equals("ㅒ") && !pre_data.equals("ㅔ") && !pre_data.equals("ㅖ") && !pre_data.equals("ㅚ")
                                                             && !pre_data.equals("ㅟ") && !pre_data.equals("ㅢ"))
                                                     {
-                                                        mConversationArrayAdapter.add(pre_data);
+                                                        mConversationArrayAdapter.insert(pre_data,0);
                                                     }
 
                                                     pre_data = recv_data;
