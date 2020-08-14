@@ -50,9 +50,10 @@
             >
 
             <ListView
-                android:id="@+id/listview_translator"
+                android:id="@android:id/list"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:stackFromBottom="true"
                 android:textSize="15sp"
                 ></ListView>
         </LinearLayout>

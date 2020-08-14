@@ -1,41 +1,118 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.sothree.slidinguppanel.SlidingUpPanelLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/sliding_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="@color/bg"
-    tools:context=".ListFragment">
-
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="리스트">
-    </TextView>
-
-    <ListView
-        android:id="@+id/listview"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-    </ListView>
+    android:gravity="bottom"
+    tools:context=".MainActivity"
+    app:umanoPanelHeight="58dp"
+    app:umanoShadowHeight="0dp"
+    app:umanoDragView="@id/dragView"
+    app:umanoOverlay = "true"
+    android:background="@android:color/transparent"
+    >
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        >
-        <Button
-            android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:background="@color/bg">
+
+
+        <TextView
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="추가"
-            />
-        <Button
-            android:layout_width="wrap_content"
+            android:text="리스트">
+        </TextView>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/signlanguage_recycler"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="삭제"
-           />
+            android:layout_marginBottom="58dp"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            >
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="추가"
+                />
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="삭제"
+                />
+
+        </LinearLayout>
 
     </LinearLayout>
 
-</LinearLayout>
+    <RelativeLayout
+        android:id="@+id/dragView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:focusable="false"
+        android:background="@drawable/radiusblue"
+        android:orientation="vertical">
+
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="수화 추가"
+            android:textColor="@android:color/white"
+            android:layout_marginTop="12dp"
+            android:textSize="22sp"
+            android:gravity="center"
+            android:layout_gravity="center"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="220dp"
+            android:orientation="vertical"
+            android:layout_marginTop="58dp"
+            android:gravity="center_horizontal"
+            android:background="@android:color/white">
+
+
+            <EditText
+                android:id="@+id/et_meaning"
+                android:layout_width="337dp"
+                android:layout_height="wrap_content"
+                android:background="@drawable/meaning_selector"
+                android:hint="수화의 의미를 입력해주세요."
+                android:textCursorDrawable="@drawable/cursor_color"
+                android:maxLines="1"
+                android:layout_marginTop="40dp"
+                android:paddingVertical="16dp"
+                android:paddingLeft="15dp"
+                android:textColor="#000000"
+                android:textColorHint="#BABABA"
+                android:layout_gravity="center_horizontal"
+                android:textSize="17sp" />
+
+            <Button
+                android:id="@+id/btn_Add"
+                android:layout_width="337dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:paddingVertical="10dp"
+                android:background="@drawable/btn_blue"
+                android:textColor="@android:color/white"
+                android:text="등록"
+                style="?android:attr/borderlessButtonStyle"
+                android:textSize="20sp"
+                />
+
+
+        </LinearLayout>
+    </RelativeLayout>
+
+</com.sothree.slidinguppanel.SlidingUpPanelLayout>

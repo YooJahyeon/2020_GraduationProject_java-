@@ -1,22 +1,24 @@
 package com.example.slt_ver2;
 
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.speech.tts.TextToSpeech;
-import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.ListFragment;
 
 import com.github.kimkevin.hangulparser.HangulParser;
 import com.github.kimkevin.hangulparser.HangulParserException;
@@ -26,12 +28,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-public class TranslationFragment extends Fragment implements TextToSpeech.OnInitListener {
+public class TranslationFragment extends ListFragment implements TextToSpeech.OnInitListener {
 
     public static final int MESSAGE_STATE_CHANGE = 1;
     public static final int MESSAGE_READ = 9999;
 
-    private ArrayAdapter<String> mConversationArrayAdapter;   //리스트뷰 출력을 위한 adapter
+    ListViewAdapter adapter;
     private String recv_data = "";
     private String pre_data = "";
 
@@ -42,10 +44,6 @@ public class TranslationFragment extends Fragment implements TextToSpeech.OnInit
     TextView first_print;
     ImageButton image_mute;
 
-    //소켓 코드
-//    private Socket socket;  //소켓생성
-//    BufferedReader in;      //서버로부터 온 데이터를 읽는다.
-//    static PrintWriter out;        //서버에 데이터를 전송한다.
     static String data;
     static String readMessage0, readMessage1;
     static float speed;
@@ -58,6 +56,7 @@ public class TranslationFragment extends Fragment implements TextToSpeech.OnInit
     Boolean runTimer = false;
     Boolean check_tts = true;
     Boolean check_mute = false;
+    Boolean check_jo = false;
 
     static boolean startTrans = false;
 
@@ -67,9 +66,13 @@ public class TranslationFragment extends Fragment implements TextToSpeech.OnInit
     String comb_message = "";
 
     @Override
+    public void onResume() {
+        super.onResume();
+    }
+
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         if(!startTrans) {
             startActivity(new Intent(getContext(),BluetoothDialog.class));
         }
@@ -78,15 +81,6 @@ public class TranslationFragment extends Fragment implements TextToSpeech.OnInit
 
         Thread worker = new Thread() {    //worker 를 Thread 로 생성
             public void run() { //스레드 실행구문
-//                try {
-//                    //소켓을 생성하고 입출력 스트립을 소켓에 연결한다.
-//                    socket = new Socket("220.64.200.73", 9999); //소켓생성
-//                    out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(socket.getOutputStream())), true); //데이터를 전송시 stream 형태로 변환하여 전송한다.
-//                    in = new BufferedReader(new InputStreamReader(socket.getInputStream())); //데이터 수신시 stream을 받아들인다.
-//
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                }
                 //소켓에서 데이터를 읽어서 화면에 표시한다.
                 try {
                     while (true) {
@@ -146,31 +140,94 @@ public class TranslationFragment extends Fragment implements TextToSpeech.OnInit
                                         {
                                             speakOutNow(recv_data);
                                         }
-
                                         Log.d("========2  ", recv_data);
-
 
                                         if(!pre_data.equals("")){
                                             listview.post(new Runnable() { //리스트뷰에 있는거 출력하기
                                                 public void run() {
+                                                    Log.d("==check_jo", String.valueOf(check_jo));
                                                     if(switch_print.isChecked())
                                                     {
-                                                        mConversationArrayAdapter.insert(pre_data, 0);
+                                                        if(!check_jo && !pre_data.equals("ㄱ") && !pre_data.equals("ㄴ") && !pre_data.equals("ㄷ") && !pre_data.equals("ㄹ") && !pre_data.equals("ㅁ")
+                                                                && !pre_data.equals("ㅂ") && !pre_data.equals("ㅅ") && !pre_data.equals("ㅇ") && !pre_data.equals("ㅈ") && !pre_data.equals("ㅊ") && !pre_data.equals("ㅋ")
+                                                                && !pre_data.equals("ㅌ") && !pre_data.equals("ㅍ") && !pre_data.equals("ㅎ") && !pre_data.equals("ㅏ") && !pre_data.equals("ㅑ") && !pre_data.equals("ㅓ")
+                                                                && !pre_data.equals("ㅕ") && !pre_data.equals("ㅗ") && !pre_data.equals("ㅛ") && !pre_data.equals("ㅜ") && !pre_data.equals("ㅠ") && !pre_data.equals("ㅡ")
+                                                                && !pre_data.equals("ㅣ") && !pre_data.equals("ㅐ") && !pre_data.equals("ㅒ") && !pre_data.equals("ㅔ") && !pre_data.equals("ㅖ") && !pre_data.equals("ㅚ")
+                                                                && !pre_data.equals("ㅟ") && !pre_data.equals("ㅢ")) {
+                                                            Log.d("==check_jo 1", String.valueOf(check_jo));
+                                                            adapter.addItem(ContextCompat.getDrawable(getActivity(), R.drawable.ic_su),
+                                                                    pre_data, 0);
+                                                            adapter.notifyDataSetChanged();
+                                                        }
+
+                                                        else {
+//                                                            (pre_data.equals("ㄱ") || pre_data.equals("ㄴ") || pre_data.equals("ㄷ")|| pre_data.equals("ㄹ") || pre_data.equals("ㅁ")
+//                                                                    || pre_data.equals("ㅂ") || pre_data.equals("ㅅ") || pre_data.equals("ㅇ") || pre_data.equals("ㅈ") || pre_data.equals("ㅊ") || pre_data.equals("ㅋ")
+//                                                                    || pre_data.equals("ㅌ") || pre_data.equals("ㅍ") || pre_data.equals("ㅎ") || pre_data.equals("ㅏ") || pre_data.equals("ㅑ") || pre_data.equals("ㅓ")
+//                                                                    || pre_data.equals("ㅕ") || pre_data.equals("ㅗ") || pre_data.equals("ㅛ") || pre_data.equals("ㅜ") || pre_data.equals("ㅠ") || pre_data.equals("ㅡ")
+//                                                                    || pre_data.equals("ㅣ") || pre_data.equals("ㅐ") || pre_data.equals("ㅒ") || pre_data.equals("ㅔ") || pre_data.equals("ㅖ") || pre_data.equals("ㅚ")
+//                                                                    || pre_data.equals("ㅟ") || pre_data.equals("ㅢ"))
+                                                            if(!check_jo) {
+                                                                Log.d("==check_jo 2", String.valueOf(check_jo));
+                                                                adapter.addItem(ContextCompat.getDrawable(getActivity(), R.drawable.ic_ji),
+                                                                        pre_data, 0);
+                                                                adapter.notifyDataSetChanged();
+                                                            }
+                                                            else{
+                                                                Log.d("==check_jo 3", String.valueOf(check_jo));
+                                                                adapter.addItem(ContextCompat.getDrawable(getActivity(), R.drawable.ic_jo),
+                                                                        pre_data, 0);
+                                                                adapter.notifyDataSetChanged();
+                                                                check_jo = false;
+                                                            }
+                                                        }
                                                     }
 
-                                                    else if( !switch_print.isChecked() && !pre_data.equals("ㄱ") && !pre_data.equals("ㄴ") && !pre_data.equals("ㄷ") && !pre_data.equals("ㄹ") && !pre_data.equals("ㅁ")
+                                                    else if(!check_jo && !switch_print.isChecked() && !pre_data.equals("ㄱ") && !pre_data.equals("ㄴ") && !pre_data.equals("ㄷ") && !pre_data.equals("ㄹ") && !pre_data.equals("ㅁ")
                                                             && !pre_data.equals("ㅂ") && !pre_data.equals("ㅅ") && !pre_data.equals("ㅇ") && !pre_data.equals("ㅈ") && !pre_data.equals("ㅊ") && !pre_data.equals("ㅋ")
                                                             && !pre_data.equals("ㅌ") && !pre_data.equals("ㅍ") && !pre_data.equals("ㅎ") && !pre_data.equals("ㅏ") && !pre_data.equals("ㅑ") && !pre_data.equals("ㅓ")
                                                             && !pre_data.equals("ㅕ") && !pre_data.equals("ㅗ") && !pre_data.equals("ㅛ") && !pre_data.equals("ㅜ") && !pre_data.equals("ㅠ") && !pre_data.equals("ㅡ")
                                                             && !pre_data.equals("ㅣ") && !pre_data.equals("ㅐ") && !pre_data.equals("ㅒ") && !pre_data.equals("ㅔ") && !pre_data.equals("ㅖ") && !pre_data.equals("ㅚ")
                                                             && !pre_data.equals("ㅟ") && !pre_data.equals("ㅢ"))
                                                     {
-                                                        mConversationArrayAdapter.insert(pre_data,0);
+                                                        Log.d("==check_jo 4", String.valueOf(check_jo));
+                                                        adapter.addItem(ContextCompat.getDrawable(getActivity(), R.drawable.ic_su),
+                                                                pre_data, 0);
+                                                        adapter.notifyDataSetChanged();
                                                     }
 
+//                                                    else if(check_jo && switch_print.isChecked())
+//                                                    {
+//                                                        Log.d("==check_jo 5", String.valueOf(check_jo));
+//                                                        adapter.addItem(ContextCompat.getDrawable(getActivity(), R.drawable.ic_jo),
+//                                                                pre_data);
+//                                                        adapter.notifyDataSetChanged();
+//                                                        check_jo = false;
+//                                                        Log.d("==check_jo 6", String.valueOf(check_jo));
+//                                                    }
+//                                                    else if(check_jo && !switch_print.isChecked())
+//                                                    {
+//                                                        Log.d("==check_jo 7", String.valueOf(check_jo));
+//                                                        adapter.addItem(ContextCompat.getDrawable(getActivity(), R.drawable.ic_jo),
+//                                                                pre_data);
+//                                                        adapter.notifyDataSetChanged();
+//                                                        check_jo = false;
+//                                                        Log.d("==check_jo 8", String.valueOf(check_jo));
+//                                                    }
+
+//                                                    else if(check_jo && !pre_data.equals("ㄱ") && !pre_data.equals("ㄴ") && !pre_data.equals("ㄷ") && !pre_data.equals("ㄹ") && !pre_data.equals("ㅁ")
+//                                                            && !pre_data.equals("ㅂ") && !pre_data.equals("ㅅ") && !pre_data.equals("ㅇ") && !pre_data.equals("ㅈ") && !pre_data.equals("ㅊ") && !pre_data.equals("ㅋ")
+//                                                            && !pre_data.equals("ㅌ") && !pre_data.equals("ㅍ") && !pre_data.equals("ㅎ") && !pre_data.equals("ㅏ") && !pre_data.equals("ㅑ") && !pre_data.equals("ㅓ")
+//                                                            && !pre_data.equals("ㅕ") && !pre_data.equals("ㅗ") && !pre_data.equals("ㅛ") && !pre_data.equals("ㅜ") && !pre_data.equals("ㅠ") && !pre_data.equals("ㅡ")
+//                                                            && !pre_data.equals("ㅣ") && !pre_data.equals("ㅐ") && !pre_data.equals("ㅒ") && !pre_data.equals("ㅔ") && !pre_data.equals("ㅖ") && !pre_data.equals("ㅚ")
+//                                                            && !pre_data.equals("ㅟ") && !pre_data.equals("ㅢ")){
+//                                                        adapter.addItem(ContextCompat.getDrawable(getActivity(), R.drawable.ic_jo),
+//                                                                pre_data);
+//                                                        adapter.notifyDataSetChanged();
+//                                                        check_jo = false;
+//                                                    }
                                                     pre_data = recv_data;
                                                 }
-
                                             });
                                         }
                                         else {
@@ -198,7 +255,6 @@ public class TranslationFragment extends Fragment implements TextToSpeech.OnInit
                             Log.d("3초 경과", "YES");
                             runTimer = true;
 
-                            //
                             if( !jasoList.isEmpty() && switch_comb.isChecked()) {  //3초 시간이 경과되면 출력
                                 try {
                                     Log.d("==", "pass1");
@@ -212,17 +268,27 @@ public class TranslationFragment extends Fragment implements TextToSpeech.OnInit
 
                                     comb_message = HangulParser.assemble(jasoList_ver2);
                                     Log.d("========조합 :  ", comb_message);
+                                    Log.d("====pre_미친놈: ", pre_data);
+                                    //adapter.addItem(ContextCompat.getDrawable(getActivity(), R.drawable.ic_ji),
+//                                            pre_data, 0);
                                 } catch (HangulParserException e) {
 //                                    e.printStackTrace();
                                     comb_message = "다시 입력하세요.";
                                     jasoList.clear();
                                     comb_message = "";
                                 }
-
                                 if(!comb_message.equals("")) {
                                     listview.post(new Runnable() {
                                         public void run() {
-                                            mConversationArrayAdapter.add(comb_message); //출력부
+                                            Log.d("====pre: ", pre_data);
+                                            adapter.addItem(ContextCompat.getDrawable(getActivity(), R.drawable.ic_ji),
+                                                    pre_data, 0);
+                                            adapter.notifyDataSetChanged();
+                                            first_print.setText(comb_message);
+                                            pre_data = comb_message;
+                                            check_jo = true;
+                                            Log.d("==check_jo 9", String.valueOf(check_jo));
+//                                            mConversationArrayAdapter.add(comb_message); //출력부
                                             if(check_tts){
                                                 speakOutNow(comb_message);
                                             }
@@ -230,6 +296,25 @@ public class TranslationFragment extends Fragment implements TextToSpeech.OnInit
                                             comb_message = "";
                                         }
                                     });
+                                }
+
+                                if(check_jo && switch_print.isChecked())
+                                {
+                                    Log.d("==check_jo 5", String.valueOf(check_jo));
+                                    adapter.addItem(ContextCompat.getDrawable(getActivity(), R.drawable.ic_jo),
+                                            pre_data, 0);
+                                    adapter.notifyDataSetChanged();
+                                    check_jo = false;
+                                    Log.d("==check_jo 6", String.valueOf(check_jo));
+                                }
+                                else if(check_jo && !switch_print.isChecked())
+                                {
+                                    Log.d("==check_jo 7", String.valueOf(check_jo));
+                                    adapter.addItem(ContextCompat.getDrawable(getActivity(), R.drawable.ic_jo),
+                                            pre_data, 0);
+                                    adapter.notifyDataSetChanged();
+                                    check_jo = false;
+                                    Log.d("==check_jo 8", String.valueOf(check_jo));
                                 }
                             }
                             else{
@@ -239,7 +324,6 @@ public class TranslationFragment extends Fragment implements TextToSpeech.OnInit
                         }
                     }
                 } catch (Exception ignored) {
-
                 }
             }
         };
@@ -250,6 +334,10 @@ public class TranslationFragment extends Fragment implements TextToSpeech.OnInit
         getActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
     }
 
+    public void addItem(Drawable icon, String desc, int pos) {
+        adapter.addItem(icon, desc, pos) ;
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -257,7 +345,7 @@ public class TranslationFragment extends Fragment implements TextToSpeech.OnInit
         View view =inflater.inflate(R.layout.fragment_translation, container, false);
 
         //리스트뷰
-        listview = (ListView)view.findViewById(R.id.listview_translator);
+        listview = (ListView)view.findViewById(android.R.id.list);
         switch_comb = (Switch)view.findViewById(R.id.switch_comb);
         switch_print = (Switch)view.findViewById(R.id.switch_print);
         first_print = (TextView)view.findViewById(R.id.first_print);
@@ -279,14 +367,17 @@ public class TranslationFragment extends Fragment implements TextToSpeech.OnInit
             }
         });
 
-        List<String> list = new ArrayList<>();
-        mConversationArrayAdapter = new ArrayAdapter(getActivity(),android.R.layout.simple_list_item_1, list);
+        // Adapter 생성 및 Adapter 지정.
+        adapter = new ListViewAdapter() ;
+        setListAdapter(adapter);
 
-        listview.setAdapter(mConversationArrayAdapter);
-        listview.setSelection(mConversationArrayAdapter.getCount() - 1);
+//        // 첫 번째 아이템 추가.
+//        adapter.addItem(ContextCompat.getDrawable(getActivity(), R.drawable.ic_su),
+//                "Box");
+
         return view;
-    }
 
+    }
 
     //Bluetooth state -> View Change
     public static final Handler handler = new Handler(new Handler.Callback() {
@@ -331,7 +422,6 @@ public class TranslationFragment extends Fragment implements TextToSpeech.OnInit
         } else {
             Toast.makeText(getActivity(), "TTS 실패!", Toast.LENGTH_SHORT).show();
         }
-
     }
 
     private void speakOutNow(String tts_data) {
@@ -430,6 +520,27 @@ public class TranslationFragment extends Fragment implements TextToSpeech.OnInit
                     jasoList.set(i, "ㅆ");
                     jasoList.remove(i+1);
                 }
+                else if(element2.equals("ㄱ")&&element3.equals("ㄱ")) {
+                    jasoList.set(i+1, "ㄲ");
+                    jasoList.remove(i+2);
+                }
+                else if(element2.equals("ㅅ")&&element3.equals("ㅅ")) {
+                    jasoList.set(i+1, "ㅆ");
+                    jasoList.remove(i+2);
+                }
+                else if(element2.equals("ㄷ")&&element3.equals("ㄷ")) {
+                    jasoList.set(i+1, "ㄸ");
+                    jasoList.remove(i+2);
+                }
+                else if(element2.equals("ㅂ")&&element3.equals("ㅂ")) {
+                    jasoList.set(i+1, "ㅃ");
+                    jasoList.remove(i+2);
+                }
+                else if(element2.equals("ㅈ")&&element3.equals("ㅈ")) {
+                    jasoList.set(i+1, "ㅉ");
+                    jasoList.remove(i+2);
+                }
+
             }
             else if(i==jasoList.size() -3 && c2<12623 && c3 < 12623) {
 //            else if(i == jasoList.size() - 3 && parseInt(element2,16)<12623 && parseInt(element3,16)<12623){
@@ -558,6 +669,52 @@ public class TranslationFragment extends Fragment implements TextToSpeech.OnInit
                 else if(element2.equals("ㅡ")&&element3.equals("ㅣ")) {
                     jasoList.set(i+1, "ㅢ");
                     jasoList.remove(i+2);
+                }
+            }
+            else if (c2 < 12623 && c3 >= 12623 && c4 >= 12623) {
+                if(element3.equals("ㅗ")&&element4.equals("ㅏ")) {
+                    jasoList.set(i+2, "ㅘ");
+                    jasoList.remove(i+3);
+                }
+                else if(element3.equals("ㅗ")&&element4.equals("ㅐ")) {
+                    jasoList.set(i+2, "ㅙ");
+                    jasoList.remove(i+3);
+                }
+                else if(element3.equals("ㅜ")&&element4.equals("ㅓ")) {
+                    jasoList.set(i+2, "ㅝ");
+                    jasoList.remove(i+3);
+                }
+                else if(element3.equals("ㅜ")&&element4.equals("ㅔ")) {
+                    jasoList.set(i+2, "ㅞ");
+                    jasoList.remove(i+3);
+                }
+                else if(element3.equals("ㅏ")&&element4.equals("ㅣ")) {
+                    jasoList.set(i+2, "ㅐ");
+                    jasoList.remove(i+3);
+                }
+                else if(element3.equals("ㅑ")&&element4.equals("ㅣ")) {
+                    jasoList.set(i+2, "ㅒ");
+                    jasoList.remove(i+3);
+                }
+                else if(element3.equals("ㅓ")&&element4.equals("ㅣ")) {
+                    jasoList.set(i+2, "ㅔ");
+                    jasoList.remove(i+3);
+                }
+                else if(element3.equals("ㅕ")&&element4.equals("ㅣ")) {
+                    jasoList.set(i+2, "ㅖ");
+                    jasoList.remove(i+3);
+                }
+                else if(element3.equals("ㅗ")&&element4.equals("ㅣ")) {
+                    jasoList.set(i+2, "ㅚ");
+                    jasoList.remove(i+3);
+                }
+                else if(element3.equals("ㅜ")&&element4.equals("ㅣ")) {
+                    jasoList.set(i+2, "ㅟ");
+                    jasoList.remove(i+3);
+                }
+                else if(element3.equals("ㅡ")&&element4.equals("ㅣ")) {
+                    jasoList.set(i+2, "ㅢ");
+                    jasoList.remove(i+3);
                 }
             }
         }
