@@ -362,6 +362,7 @@ public class BluetoothService extends Service {
         m.obj = s;
 
         TranslationFragment.handler.sendMessage(m);
+        ListFragment.handler.sendMessage(m);
     }
 
     // 연결 실패했을때

@@ -4,10 +4,9 @@ import android.bluetooth.BluetoothAdapter;
 import android.os.Bundle;
 import android.view.MenuItem;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -19,41 +18,98 @@ import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.Socket;
 
+import butterknife.ButterKnife;
+
 import static com.example.slt_ver2.TranslationFragment.handler;
 
 public class MainActivity extends AppCompatActivity {
     static BluetoothService bluetoothService = null;
-
     private BluetoothAdapter mBluetoothAdapter = null;
-    private FragmentManager fragmentManager = getSupportFragmentManager();
 
-//    private  ListViewFragment listViewFragment = new ListViewFragment();
-    private TranslationFragment translationFragment = new TranslationFragment();
-    private ListFragment listFragment = new ListFragment();
-    private SettingFragment settingFragment = new SettingFragment();
+    private FragmentManager fragmentManager;
+    private Fragment fa, fb, fc;
 
     private Socket socket;  //소켓생성
     static BufferedReader in;      //서버로부터 온 데이터를 읽는다.
     static PrintWriter out;        //서버에 데이터를 전송한다.
-
-    BottomNavigationView bottomNavigationView;
-
-//     Toast.makeText(MainActivity.this, "서버와 연결할 수 없습니다.", Toast.LENGTH_SHORT).show();
+    static float speed;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        ButterKnife.bind(this);
+
+        fragmentManager = getSupportFragmentManager();
+
+
+        BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottomnavigationview_main);
+
+
+//        getFragmentManager().beginTransaction().replace(R.id.layout_container, new TranslationFragment()).commit();
+
+        bottomNavigationView.setSelectedItemId(R.id.navigation_translator);
+        fa = new TranslationFragment();
+        fragmentManager.beginTransaction().replace(R.id.layout_container,fa).commit();
+
+        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@androidx.annotation.NonNull MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.navigation_translator:
+//                        getFragmentManager().beginTransaction().replace(R.id.layout_container, new TranslationFragment()).commit();
+
+                        if(fa == null) {
+                            fa = new TranslationFragment();
+                            fragmentManager.beginTransaction().add(R.id.layout_container, fa).commit();
+                        }
+
+                        if(fa != null) fragmentManager.beginTransaction().show(fa).commit();
+                        if(fb != null) fragmentManager.beginTransaction().hide(fb).commit();
+                        if(fc != null) fragmentManager.beginTransaction().hide(fc).commit();
+
+                        return true;
+                    case R.id.navigation_list:
+//                        getFragmentManager().beginTransaction().replace(R.id.layout_container, new ListFragment()).commit();
+
+                        if(fb == null) {
+                            fb = new ListFragment();
+                            fragmentManager.beginTransaction().add(R.id.layout_container, fb).commit();
+                        }
+
+                        if(fa != null) fragmentManager.beginTransaction().hide(fa).commit();
+                        if(fb != null) fragmentManager.beginTransaction().show(fb).commit();
+                        if(fc != null) fragmentManager.beginTransaction().hide(fc).commit();
+
+                        return true;
+                    case R.id.navigation_setting:
+//                        getFragmentManager().beginTransaction().replace(R.id.layout_container, new SettingFragment()).commit();
+
+                        if(fc == null) {
+                            fc = new SettingFragment();
+                            fragmentManager.beginTransaction().add(R.id.layout_container, fc).commit();
+                        }
+
+                        if(fa != null) fragmentManager.beginTransaction().hide(fa).commit();
+                        if(fb != null) fragmentManager.beginTransaction().hide(fb).commit();
+                        if(fc != null) fragmentManager.beginTransaction().show(fc).commit();
+
+                        return true;
+                }
+                return false;
+            }
+        });
 
         Thread main_socket = new Thread() {
             public void run() { //스레드 실행구문
                 try {
                     //소켓을 생성하고 입출력 스트립을 소켓에 연결한다.
-                    socket = new Socket("115.85.173.148", 9999); //소켓생성
+                    socket = new Socket("115.85.173.148", 8888); //소켓생성
                     out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(socket.getOutputStream())), true); //데이터를 전송시 stream 형태로 변환하여 전송한다.
                     in = new BufferedReader(new InputStreamReader(socket.getInputStream())); //데이터 수신시 stream을 받아들인다.
-                } catch (IOException e) {
-//
+
+                } catch (
+                        IOException e) {
                     e.printStackTrace();
                 }
             }
@@ -65,36 +121,6 @@ public class MainActivity extends AppCompatActivity {
         }
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
 
-        FragmentTransaction transaction = fragmentManager.beginTransaction();
-
-        transaction.add(R.id.layout_container, translationFragment).commitAllowingStateLoss();
-
-        bottomNavigationView = findViewById(R.id.bottomnavigationview_main);
-        bottomNavigationView.setOnNavigationItemSelectedListener(new ItemSelectedListener());
-        bottomNavigationView.getMenu().findItem(R.id.navigation_translator).setChecked(true);
     }
 
-    class ItemSelectedListener implements BottomNavigationView.OnNavigationItemSelectedListener{
-        @Override
-        public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-            FragmentTransaction transaction = fragmentManager.beginTransaction();
-
-            switch (menuItem.getItemId())
-            {
-                case R.id.navigation_translator:
-                    transaction.replace(R.id.layout_container, translationFragment).commitAllowingStateLoss();
-                    break;
-
-                case R.id.navigation_list:
-                    transaction.replace(R.id.layout_container, listFragment).commitAllowingStateLoss();
-                    break;
-
-                case R.id.navigation_setting:
-                    transaction.replace(R.id.layout_container, settingFragment).commitAllowingStateLoss();
-                    break;
-            }
-
-            return true;
-        }
-    }
 }
