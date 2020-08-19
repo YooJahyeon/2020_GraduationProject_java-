@@ -3,6 +3,7 @@ package com.example.slt_ver2;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Build;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,46 +37,8 @@ public class SignLanguageListAdapter extends RecyclerView.Adapter<SignLanguageLi
 
         final MyViewHolder vHolder = new MyViewHolder(view);
 
-
-        //Dialog ini
-//        vHolder.delete_btn.setOnClickListener(new View.OnClickListener() {
-//            @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-//            @Override
-//            public void onClick(View view) {
-//                Toast.makeText(mContext,"Click Delete Button", Toast.LENGTH_SHORT).show();
-//                int position =
-//            }
-//        });
         return new MyViewHolder(view);
     }
-
-//    public void onBindViewHolder(final RecyclerView.ViewHolder holder, final int position) {
-//        // 해당 position 에 해당하는 데이터 결합
-//        holder.MyViewHolder.delete_btn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//
-//                final AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
-//                builder.setTitle("삭제");
-//                builder.setMessage("해당 항목을 삭제하시겠습니까?");
-//                builder.setPositiveButton("예",
-//                        new DialogInterface.OnClickListener() {
-//                            public void onClick(DialogInterface dialog, int which) {
-//                                deleteThisView();
-//                            }
-//                        });
-//                builder.setNegativeButton("아니오",
-//                        new DialogInterface.OnClickListener() {
-//                            public void onClick(DialogInterface dialog, int which) {
-//                                dialog.cancel();
-//                            }
-//                        });
-//                builder.show();
-//
-//            }
-//        });
-//    }
-
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
@@ -98,12 +61,13 @@ public class SignLanguageListAdapter extends RecyclerView.Adapter<SignLanguageLi
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             //예 눌렀을때의 이벤트 처리
-                            signLanguageList.remove(position);
-//                            new Thread() {
-//                                public void run() {
-//                                    MainActivity.out.println("Del " + signLanguageList.get(position).getSignLanguageName());
-//                                }
-//                            }.start();
+                            new Thread() {
+                                public void run() {
+                                    MainActivity.out.println("delete " + signLanguageList.get(position).getSignLanguageName());
+                                    Log.d("====del ", signLanguageList.get(position).getSignLanguageName());
+                                    signLanguageList.remove(position);
+                                }
+                            }.start();
                             notifyDataSetChanged();
                         }
                     });
@@ -116,17 +80,6 @@ public class SignLanguageListAdapter extends RecyclerView.Adapter<SignLanguageLi
                     });
                     builder.show();
                 }
-
-//                    deleteDialog();
-//                    signLanguageList.remove(position);
-//                    new Thread() {
-//                        public void run() {
-//                            MainActivity.out.println("Del " + signLanguageList.get(position).getSignLanguageName());
-//                        }
-//                    }.start();
-//
-//                    notifyDataSetChanged();
-
             }
         });
     }
@@ -148,30 +101,4 @@ public class SignLanguageListAdapter extends RecyclerView.Adapter<SignLanguageLi
         }
     }
 
-//    private void deleteDialog() {
-//        AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
-//        builder.setTitle("삭제 확인");
-//        builder.setMessage("삭제하시겠습니까?");
-//        builder.setNegativeButton("예", new DialogInterface.OnClickListener() {
-//            @Override
-//            public void onClick(DialogInterface dialog, int which) {
-//                //예 눌렀을때의 이벤트 처리
-//                signLanguageList.remove(pos);
-//                new Thread() {
-//                    public void run() {
-//                        MainActivity.out.println("Del " + signLanguageList.get(position).getSignLanguageName());
-//                    }
-//                }.start();
-//
-//                notifyDataSetChanged();
-//                }
-//        });
-//        builder.setPositiveButton("아니오", new DialogInterface.OnClickListener() {
-//            @Override
-//            public void onClick(DialogInterface dialog, int which) {
-//                //아니오 눌렀을때의 이벤트 처리
-//                }
-//        });
-//        builder.show();
-//    }
  }
