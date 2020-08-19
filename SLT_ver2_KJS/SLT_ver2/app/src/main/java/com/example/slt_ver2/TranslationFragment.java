@@ -46,7 +46,6 @@ public class TranslationFragment extends ListFragment implements TextToSpeech.On
 
     static String data;
     static String readMessage0, readMessage1;
-    static float speed;
     float pitch;
     ByteBuffer message_buffer;
 
@@ -427,7 +426,7 @@ public class TranslationFragment extends ListFragment implements TextToSpeech.On
     private void speakOutNow(String tts_data) {
         String text = (String)tts_data;
         tts.setPitch(pitch); //음량
-        tts.setSpeechRate(speed); //재생속도
+        tts.setSpeechRate(MainActivity.speed); //재생속도
         tts.speak(text, TextToSpeech.QUEUE_FLUSH, null);
     }
 
