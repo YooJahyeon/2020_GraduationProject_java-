@@ -67,7 +67,6 @@ public class BluetoothLEHelper {
 
     private static final int STATE_DISCONNECTED = 0;
     private static final int STATE_CONNECTED    = 1;
-    private int              mConnectionState   = STATE_DISCONNECTED;
     private int state_right = STATE_DISCONNECTED;
     private int state_left = STATE_DISCONNECTED;
 

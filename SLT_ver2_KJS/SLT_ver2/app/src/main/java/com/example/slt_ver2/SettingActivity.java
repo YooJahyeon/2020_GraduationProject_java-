@@ -1,30 +1,27 @@
 package com.example.slt_ver2;
 
-import android.graphics.Color;
 import android.media.AudioManager;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.RadioButton;
 import android.widget.SeekBar;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import java.io.IOException;
 
-import static com.example.slt_ver2.MainActivity.Bluetoothtext0;
-import static com.example.slt_ver2.MainActivity.Bluetoothtext1;
-import static com.example.slt_ver2.MainActivity.bluetoothDevice0;
-import static com.example.slt_ver2.MainActivity.bluetoothDevice1;
-import static com.example.slt_ver2.MainActivity.connectThread0;
-import static com.example.slt_ver2.MainActivity.connectThread1;
+
 import static com.example.slt_ver2.TranslateActivity.CONNECTED;
 import static com.example.slt_ver2.TranslateActivity.DISCONNECT;
-import static com.example.slt_ver2.MainActivity.CONNECTING;
 import static com.example.slt_ver2.TranslateActivity.IsConnect0;
 import static com.example.slt_ver2.TranslateActivity.IsConnect1;
+import static com.example.slt_ver2.utils.Constants.STATE_CONNECTED;
+import static com.example.slt_ver2.utils.Constants.STATE_CONNECTING;
+import static com.example.slt_ver2.utils.Constants.STATE_DISCONNECTED;
 
 public class SettingActivity extends AppCompatActivity implements View.OnClickListener{
 
@@ -93,19 +90,18 @@ public class SettingActivity extends AppCompatActivity implements View.OnClickLi
         public boolean handleMessage(Message msg) {
             if(msg.what == 0){
                 switch (msg.arg1){
-                    case DISCONNECT:
-                        MainActivity.IsConnect0 = false;
-                        left_connect.setText("CONNECT");
-                        Bluetoothtext0.setText("DISCONNECT");
+                    case STATE_DISCONNECTED:
+                        BluetoothService.state_right = STATE_DISCONNECTED;
+                        right_connect.setText("CONNECT");
                         break;
-                    case CONNECTING:
-                        Bluetoothtext0.setText("CONNECTING");
+                    case STATE_CONNECTING:
+                        right_connect.setText("CONNECTING");
                         break;
-                    case CONNECTED:
-                        MainActivity.IsConnect0 = true;
-                        left_connect.setEnabled(true);
+                    case STATE_CONNECTED:
+                        BluetoothService.state_right = STATE_CONNECTED;
+                        right_connect.setEnabled(true);
                         right_connect.setText("DISCONNECT");
-                        Bluetoothtext0.setText("CONNECTED");
+
                         break;
 
                 }
@@ -113,19 +109,16 @@ public class SettingActivity extends AppCompatActivity implements View.OnClickLi
             }
             else{
                 switch (msg.arg1){
-                    case DISCONNECT:
-                        MainActivity.IsConnect1 = false;
-                        right_connect.setText("CONNECT");
-                        Bluetoothtext1.setText("DISCONNECT");
+                    case STATE_DISCONNECTED:
+                        BluetoothService.state_left = STATE_DISCONNECTED;
+                        left_connect.setText("CONNECT");
                         break;
-                    case CONNECTING:
-                        Bluetoothtext1.setText("CONNECTING");
+                    case STATE_CONNECTING:
                         break;
-                    case CONNECTED:
-                        MainActivity.IsConnect1 = true;
-                        right_connect.setEnabled(true);
-                        right_connect.setText("DISCONNECT");
-                        Bluetoothtext1.setText("CONNECTED");
+                    case STATE_CONNECTED:
+                        BluetoothService.state_left = STATE_CONNECTED;
+                        left_connect.setEnabled(true);
+                        left_connect.setText("DISCONNECT");
                         break;
 
                 }
@@ -171,16 +164,16 @@ public class SettingActivity extends AppCompatActivity implements View.OnClickLi
         {
             if(IsConnect0){
                 //블루투스 연결된 상태
-                if(connectThread0 != null){
+                if(MainActivity.bs.connectThread_right != null){
                     try {
-                        connectThread0.cancel();
+                        MainActivity.bs.connectThread_right.cancel();
 
                         Message m = new Message();
                         m.what = 0;
                         m.arg1 = DISCONNECT;
                         handler.sendMessage(m);
 
-                        connectThread0 = null;
+                        MainActivity.bs.connectThread_right = null;
                     } catch (IOException e) { }
                 }
             }
@@ -188,7 +181,7 @@ public class SettingActivity extends AppCompatActivity implements View.OnClickLi
                 //블루투스 끊어진 상태
                 v.setEnabled(false);
 //                connectThread0 = new MainActivity.ConnectThread(bluetoothDevice0,0);
-                connectThread0.start();
+                MainActivity.bs.connectThread_right.start();
 
             }
         }
@@ -197,16 +190,16 @@ public class SettingActivity extends AppCompatActivity implements View.OnClickLi
         {
             if(IsConnect1){
                 //블루투스 연결된 상태
-                if(connectThread1 != null){
+                if(MainActivity.bs.connectThread_left != null){
                     try {
-                        connectThread1.cancel();
+                        MainActivity.bs.connectThread_left.cancel();
 
                         Message m = new Message();
                         m.what = 1;
                         m.arg1 = DISCONNECT;
                         handler.sendMessage(m);
 
-                        connectThread1 = null;
+                        MainActivity.bs.connectThread_left = null;
                     } catch (IOException e) { }
                 }
             }else{
@@ -214,7 +207,7 @@ public class SettingActivity extends AppCompatActivity implements View.OnClickLi
                 v.setEnabled(false);
 
 //                connectThread1 = new MainActivity.ConnectThread(bluetoothDevice1,1);
-                connectThread1.start();
+                MainActivity.bs.connectThread_left.start();
             }
         }
 

@@ -1,13 +1,18 @@
 package com.example.slt_ver2;
 
 import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothGatt;
+import android.bluetooth.BluetoothGattCharacteristic;
+import android.bluetooth.BluetoothProfile;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
+import com.example.slt_ver2.interfaces.BleCallback;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.io.BufferedReader;
@@ -17,13 +22,18 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.Arrays;
 
 import butterknife.ButterKnife;
 
+import static com.example.slt_ver2.BluetoothService.device_left;
+import static com.example.slt_ver2.BluetoothService.device_right;
 import static com.example.slt_ver2.TranslationFragment.handler;
 
 public class MainActivity extends AppCompatActivity {
-    static BluetoothService bluetoothService = null;
+    private static final String TAG = "MainActivity";
+
+    static BluetoothService bs;
     private BluetoothAdapter mBluetoothAdapter = null;
 
     private FragmentManager fragmentManager;
@@ -40,15 +50,16 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
+        if(bs == null) {
+            bs = new BluetoothService(this, handler);
+        }
+        mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+
         fragmentManager = getSupportFragmentManager();
 
-
         BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottomnavigationview_main);
-
-
-//        getFragmentManager().beginTransaction().replace(R.id.layout_container, new TranslationFragment()).commit();
-
         bottomNavigationView.setSelectedItemId(R.id.navigation_translator);
+
         fa = new TranslationFragment();
         fragmentManager.beginTransaction().replace(R.id.layout_container,fa).commit();
 
@@ -118,11 +129,6 @@ public class MainActivity extends AppCompatActivity {
             }
         };
         main_socket.start();
-
-        if(bluetoothService == null) {
-            bluetoothService = new BluetoothService(this, handler);
-        }
-        mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
 
     }
 
