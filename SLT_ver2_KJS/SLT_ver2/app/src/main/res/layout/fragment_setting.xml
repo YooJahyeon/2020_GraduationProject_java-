@@ -22,38 +22,38 @@
         android:text="재생속도" />
 
 
-    <RadioGroup
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        >
-        <RadioButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="0.10배"
-            android:id="@+id/Button_010"/>
-        <RadioButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="0.50배"
-            android:id="@+id/Button_050"/>
-        <RadioButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="1.00배"
-            android:id="@+id/Button_100"
-            android:checked="true"/>
-        <RadioButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="1.50배"
-            android:id="@+id/Button_150"/>
-        <RadioButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="2.00배"
-            android:id="@+id/Button_200"/>
-    </RadioGroup>
+            <RadioGroup
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                >
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0.10배"
+                    android:id="@+id/Button_010"/>
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0.50배"
+                    android:id="@+id/Button_050"/>
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="1.00배"
+                    android:id="@+id/Button_100"
+                    android:checked="true"/>
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="1.50배"
+                    android:id="@+id/Button_150"/>
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="2.00배"
+                    android:id="@+id/Button_200"/>
+            </RadioGroup>
 
     <TextView
         android:layout_width="match_parent"
@@ -94,52 +94,50 @@
     </LinearLayout>
 
 
-    <TextView
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:drawableLeft="@drawable/ic_bluetooth_audio_black_24dp"
-    android:text="블루투스 연결"
-    android:layout_marginTop="70dp"
-    />
-    <LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    >
-    <TextView
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:text="왼손"
-    />
+    <!--<TextView-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:drawableLeft="@drawable/ic_bluetooth_audio_black_24dp"-->
+        <!--android:text="블루투스 연결"-->
+        <!--android:layout_marginTop="70dp"-->
+        <!--/>-->
+    <!--<LinearLayout-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:orientation="horizontal"-->
+        <!--&gt;-->
+        <!--<TextView-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:text="왼손"-->
+            <!--/>-->
 
-    <Button
-        android:id="@+id/LeftConnectButton"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_marginLeft="260dp"
-    android:text="DISCONNECT" />
+        <!--<Button-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_marginLeft="260dp"-->
+            <!--android:text="DISCONNECT" />-->
 
-    </LinearLayout>
+    <!--</LinearLayout>-->
 
-    <LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    >
-    <TextView
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:text="오른손"
-    />
-    <Button
-        android:id="@+id/RightConnectButton"
-        android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_marginLeft="250dp"
-    android:text="DISCONNECT"
-    />
+    <!--<LinearLayout-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:orientation="horizontal"-->
+        <!--&gt;-->
+        <!--<TextView-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:text="오른손"-->
+            <!--/>-->
+        <!--<Button-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_marginLeft="250dp"-->
+            <!--android:text="DISCONNECT"-->
+            <!--/>-->
 
-    </LinearLayout>
+    <!--</LinearLayout>-->
 
 
 

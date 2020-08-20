@@ -25,6 +25,7 @@ import com.github.kimkevin.hangulparser.HangulParserException;
 
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 
@@ -46,7 +47,6 @@ public class TranslationFragment extends ListFragment implements TextToSpeech.On
 
     static String data;
     static String readMessage0, readMessage1;
-    float pitch;
     ByteBuffer message_buffer;
 
     long start = 0;
@@ -56,6 +56,8 @@ public class TranslationFragment extends ListFragment implements TextToSpeech.On
     Boolean check_tts = true;
     Boolean check_mute = false;
     Boolean check_jo = false;
+    Boolean check_server_list = false;
+    static boolean check_finished = false;
 
     static boolean startTrans = false;
 
@@ -63,6 +65,8 @@ public class TranslationFragment extends ListFragment implements TextToSpeech.On
     List<String> jasoList_ver1 = new ArrayList<>();
     List<String> jasoList_ver2 = new ArrayList<>();
     String comb_message = "";
+    static String[] server_list_2;
+
 
     @Override
     public void onResume() {
@@ -78,113 +82,129 @@ public class TranslationFragment extends ListFragment implements TextToSpeech.On
 
         message_buffer = ByteBuffer.allocate(1024);
 
+
+
         Thread worker = new Thread() {    //worker 를 Thread 로 생성
             public void run() { //스레드 실행구문
                 //소켓에서 데이터를 읽어서 화면에 표시한다.
                 try {
                     while (true) {
-                            data = MainActivity.in.readLine(); // in으로 받은 데이타를 String 형태로 읽어 data에 저장
+                        data = MainActivity.in.readLine(); // in으로 받은 데이타를 String 형태로 읽어 data에 저장
 
-                            start = System.currentTimeMillis();
-                            Log.d("==start: ", Long.toString(start));
-                            runTimer = false;
+                        System.out.println("데이터 :" + data);
+                        if(data.equals("finish")){
+                            check_finished = true;
+                            System.out.println("translation " + check_finished);
+                            data = "";
+                        }
+                        server_list_2 = data.split("\\s");
+                        System.out.println("serverList :" + Arrays.toString(server_list_2));
+                        if(server_list_2[0].equals("list")){
+                            data = "";
+                            check_server_list = true;
+                            com.example.slt_ver2.ListFragment.server_list = server_list_2;
+                            System.out.println("갔나요???" + Arrays.toString(com.example.slt_ver2.ListFragment.server_list));
+                        }
 
-                            recv_data = data;
-                            if (switch_comb.isChecked() && (recv_data.equals("ㄱ") || recv_data.equals("ㄴ") || recv_data.equals("ㄷ") || recv_data.equals("ㄹ") || recv_data.equals("ㅁ")
-                                    || recv_data.equals("ㅂ") || recv_data.equals("ㅅ") || recv_data.equals("ㅇ") || recv_data.equals("ㅈ") || recv_data.equals("ㅊ") || recv_data.equals("ㅋ")
-                                    || recv_data.equals("ㅌ") || recv_data.equals("ㅍ") || recv_data.equals("ㅎ") || recv_data.equals("ㅏ") || recv_data.equals("ㅑ") || recv_data.equals("ㅓ")
-                                    || recv_data.equals("ㅕ") || recv_data.equals("ㅗ") || recv_data.equals("ㅛ") || recv_data.equals("ㅜ") || recv_data.equals("ㅠ") || recv_data.equals("ㅡ")
-                                    || recv_data.equals("ㅣ") || recv_data.equals("ㅐ") || recv_data.equals("ㅒ") || recv_data.equals("ㅔ") || recv_data.equals("ㅖ") || recv_data.equals("ㅚ")
-                                    || recv_data.equals("ㅟ") || recv_data.equals("ㅢ"))) {  //데이터 버퍼에 넣기
-                                jasoList.add(recv_data);
-                                System.out.print(jasoList);
-                                System.out.println(jasoList.size());
-                            }
+                        start = System.currentTimeMillis();
+                        Log.d("==start: ", Long.toString(start));
+                        runTimer = false;
 
-                            Log.d("========처음  ", recv_data);
+                        recv_data = data;
+                        if (switch_comb.isChecked() && (recv_data.equals("ㄱ") || recv_data.equals("ㄴ") || recv_data.equals("ㄷ") || recv_data.equals("ㄹ") || recv_data.equals("ㅁ")
+                                || recv_data.equals("ㅂ") || recv_data.equals("ㅅ") || recv_data.equals("ㅇ") || recv_data.equals("ㅈ") || recv_data.equals("ㅊ") || recv_data.equals("ㅋ")
+                                || recv_data.equals("ㅌ") || recv_data.equals("ㅍ") || recv_data.equals("ㅎ") || recv_data.equals("ㅏ") || recv_data.equals("ㅑ") || recv_data.equals("ㅓ")
+                                || recv_data.equals("ㅕ") || recv_data.equals("ㅗ") || recv_data.equals("ㅛ") || recv_data.equals("ㅜ") || recv_data.equals("ㅠ") || recv_data.equals("ㅡ")
+                                || recv_data.equals("ㅣ") || recv_data.equals("ㅐ") || recv_data.equals("ㅒ") || recv_data.equals("ㅔ") || recv_data.equals("ㅖ") || recv_data.equals("ㅚ")
+                                || recv_data.equals("ㅟ") || recv_data.equals("ㅢ"))) {  //데이터 버퍼에 넣기
+                            jasoList.add(recv_data);
+                            System.out.print(jasoList);
+                            System.out.println(jasoList.size());
+                        }
 
-                            getActivity().runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    Log.d("========1  ", recv_data);
-                                    if (switch_print.isChecked()) {
-                                        first_print.setText(recv_data);  //텍스트뷰에 출력
-                                    } else if (!switch_print.isChecked() && !recv_data.equals("ㄱ") && !recv_data.equals("ㄴ") && !recv_data.equals("ㄷ") && !recv_data.equals("ㄹ") && !recv_data.equals("ㅁ")
-                                            && !recv_data.equals("ㅂ") && !recv_data.equals("ㅅ") && !recv_data.equals("ㅇ") && !recv_data.equals("ㅈ") && !recv_data.equals("ㅊ") && !recv_data.equals("ㅋ")
-                                            && !recv_data.equals("ㅌ") && !recv_data.equals("ㅍ") && !recv_data.equals("ㅎ") && !recv_data.equals("ㅏ") && !recv_data.equals("ㅑ") && !recv_data.equals("ㅓ")
-                                            && !recv_data.equals("ㅕ") && !recv_data.equals("ㅗ") && !recv_data.equals("ㅛ") && !recv_data.equals("ㅜ") && !recv_data.equals("ㅠ") && !recv_data.equals("ㅡ")
-                                            && !recv_data.equals("ㅣ") && !recv_data.equals("ㅐ") && !recv_data.equals("ㅒ") && !recv_data.equals("ㅔ") && !recv_data.equals("ㅖ") && !recv_data.equals("ㅚ")
-                                            && !recv_data.equals("ㅟ") && !recv_data.equals("ㅢ")) {
-                                        first_print.setText(recv_data);  //텍스트뷰에 출력
-                                    }
+                        Log.d("========처음  ", recv_data);
 
-                                    first_print.post(new Runnable() {
-                                        public void run() {
-                                            if (check_tts && !switch_print.isChecked() && !recv_data.equals("ㄱ") && !recv_data.equals("ㄴ") && !recv_data.equals("ㄷ") && !recv_data.equals("ㄹ") && !recv_data.equals("ㅁ")
-                                                    && !recv_data.equals("ㅂ") && !recv_data.equals("ㅅ") && !recv_data.equals("ㅇ") && !recv_data.equals("ㅈ") && !recv_data.equals("ㅊ") && !recv_data.equals("ㅋ")
-                                                    && !recv_data.equals("ㅌ") && !recv_data.equals("ㅍ") && !recv_data.equals("ㅎ") && !recv_data.equals("ㅏ") && !recv_data.equals("ㅑ") && !recv_data.equals("ㅓ")
-                                                    && !recv_data.equals("ㅕ") && !recv_data.equals("ㅗ") && !recv_data.equals("ㅛ") && !recv_data.equals("ㅜ") && !recv_data.equals("ㅠ") && !recv_data.equals("ㅡ")
-                                                    && !recv_data.equals("ㅣ") && !recv_data.equals("ㅐ") && !recv_data.equals("ㅒ") && !recv_data.equals("ㅔ") && !recv_data.equals("ㅖ") && !recv_data.equals("ㅚ")
-                                                    && !recv_data.equals("ㅟ") && !recv_data.equals("ㅢ")) {
-                                                speakOutNow(recv_data); //tts 출력
-                                            } else if (check_tts && switch_print.isChecked()) {
-                                                speakOutNow(recv_data);
-                                            }
-                                            Log.d("========2  ", recv_data);
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Log.d("========1  ", recv_data);
+                                if (switch_print.isChecked()) {
+                                    first_print.setText(recv_data);  //텍스트뷰에 출력
+                                } else if (!switch_print.isChecked() && !recv_data.equals("ㄱ") && !recv_data.equals("ㄴ") && !recv_data.equals("ㄷ") && !recv_data.equals("ㄹ") && !recv_data.equals("ㅁ")
+                                        && !recv_data.equals("ㅂ") && !recv_data.equals("ㅅ") && !recv_data.equals("ㅇ") && !recv_data.equals("ㅈ") && !recv_data.equals("ㅊ") && !recv_data.equals("ㅋ")
+                                        && !recv_data.equals("ㅌ") && !recv_data.equals("ㅍ") && !recv_data.equals("ㅎ") && !recv_data.equals("ㅏ") && !recv_data.equals("ㅑ") && !recv_data.equals("ㅓ")
+                                        && !recv_data.equals("ㅕ") && !recv_data.equals("ㅗ") && !recv_data.equals("ㅛ") && !recv_data.equals("ㅜ") && !recv_data.equals("ㅠ") && !recv_data.equals("ㅡ")
+                                        && !recv_data.equals("ㅣ") && !recv_data.equals("ㅐ") && !recv_data.equals("ㅒ") && !recv_data.equals("ㅔ") && !recv_data.equals("ㅖ") && !recv_data.equals("ㅚ")
+                                        && !recv_data.equals("ㅟ") && !recv_data.equals("ㅢ")) {
+                                    first_print.setText(recv_data);  //텍스트뷰에 출력
+                                }
 
-                                            if (!pre_data.equals("")) {
-                                                listview.post(new Runnable() { //리스트뷰에 있는거 출력하기
-                                                    public void run() {
-                                                        Log.d("==check_jo", String.valueOf(check_jo));
-                                                        if (switch_print.isChecked()) {
-                                                            if (!check_jo && !pre_data.equals("ㄱ") && !pre_data.equals("ㄴ") && !pre_data.equals("ㄷ") && !pre_data.equals("ㄹ") && !pre_data.equals("ㅁ")
-                                                                    && !pre_data.equals("ㅂ") && !pre_data.equals("ㅅ") && !pre_data.equals("ㅇ") && !pre_data.equals("ㅈ") && !pre_data.equals("ㅊ") && !pre_data.equals("ㅋ")
-                                                                    && !pre_data.equals("ㅌ") && !pre_data.equals("ㅍ") && !pre_data.equals("ㅎ") && !pre_data.equals("ㅏ") && !pre_data.equals("ㅑ") && !pre_data.equals("ㅓ")
-                                                                    && !pre_data.equals("ㅕ") && !pre_data.equals("ㅗ") && !pre_data.equals("ㅛ") && !pre_data.equals("ㅜ") && !pre_data.equals("ㅠ") && !pre_data.equals("ㅡ")
-                                                                    && !pre_data.equals("ㅣ") && !pre_data.equals("ㅐ") && !pre_data.equals("ㅒ") && !pre_data.equals("ㅔ") && !pre_data.equals("ㅖ") && !pre_data.equals("ㅚ")
-                                                                    && !pre_data.equals("ㅟ") && !pre_data.equals("ㅢ")) {
-                                                                Log.d("==check_jo 1", String.valueOf(check_jo));
-                                                                adapter.addItem(ContextCompat.getDrawable(getActivity(), R.drawable.ic_su),
-                                                                        pre_data, 0);
-                                                                adapter.notifyDataSetChanged();
-                                                            } else {
-                                                                if (!check_jo) {
-                                                                    Log.d("==check_jo 2", String.valueOf(check_jo));
-                                                                    adapter.addItem(ContextCompat.getDrawable(getActivity(), R.drawable.ic_ji),
-                                                                            pre_data, 0);
-                                                                    adapter.notifyDataSetChanged();
-                                                                } else {
-                                                                    Log.d("==check_jo 3", String.valueOf(check_jo));
-                                                                    adapter.addItem(ContextCompat.getDrawable(getActivity(), R.drawable.ic_jo),
-                                                                            pre_data, 0);
-                                                                    adapter.notifyDataSetChanged();
-                                                                    check_jo = false;
-                                                                }
-                                                            }
-                                                        } else if (!check_jo && !switch_print.isChecked() && !pre_data.equals("ㄱ") && !pre_data.equals("ㄴ") && !pre_data.equals("ㄷ") && !pre_data.equals("ㄹ") && !pre_data.equals("ㅁ")
+                                first_print.post(new Runnable() {
+                                    public void run() {
+                                        if (check_tts && !switch_print.isChecked() && !recv_data.equals("ㄱ") && !recv_data.equals("ㄴ") && !recv_data.equals("ㄷ") && !recv_data.equals("ㄹ") && !recv_data.equals("ㅁ")
+                                                && !recv_data.equals("ㅂ") && !recv_data.equals("ㅅ") && !recv_data.equals("ㅇ") && !recv_data.equals("ㅈ") && !recv_data.equals("ㅊ") && !recv_data.equals("ㅋ")
+                                                && !recv_data.equals("ㅌ") && !recv_data.equals("ㅍ") && !recv_data.equals("ㅎ") && !recv_data.equals("ㅏ") && !recv_data.equals("ㅑ") && !recv_data.equals("ㅓ")
+                                                && !recv_data.equals("ㅕ") && !recv_data.equals("ㅗ") && !recv_data.equals("ㅛ") && !recv_data.equals("ㅜ") && !recv_data.equals("ㅠ") && !recv_data.equals("ㅡ")
+                                                && !recv_data.equals("ㅣ") && !recv_data.equals("ㅐ") && !recv_data.equals("ㅒ") && !recv_data.equals("ㅔ") && !recv_data.equals("ㅖ") && !recv_data.equals("ㅚ")
+                                                && !recv_data.equals("ㅟ") && !recv_data.equals("ㅢ")) {
+                                            speakOutNow(recv_data); //tts 출력
+                                        } else if (check_tts && switch_print.isChecked()) {
+                                            speakOutNow(recv_data);
+                                        }
+                                        Log.d("========2  ", recv_data);
+
+                                        if (!pre_data.equals("")) {
+                                            listview.post(new Runnable() { //리스트뷰에 있는거 출력하기
+                                                public void run() {
+                                                    Log.d("==check_jo", String.valueOf(check_jo));
+                                                    if (switch_print.isChecked()) {
+                                                        if (!check_jo && !pre_data.equals("ㄱ") && !pre_data.equals("ㄴ") && !pre_data.equals("ㄷ") && !pre_data.equals("ㄹ") && !pre_data.equals("ㅁ")
                                                                 && !pre_data.equals("ㅂ") && !pre_data.equals("ㅅ") && !pre_data.equals("ㅇ") && !pre_data.equals("ㅈ") && !pre_data.equals("ㅊ") && !pre_data.equals("ㅋ")
                                                                 && !pre_data.equals("ㅌ") && !pre_data.equals("ㅍ") && !pre_data.equals("ㅎ") && !pre_data.equals("ㅏ") && !pre_data.equals("ㅑ") && !pre_data.equals("ㅓ")
                                                                 && !pre_data.equals("ㅕ") && !pre_data.equals("ㅗ") && !pre_data.equals("ㅛ") && !pre_data.equals("ㅜ") && !pre_data.equals("ㅠ") && !pre_data.equals("ㅡ")
                                                                 && !pre_data.equals("ㅣ") && !pre_data.equals("ㅐ") && !pre_data.equals("ㅒ") && !pre_data.equals("ㅔ") && !pre_data.equals("ㅖ") && !pre_data.equals("ㅚ")
                                                                 && !pre_data.equals("ㅟ") && !pre_data.equals("ㅢ")) {
-                                                            Log.d("==check_jo 4", String.valueOf(check_jo));
+                                                            Log.d("==check_jo 1", String.valueOf(check_jo));
                                                             adapter.addItem(ContextCompat.getDrawable(getActivity(), R.drawable.ic_su),
                                                                     pre_data, 0);
                                                             adapter.notifyDataSetChanged();
+                                                        } else {
+                                                            if (!check_jo) {
+                                                                Log.d("==check_jo 2", String.valueOf(check_jo));
+                                                                adapter.addItem(ContextCompat.getDrawable(getActivity(), R.drawable.ic_ji),
+                                                                        pre_data, 0);
+                                                                adapter.notifyDataSetChanged();
+                                                            } else {
+                                                                Log.d("==check_jo 3", String.valueOf(check_jo));
+                                                                adapter.addItem(ContextCompat.getDrawable(getActivity(), R.drawable.ic_jo),
+                                                                        pre_data, 0);
+                                                                adapter.notifyDataSetChanged();
+                                                                check_jo = false;
+                                                            }
                                                         }
-                                                        pre_data = recv_data;
+                                                    } else if (!check_jo && !switch_print.isChecked() && !pre_data.equals("ㄱ") && !pre_data.equals("ㄴ") && !pre_data.equals("ㄷ") && !pre_data.equals("ㄹ") && !pre_data.equals("ㅁ")
+                                                            && !pre_data.equals("ㅂ") && !pre_data.equals("ㅅ") && !pre_data.equals("ㅇ") && !pre_data.equals("ㅈ") && !pre_data.equals("ㅊ") && !pre_data.equals("ㅋ")
+                                                            && !pre_data.equals("ㅌ") && !pre_data.equals("ㅍ") && !pre_data.equals("ㅎ") && !pre_data.equals("ㅏ") && !pre_data.equals("ㅑ") && !pre_data.equals("ㅓ")
+                                                            && !pre_data.equals("ㅕ") && !pre_data.equals("ㅗ") && !pre_data.equals("ㅛ") && !pre_data.equals("ㅜ") && !pre_data.equals("ㅠ") && !pre_data.equals("ㅡ")
+                                                            && !pre_data.equals("ㅣ") && !pre_data.equals("ㅐ") && !pre_data.equals("ㅒ") && !pre_data.equals("ㅔ") && !pre_data.equals("ㅖ") && !pre_data.equals("ㅚ")
+                                                            && !pre_data.equals("ㅟ") && !pre_data.equals("ㅢ")) {
+                                                        Log.d("==check_jo 4", String.valueOf(check_jo));
+                                                        adapter.addItem(ContextCompat.getDrawable(getActivity(), R.drawable.ic_su),
+                                                                pre_data, 0);
+                                                        adapter.notifyDataSetChanged();
                                                     }
-                                                });
-                                            } else {
-                                                pre_data = recv_data; //이전의 데이터를 리스트뷰에 출력하기 위해서
-                                            }
-                                            Log.d("======pre_data: ", pre_data);
+                                                    pre_data = recv_data;
+                                                }
+                                            });
+                                        } else {
+                                            pre_data = recv_data; //이전의 데이터를 리스트뷰에 출력하기 위해서
                                         }
-                                    });
-                                }
-                            });
-                        }
-
+                                        Log.d("======pre_data: ", pre_data);
+                                    }
+                                });
+                            }
+                        });
+                    }
                 }catch (Exception ignored) {
                 }
             }
@@ -227,9 +247,11 @@ public class TranslationFragment extends ListFragment implements TextToSpeech.On
                                     listview.post(new Runnable() {
                                         public void run() {
                                             Log.d("====pre: ", pre_data);
-                                            adapter.addItem(ContextCompat.getDrawable(getActivity(), R.drawable.ic_ji),
-                                                    pre_data, 0);
-                                            adapter.notifyDataSetChanged();
+                                            if(switch_print.isChecked()) {
+                                                adapter.addItem(ContextCompat.getDrawable(getActivity(), R.drawable.ic_ji),
+                                                        pre_data, 0);
+                                                adapter.notifyDataSetChanged();
+                                            }
                                             first_print.setText(comb_message);
                                             pre_data = comb_message;
                                             check_jo = true;
@@ -315,6 +337,10 @@ public class TranslationFragment extends ListFragment implements TextToSpeech.On
         // Adapter 생성 및 Adapter 지정.
         adapter = new ListViewAdapter() ;
         setListAdapter(adapter);
+//        adapter.addItem(ContextCompat.getDrawable(getActivity(), R.drawable.ic_su),
+//                "안녕하세요", 0);
+//        adapter.addItem(ContextCompat.getDrawable(getActivity(), R.drawable.ic_su),
+//                "글씨 크기 예시", 0);
 
         return view;
 
@@ -367,8 +393,8 @@ public class TranslationFragment extends ListFragment implements TextToSpeech.On
 
     private void speakOutNow(String tts_data) {
         String text = (String)tts_data;
-        tts.setPitch(pitch); //음량
-        tts.setSpeechRate(MainActivity.speed); //재생속도
+//        tts.setPitch(pitch); //음량
+        tts.setSpeechRate(SettingFragment.speed); //재생속도
         tts.speak(text, TextToSpeech.QUEUE_FLUSH, null);
     }
 
@@ -662,6 +688,7 @@ public class TranslationFragment extends ListFragment implements TextToSpeech.On
         System.out.println("ver_2 : " + jasoList);
         return jasoList;
     }
+
 
     @Override
     public void onDestroy() {

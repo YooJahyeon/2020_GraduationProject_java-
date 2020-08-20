@@ -31,6 +31,7 @@ public class ListViewAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         final int pos = position;
         final Context context = parent.getContext();
+        int font_size = 15;
 
         // "listview_item" Layout을 inflate하여 convertView 참조 획득.
         if (convertView == null) {
@@ -45,9 +46,12 @@ public class ListViewAdapter extends BaseAdapter {
         // Data Set(listViewItemList)에서 position에 위치한 데이터 참조 획득
         ListViewItem listViewItem = listViewItemList.get(position);
 
+        font_size = Integer.parseInt(String.valueOf(SettingFragment.font_size));
+
         // 아이템 내 각 위젯에 데이터 반영
         iconImageView.setImageDrawable(listViewItem.getIcon());
         descTextView.setText(listViewItem.getDesc());
+        descTextView.setTextSize(font_size);
 
         return convertView;
     }

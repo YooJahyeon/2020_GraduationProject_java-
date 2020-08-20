@@ -15,8 +15,8 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
@@ -36,7 +36,8 @@ public class ListFragment extends Fragment  {
 
     static boolean startList = false;
     boolean check_List = false;
-    String server_list = "";
+    static String[] server_list;
+    static boolean is_finished = false;
 
     public ListFragment()
     {
@@ -47,24 +48,9 @@ public class ListFragment extends Fragment  {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-//        new Thread(){
-//            public void run(){
-//                try {
-//                        sleep(300);
-//                    } catch (InterruptedException e) {
-//                        e.printStackTrace();
-//                    }
-//            }
-//        }.start();
-
         if(startList == true) {
             new Thread() {
                 public void run() {
-//                    try {
-//                        sleep(300);
-//                    } catch (InterruptedException e) {
-//                        e.printStackTrace();
-//                    }
                     MainActivity.out.println("load");
                     Log.d("=========load", "보냈는디요");
                 }
@@ -72,46 +58,98 @@ public class ListFragment extends Fragment  {
             startList = false;
         }
 
-        Thread rev_server_list = new Thread() {    //worker 를 Thread 로 생성
+//        new Thread(){
+//            public void run(){
+//                try {
+//                        sleep(500);
+//                    } catch (InterruptedException e) {
+//                        e.printStackTrace();
+//                    }
+//            }
+//        }.start();
+
+        Thread serverList = new Thread() {    //worker 를 Thread 로 생성
             public void run() { //스레드 실행구문
-                while (true) {
-                    try {
-                        server_list = MainActivity.in.readLine(); //signLanguageName, iconImage를 리스트 형태로 받아옴.
-                        Log.d("===by surim", server_list);
+                //소켓에서 데이터를 읽어서 화면에 표시한다.
+                try {
+                    while (true) {
+                        if (server_list != null) {
+                            server_list = TranslationFragment.server_list_2;
 
-                        String[] server_list_2 = server_list.split("\\s");
-                        Log.d("===by server_list2", String.valueOf(server_list_2));
-                        for(int i=0; i<server_list_2.length; i+=2)
-                        {
-                            System.out.println("data["+i+"] : " + server_list_2[i] + "data["+(i+1)+"] : " + server_list_2[i+1]);
+                            Log.d("===by server_list2", Arrays.toString(server_list));
 
-                            if(server_list_2[i].equals("지화")){
-                                signLanguageList.add(new SignLanguageList(server_list_2[i+1],R.drawable.fingerlanguage_icon));
+                            for (int i = 1; i < server_list.length; i += 2) {
+//                            System.out.println("data["+i+"] : " + server_list_2[i] + "data["+(i+1)+"] : " + server_list_2[i+1]);
+
+                                if (server_list[i].equals("지화")) {
+                                    signLanguageList.add(new SignLanguageList(server_list[i + 1], R.drawable.fingerlanguage_icon));
+                                } else {
+                                    signLanguageList.add(new SignLanguageList(server_list[i + 1], R.drawable.ic_su));
+                                }
                             }
-                            else
-                            {
-                                signLanguageList.add(new SignLanguageList(server_list_2[i+1],R.drawable.ic_su));
-                            }
+
+                            getActivity().runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    signLanguageListAdapter.notifyDataSetChanged();
+                                    System.out.println(signLanguageList.get(0).getSignLanguageName());
+                                    System.out.println(signLanguageList.get(2).getSignLanguageName());
+                                    System.out.println(signLanguageList.get(4).getSignLanguageName());
+                                    System.out.println(signLanguageList.get(5).getSignLanguageName());
+                                }
+                            });
+
+                            break;
                         }
-
-                        getActivity().runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                signLanguageListAdapter.notifyDataSetChanged();
-                                System.out.println(signLanguageList.get(0).getSignLanguageName());
-                                System.out.println(signLanguageList.get(2).getSignLanguageName());
-                                System.out.println(signLanguageList.get(4).getSignLanguageName());
-                                System.out.println(signLanguageList.get(5).getSignLanguageName());
-                            }
-                        });
-
-                    } catch (IOException e) {
-                        e.printStackTrace();
                     }
+                }catch (Exception ignored) {
                 }
             }
         };
-        rev_server_list.start();
+        serverList.start();  //onResume()에서 실행.
+
+//        if(startList == true) {
+//            Thread rev_server_list = new Thread() {
+//                public void run() { //스레드 실행구문
+//                    while (true) {
+//                        try {
+//                            server_list = MainActivity.in.readLine(); //signLanguageName, iconImage를 리스트 형태로 받아옴.
+//                            Log.d("===by surim", server_list);
+//
+//                            String[] server_list_2 = server_list.split("\\s");
+//                            Log.d("===by server_list2", String.valueOf(server_list_2));
+//
+//                            for (int i = 0; i < server_list_2.length; i += 2) {
+////                            System.out.println("data["+i+"] : " + server_list_2[i] + "data["+(i+1)+"] : " + server_list_2[i+1]);
+//
+//                                if (server_list_2[i].equals("지화")) {
+//                                    signLanguageList.add(new SignLanguageList(server_list_2[i + 1], R.drawable.fingerlanguage_icon));
+//                                } else {
+//                                    signLanguageList.add(new SignLanguageList(server_list_2[i + 1], R.drawable.ic_su));
+//                                }
+//                            }
+//
+//                            getActivity().runOnUiThread(new Runnable() {
+//                                @Override
+//                                public void run() {
+//                                    signLanguageListAdapter.notifyDataSetChanged();
+//                                    System.out.println(signLanguageList.get(0).getSignLanguageName());
+//                                    System.out.println(signLanguageList.get(2).getSignLanguageName());
+//                                    System.out.println(signLanguageList.get(4).getSignLanguageName());
+//                                    System.out.println(signLanguageList.get(5).getSignLanguageName());
+//                                }
+//                            });
+//
+//                        } catch (IOException e) {
+//                            e.printStackTrace();
+//                        }
+//                    }
+//                }
+//            };
+//            rev_server_list.start();
+//
+//            startList = false;
+//        }
 
 
         //Add dummy data in SignLanguage Fragment here
@@ -157,14 +195,13 @@ public class ListFragment extends Fragment  {
 
                 for (int i = 0; i < signLanguageList.size(); i++) {
                     if (et_meaning.getText().toString().equals(signLanguageList.get(i).getSignLanguageName())) {
-
                         check_List = true;
                     }
                     System.out.println(signLanguageList.get(i).getSignLanguageName());
 
                 }
 
-                if(check_List = true) {
+                if(!check_List) {
                     if (et_meaning.getText().length() != 0) {
                         new Thread() {
                             public void run() {
@@ -185,72 +222,148 @@ public class ListFragment extends Fragment  {
                             }
                         }.start();
 
+//                        new Thread() {
+//                            public void run() {
+//                                if (readMessage0 != null && readMessage1 != null) {
+//                                    MainActivity.out.println(readMessage0); //data를   stream 형태로 변형하여 전송.  변환내용은 쓰레드에 담겨 있다.
+//                                    MainActivity.out.println(readMessage1); //data를   stream 형태로 변형하여 전송.  변환내용은 쓰레드에 담겨 있다.
+//                                    Log.d("=== in net0", readMessage0);
+//                                    Log.d("=== in net1", readMessage1);
+//                                    System.out.println();
+//                                }
+//                            }
+//                        }.start();
+
+
+//                        is_finished = TranslationFragment.check_finished;
+//
+//                        System.out.println("finish의 정체는....." + is_finished);
+
+                        final SweetAlertDialog pDialog = new SweetAlertDialog(getActivity(), SweetAlertDialog.PROGRESS_TYPE)
+                                .setTitleText("수화 인식중");
+                        pDialog.setCancelable(false);
+                        pDialog.getProgressHelper()
+                                .setBarColor(getResources().getColor(R.color.blue_btn_bg_color));
+                        pDialog.show();
 
                         new Thread() {
                             public void run() {
-                                if (readMessage0 != null && readMessage1 != null) {
-                                    MainActivity.out.println(readMessage0); //data를   stream 형태로 변형하여 전송.  변환내용은 쓰레드에 담겨 있다.
-                                    MainActivity.out.println(readMessage1); //data를   stream 형태로 변형하여 전송.  변환내용은 쓰레드에 담겨 있다.
-                                    Log.d("=== in net0", readMessage0);
-                                    Log.d("=== in net1", readMessage1);
-                                    System.out.println();
+                                while (true) {
+                                    if(TranslationFragment.check_finished == true) {
+                                        is_finished = TranslationFragment.check_finished;
+                                        System.out.println("finish의 정체는....." + is_finished);
+
+                                        getActivity().runOnUiThread(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                if(is_finished == true){
+                                                    System.out.println("성공시켜주세요.....");
+                                                    pDialog.setTitleText("Success!")
+                                                            .setConfirmText("확인")
+                                                            .changeAlertType(SweetAlertDialog.SUCCESS_TYPE);
+                                                }
+                                            }
+                                        });
+
+//                                        if(is_finished == true){
+//                                            System.out.println("성공시켜주세요.....");
+//                                            pDialog.setTitleText("Success!")
+//                                                    .setConfirmText("OK")
+//                                                    .changeAlertType(SweetAlertDialog.SUCCESS_TYPE);
+//                                        }
+//                                        try {
+//                                            sleep(1000);
+//                                        } catch (InterruptedException e) {
+//                                            e.printStackTrace();
+//                                        }
+
+                                        break;
+                                    }
                                 }
                             }
                         }.start();
 
-                        new SweetAlertDialog(getActivity(), SweetAlertDialog.NORMAL_TYPE)
-                                .setTitleText("수화데이터 수집중")
-                                .setContentText("지금부터 수화를 1회 사용해주세요.")
-                                .setConfirmText("완료")
-                                .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
-                                    @Override
-                                    public void onClick(SweetAlertDialog sweetAlertDialog) {
-                                        new Thread() {
-                                            public void run() {
-                                                MainActivity.out.println("done");
-                                                Log.d("==done", "끝났다고요.");
-                                                getActivity().runOnUiThread(new Runnable() {
-                                                    @Override
-                                                    public void run() {
-                                                        et_meaning.setText(null);
-                                                    }
-                                                });
-                                            }
-                                        }.start();
+//                        if(is_finished == true){
+//                            System.out.println("성공시켜주세요.....");
+//                            pDialog.setTitleText("Success!")
+//                                    .setConfirmText("OK")
+//                                    .changeAlertType(SweetAlertDialog.SUCCESS_TYPE);
+//                            pDialog.show();
+//                        }
 
-                                        sweetAlertDialog.setTitleText("동작 완료!")
-                                                .setContentText("수화 등록이 완료되었습니다.")
-                                                .setConfirmText("완료")
-                                                .setConfirmClickListener(null)
-                                                .changeAlertType(SweetAlertDialog.SUCCESS_TYPE);
+                        if (et_meaning.getText().toString().equals("ㄱ") || et_meaning.getText().toString().equals("ㄴ") || et_meaning.getText().toString().equals("ㄷ")
+                                || et_meaning.getText().toString().equals("ㄹ") || et_meaning.getText().toString().equals("ㅁ") || et_meaning.getText().toString().equals("ㅂ")
+                                || et_meaning.getText().toString().equals("ㅅ") || et_meaning.getText().toString().equals("ㅇ") || et_meaning.getText().toString().equals("ㅈ")
+                                || et_meaning.getText().toString().equals("ㅊ") || et_meaning.getText().toString().equals("ㅋ") || et_meaning.getText().toString().equals("ㅌ")
+                                || et_meaning.getText().toString().equals("ㅍ") || et_meaning.getText().toString().equals("ㅎ") || et_meaning.getText().toString().equals("ㅏ")
+                                || et_meaning.getText().toString().equals("ㅑ") || et_meaning.getText().toString().equals("ㅓ") || et_meaning.getText().toString().equals("ㅕ")
+                                || et_meaning.getText().toString().equals("ㅗ") || et_meaning.getText().toString().equals("ㅛ") || et_meaning.getText().toString().equals("ㅜ")
+                                || et_meaning.getText().toString().equals("ㅠ") || et_meaning.getText().toString().equals("ㅡ") || et_meaning.getText().toString().equals("ㅣ")) {
+                            signLanguageList.add(new SignLanguageList(et_meaning.getText().toString(), R.drawable.fingerlanguage_icon));
+                            et_meaning.setText(null);
+                            getActivity().runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    signLanguageListAdapter.notifyDataSetChanged();
+                                }
+                            });
+                        } else {
+                            signLanguageList.add(new SignLanguageList(et_meaning.getText().toString(), R.drawable.ic_su));
+                            getActivity().runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    signLanguageListAdapter.notifyDataSetChanged();
+                                }
+                            });
+                        }
 
-                                        if (et_meaning.getText().toString().equals("ㄱ") || et_meaning.getText().toString().equals("ㄴ") || et_meaning.getText().toString().equals("ㄷ")
-                                                || et_meaning.getText().toString().equals("ㄹ") || et_meaning.getText().toString().equals("ㅁ") || et_meaning.getText().toString().equals("ㅂ")
-                                                || et_meaning.getText().toString().equals("ㅅ") || et_meaning.getText().toString().equals("ㅇ") || et_meaning.getText().toString().equals("ㅈ")
-                                                || et_meaning.getText().toString().equals("ㅊ") || et_meaning.getText().toString().equals("ㅋ") || et_meaning.getText().toString().equals("ㅌ")
-                                                || et_meaning.getText().toString().equals("ㅍ") || et_meaning.getText().toString().equals("ㅎ") || et_meaning.getText().toString().equals("ㅏ")
-                                                || et_meaning.getText().toString().equals("ㅑ") || et_meaning.getText().toString().equals("ㅓ") || et_meaning.getText().toString().equals("ㅕ")
-                                                || et_meaning.getText().toString().equals("ㅗ") || et_meaning.getText().toString().equals("ㅛ") || et_meaning.getText().toString().equals("ㅜ")
-                                                || et_meaning.getText().toString().equals("ㅠ") || et_meaning.getText().toString().equals("ㅡ") || et_meaning.getText().toString().equals("ㅣ")) {
-                                            signLanguageList.add(new SignLanguageList(et_meaning.getText().toString(), R.drawable.fingerlanguage_icon));
-                                            getActivity().runOnUiThread(new Runnable() {
-                                                @Override
-                                                public void run() {
-                                                    signLanguageListAdapter.notifyDataSetChanged();
-                                                }
-                                            });
-                                        } else {
-                                            signLanguageList.add(new SignLanguageList(et_meaning.getText().toString(), R.drawable.ic_su));
-                                            getActivity().runOnUiThread(new Runnable() {
-                                                @Override
-                                                public void run() {
-                                                    signLanguageListAdapter.notifyDataSetChanged();
-                                                }
-                                            });
-                                        }
-                                    }
-                                })
-                                .show();
+//                        new SweetAlertDialog(getActivity(), SweetAlertDialog.NORMAL_TYPE)
+//                                .setTitleText("수화데이터 수집중")
+//                                .setContentText("지금부터 수화를 1회 사용해주세요.")
+//                                .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+//                                    @Override
+//                                    public void onClick(SweetAlertDialog sweetAlertDialog) {
+//                                        new Thread() {
+//                                            public void run() {
+////                                                MainActivity.out.println("done");
+////                                                Log.d("==done", "끝났다고요.");
+//                                                getActivity().runOnUiThread(new Runnable() {
+//                                                    @Override
+//                                                    public void run() {
+//
+//                                                    }
+//                                                });
+//                                            }
+//                                        }.start();
+
+//                                        if (et_meaning.getText().toString().equals("ㄱ") || et_meaning.getText().toString().equals("ㄴ") || et_meaning.getText().toString().equals("ㄷ")
+//                                                || et_meaning.getText().toString().equals("ㄹ") || et_meaning.getText().toString().equals("ㅁ") || et_meaning.getText().toString().equals("ㅂ")
+//                                                || et_meaning.getText().toString().equals("ㅅ") || et_meaning.getText().toString().equals("ㅇ") || et_meaning.getText().toString().equals("ㅈ")
+//                                                || et_meaning.getText().toString().equals("ㅊ") || et_meaning.getText().toString().equals("ㅋ") || et_meaning.getText().toString().equals("ㅌ")
+//                                                || et_meaning.getText().toString().equals("ㅍ") || et_meaning.getText().toString().equals("ㅎ") || et_meaning.getText().toString().equals("ㅏ")
+//                                                || et_meaning.getText().toString().equals("ㅑ") || et_meaning.getText().toString().equals("ㅓ") || et_meaning.getText().toString().equals("ㅕ")
+//                                                || et_meaning.getText().toString().equals("ㅗ") || et_meaning.getText().toString().equals("ㅛ") || et_meaning.getText().toString().equals("ㅜ")
+//                                                || et_meaning.getText().toString().equals("ㅠ") || et_meaning.getText().toString().equals("ㅡ") || et_meaning.getText().toString().equals("ㅣ")) {
+//                                            signLanguageList.add(new SignLanguageList(et_meaning.getText().toString(), R.drawable.fingerlanguage_icon));
+//                                            et_meaning.setText(null);
+//                                            getActivity().runOnUiThread(new Runnable() {
+//                                                @Override
+//                                                public void run() {
+//                                                    signLanguageListAdapter.notifyDataSetChanged();
+//                                                }
+//                                            });
+//                                        } else {
+//                                            signLanguageList.add(new SignLanguageList(et_meaning.getText().toString(), R.drawable.ic_su));
+//                                            getActivity().runOnUiThread(new Runnable() {
+//                                                @Override
+//                                                public void run() {
+//                                                    signLanguageListAdapter.notifyDataSetChanged();
+//                                                }
+//                                            });
+//                                        }
+//                                    }
+//                                })
+//                                .show();
                     } else {
                         Toast.makeText(getContext(), "수화의 의미를 입력하세요", Toast.LENGTH_SHORT).show();
                     }
@@ -258,8 +371,8 @@ public class ListFragment extends Fragment  {
                 else
                 {
                     Toast.makeText(getContext(), "이미 존재하는 수화입니다.", Toast.LENGTH_SHORT).show();
+                    et_meaning.setText(null);
                 }
-
 
 //                if (et_meaning.getText().length() != 0) {
 //                    new Thread() {
