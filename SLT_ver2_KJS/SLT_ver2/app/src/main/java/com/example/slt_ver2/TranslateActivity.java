@@ -18,14 +18,14 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Locale;
+
+import static com.example.slt_ver2.MainActivity.CONNECTING;
 
 public class TranslateActivity extends AppCompatActivity implements View.OnClickListener, TextToSpeech.OnInitListener
 {
@@ -44,8 +44,8 @@ public class TranslateActivity extends AppCompatActivity implements View.OnClick
     RelativeLayout tran_Bluetoothlayout0;
     RelativeLayout tran_Bluetoothlayout1;
 
-    ConnectThread connectThread0;
-    ConnectThread connectThread1;
+    MainActivity.ConnectThread connectThread0;
+    MainActivity.ConnectThread connectThread1;
 
     static boolean IsConnect0 = false;
     static boolean IsConnect1 = false;
@@ -66,7 +66,6 @@ public class TranslateActivity extends AppCompatActivity implements View.OnClick
     private static ArrayAdapter<String> mConversationArrayAdapter1;  //bluetooth1의 리스트뷰 출력을 위한 adapter
     private static String s;   //message
     static float speed; //재생속도를 위한 변수
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

@@ -160,19 +160,19 @@ private void startConnect_left() {
 
                 if (newState == BluetoothProfile.STATE_CONNECTED) {
                     if(gatt.getDevice().equals(device_right)) {
-                        //오른쪽 연결
+                        //오른쪽 버튼 연결로 변경
                     }
                     else {
-                        //왼쪽 연결
+                        //왼쪾 버튼 연결로 변경
                     }
 
                 }
                 if (newState == BluetoothProfile.STATE_DISCONNECTED) {
                     if(gatt.getDevice().equals(device_right)) {
-                        //오른쪽 연결 해제
+                        //오른쪽 버튼 연결 해제로 변경
                     }
                     else {
-                        //왼쪽 연결 해제
+                        //왼쪾 버튼 연결 해제로 변경
                     }
                 }
             }
