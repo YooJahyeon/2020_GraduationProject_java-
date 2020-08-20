@@ -34,13 +34,10 @@ import static com.example.slt_ver2.BluetoothService.device_left;
 import static com.example.slt_ver2.BluetoothService.device_right;
 import static com.example.slt_ver2.TranslationFragment.handler;
 import static com.example.slt_ver2.utils.Constants.LEFT;
-import static com.example.slt_ver2.utils.Constants.LOCATION_PERMISSION_REQUEST_CODE;
 import static com.example.slt_ver2.utils.Constants.RIGHT;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
-
-    private boolean isPermissionAllowed = false;
 
     static BluetoothService bs = null;
     private BluetoothAdapter mBluetoothAdapter = null;
@@ -62,20 +59,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            //위치 권한 없으면 -1 반환
-            int permission = checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION);
-
-            if (permission == PackageManager.PERMISSION_DENIED) {
-                String[] permissions = new String[1];
-                permissions[0] = Manifest.permission.ACCESS_COARSE_LOCATION;  // 요청할 권한
-                requestPermissions(permissions, LOCATION_PERMISSION_REQUEST_CODE);
-            }
-            // 권한이 있을 때
-            else {
-                isPermissionAllowed = true;
-            }
-        }
 
         if(bs == null) {
             bs = new BluetoothService(this, handler);

@@ -1,7 +1,10 @@
 package com.example.slt_ver2;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -20,6 +23,7 @@ import java.io.IOException;
 import static com.example.slt_ver2.BluetoothService.state_left;
 import static com.example.slt_ver2.BluetoothService.state_right;
 import static com.example.slt_ver2.utils.Constants.LEFT;
+import static com.example.slt_ver2.utils.Constants.LOCATION_PERMISSION_REQUEST_CODE;
 import static com.example.slt_ver2.utils.Constants.RIGHT;
 import static com.example.slt_ver2.utils.Constants.STATE_CONNECTED;
 import static com.example.slt_ver2.utils.Constants.STATE_CONNECTING;
@@ -30,6 +34,9 @@ public class BluetoothDialog extends AppCompatActivity implements View.OnClickLi
     static BluetoothService bs;
 
     private static final String TAG = "BluetoothDialog";
+
+    private boolean isPermissionAllowed = false;
+
 
     static Button connectbtn_left; //연결 버튼(connect/disconnect)
     static Button connectbtn_right; //연결 버튼(connect/disconnect)
@@ -57,6 +64,21 @@ public class BluetoothDialog extends AppCompatActivity implements View.OnClickLi
         connectbtn_right.setOnClickListener(this);
 
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            //위치 권한 없으면 -1 반환
+            int permission = checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION);
+
+            if (permission == PackageManager.PERMISSION_DENIED) {
+                String[] permissions = new String[1];
+                permissions[0] = Manifest.permission.ACCESS_COARSE_LOCATION;  // 요청할 권한
+                requestPermissions(permissions, LOCATION_PERMISSION_REQUEST_CODE);
+            }
+            // 권한이 있을 때
+            else {
+                isPermissionAllowed = true;
+            }
+        }
 
     }
 
