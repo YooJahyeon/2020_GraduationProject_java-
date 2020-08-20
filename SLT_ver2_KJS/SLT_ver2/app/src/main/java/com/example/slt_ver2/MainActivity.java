@@ -2,26 +2,21 @@ package com.example.slt_ver2;
 
 import android.Manifest;
 import android.bluetooth.BluetoothAdapter;
-<<<<<<< HEAD
-=======
 import android.bluetooth.BluetoothGatt;
 import android.bluetooth.BluetoothGattCharacteristic;
 import android.bluetooth.BluetoothProfile;
 import android.content.pm.PackageManager;
 import android.os.Build;
->>>>>>> parent of ab5bef1... Revert "200821 YJH SLT_ble"
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
-<<<<<<< HEAD
-=======
 import com.example.slt_ver2.interfaces.BleCallback;
 import com.example.slt_ver2.utils.Constants;
->>>>>>> parent of ab5bef1... Revert "200821 YJH SLT_ble"
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.io.BufferedReader;
@@ -31,24 +26,23 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.Arrays;
 
 import butterknife.ButterKnife;
 
+import static com.example.slt_ver2.BluetoothService.device_left;
+import static com.example.slt_ver2.BluetoothService.device_right;
 import static com.example.slt_ver2.TranslationFragment.handler;
 import static com.example.slt_ver2.utils.Constants.LEFT;
 import static com.example.slt_ver2.utils.Constants.LOCATION_PERMISSION_REQUEST_CODE;
 import static com.example.slt_ver2.utils.Constants.RIGHT;
 
 public class MainActivity extends AppCompatActivity {
-<<<<<<< HEAD
-    static BluetoothService bluetoothService = null;
-=======
     private static final String TAG = "MainActivity";
 
     private boolean isPermissionAllowed = false;
 
     static BluetoothService bs = null;
->>>>>>> parent of ab5bef1... Revert "200821 YJH SLT_ble"
     private BluetoothAdapter mBluetoothAdapter = null;
 
     private FragmentManager fragmentManager;
@@ -57,8 +51,7 @@ public class MainActivity extends AppCompatActivity {
     private Socket socket;  //소켓생성
     static BufferedReader in;      //서버로부터 온 데이터를 읽는다.
     static PrintWriter out;        //서버에 데이터를 전송한다.
-
-    static Boolean is_finish = false;
+    static float speed;
 
     private static String recv_RightData;
     private static String recv_LeftData;
@@ -69,8 +62,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
-<<<<<<< HEAD
-=======
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             //위치 권한 없으면 -1 반환
             int permission = checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION);
@@ -93,16 +84,11 @@ public class MainActivity extends AppCompatActivity {
         bs.setFilterService(Constants.SERVICE_STRING);
 
 
->>>>>>> parent of ab5bef1... Revert "200821 YJH SLT_ble"
         fragmentManager = getSupportFragmentManager();
 
-
         BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottomnavigationview_main);
-
-
-//        getFragmentManager().beginTransaction().replace(R.id.layout_container, new TranslationFragment()).commit();
-
         bottomNavigationView.setSelectedItemId(R.id.navigation_translator);
+
         fa = new TranslationFragment();
         fragmentManager.beginTransaction().replace(R.id.layout_container,fa).commit();
 
@@ -136,7 +122,6 @@ public class MainActivity extends AppCompatActivity {
                         if(fb != null) fragmentManager.beginTransaction().show(fb).commit();
                         if(fc != null) fragmentManager.beginTransaction().hide(fc).commit();
                         ListFragment.startList = true;
-
 
                         return true;
                     case R.id.navigation_setting:
@@ -173,11 +158,6 @@ public class MainActivity extends AppCompatActivity {
             }
         };
         main_socket.start();
-
-        if(bluetoothService == null) {
-            bluetoothService = new BluetoothService(this, handler);
-        }
-//        mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
 
     }
 

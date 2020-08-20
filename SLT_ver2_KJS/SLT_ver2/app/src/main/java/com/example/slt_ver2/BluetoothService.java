@@ -1,24 +1,36 @@
 package com.example.slt_ver2;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.Service;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
+import android.bluetooth.BluetoothGatt;
+import android.bluetooth.BluetoothGattCallback;
+import android.bluetooth.BluetoothGattCharacteristic;
+import android.bluetooth.BluetoothManager;
+import android.bluetooth.BluetoothProfile;
 import android.bluetooth.BluetoothSocket;
+import android.content.Context;
 import android.content.Intent;
+import android.media.Ringtone;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
 import android.util.Log;
 
+import com.example.slt_ver2.interfaces.BleCallback;
+import com.example.slt_ver2.utils.Constants;
+import com.example.slt_ver2.utils.Functions;
+import com.example.slt_ver2.utils.Permissions;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.Arrays;
 import java.util.UUID;
 
-<<<<<<< HEAD
-=======
 
 import static com.example.slt_ver2.MainActivity.bleCallbacks;
 import static com.example.slt_ver2.utils.Constants.LEFT;
@@ -31,89 +43,123 @@ import static com.example.slt_ver2.utils.Constants.STATE_DISCONNECTED;
 import static com.example.slt_ver2.utils.Constants.STATE_LISTEN;
 import static com.example.slt_ver2.utils.Constants.UUID_CHAR;
 
->>>>>>> parent of ab5bef1... Revert "200821 YJH SLT_ble"
 public class BluetoothService extends Service {
     //Debugging
     private static final String TAG = "BluetoothService";
 
-    static BluetoothAdapter BA;
-    static BluetoothDevice B0, B1;
-
-    final String SPP_UUID_STRING = "00001101-0000-1000-8000-00805F9B34FB"; //SPP UUID
-    final UUID SPP_UUID = UUID.fromString(SPP_UUID_STRING);
-
-//    private Fragment mFragment;
-    private Activity mActivity;
+    //    private Fragment mFragment;
+    private Activity act;
     private Handler mHandler;
 
-    private  ConnectThread ConnectThread0;
-    private ConnectThread ConnectThread1;
-    private ConnectedThread mConnectedThread;
-//    ConnectedThread connectedThread0, connectedThread1;
+    private BleCallback bleCallback;
+    private BluetoothGatt mBluetoothGatt_right;
+    private BluetoothGatt    mBluetoothGatt_left;
+    private BluetoothAdapter mBluetoothAdapter;
+
+    public static BluetoothDevice device_right;
+    public static BluetoothDevice device_left;
+
+    protected ConnectThread connectThread_right;
+    protected ConnectThread connectThread_left;
+
+    private ReadThread readThread_right;
+    private ReadThread readThread_left;
+
+    private static String recv_RightData;
+    private static String recv_LeftData;
 
     private int mState;
 
-<<<<<<< HEAD
-    // 상태를 나타내는 상태 변수
-    public static final int STATE_NONE = 0; // we're doing nothing
-    public static final int STATE_LISTEN = 1; // now listening for incoming connections
-    public static final int STATE_CONNECTING = 2; // now initiating an outgoing connection
-    public static final int STATE_CONNECTED = 3; // now connected to a remote device
 
-    boolean IsConnect0 = false;
-    boolean IsConnect1 = false;
-=======
-
-    private static long SCAN_PERIOD             = 1000;
+    private static long SCAN_PERIOD             = 2000;
     private static boolean mScanning_right            = false;
     private static boolean mScanning_left             = false;
     private static String FILTER_SERVICE        = "";
 
     public static int state_right = STATE_DISCONNECTED;
     public static int state_left = STATE_DISCONNECTED;
->>>>>>> parent of ab5bef1... Revert "200821 YJH SLT_ble"
 
     // Constructors
     public BluetoothService(Activity ac, Handler handler) {
-        mActivity = ac;
+        act = ac;
         mHandler = handler;
-        mState = STATE_NONE;
+        mState = STATE_DISCONNECTED;
+
         // BluetoothAdapter 얻기
-        BA = BluetoothAdapter.getDefaultAdapter();
-        if(!BA.isEnabled()){
-            Intent i = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-            mActivity.startActivityForResult(i,5000);
+        if(Functions.isBleSupported(ac)) {
+            act = ac;
+            BluetoothManager bluetoothManager = (BluetoothManager) act.getSystemService(Context.BLUETOOTH_SERVICE);
+            mBluetoothAdapter = bluetoothManager.getAdapter();
+            if(!mBluetoothAdapter.isEnabled()) {
+                Intent i = new Intent(mBluetoothAdapter.ACTION_REQUEST_ENABLE);
+                act.startActivityForResult(i,5000);
+            }
         }
     }
 
-    public  void getDeviceInfo(String mac_address, int index) {
-        // Get the device MAC address
-        String address = mac_address;
-        // Get the BluetoothDevice object
-        B0 = BA.getRemoteDevice(address);
-        Log.d(TAG, "Get Device Info(0) \n" + "address : " + address + "index: " + index);
-        try {
-            connect(B0, index);
-            Log.d(TAG, "Connect B0 \n" + "address : " + address);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    // 스캔
+    public void scanLeDevice(boolean enable, int index) {
+        Handler mHandler = new Handler();
 
-<<<<<<< HEAD
+        if (enable) {
+            if(index == RIGHT) {
+                mScanning_right = true;
+                Log.d(TAG, "오른쪽 scanLeDevice");
+            }
+            else if(index == LEFT) {
+                mScanning_left = true;
+                Log.d(TAG, "왼쪽 scanLeDevice");
+            }
+
+            mHandler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    if(index == RIGHT) {mScanning_right = false;}
+                    else if(index == LEFT) {mScanning_left = false;}
+                    mBluetoothAdapter.stopLeScan(mLeScanCallback);
+                }
+            }, SCAN_PERIOD);
+
+            if(!FILTER_SERVICE.equals("")) {
+                UUID[] filter  = new UUID[1];
+                filter [0]     = UUID.fromString(FILTER_SERVICE);
+                Log.d(TAG, "startLeScan 실행");
+                mBluetoothAdapter.startLeScan(filter, mLeScanCallback);
+            }
+        }
+        else {
+            if(index == RIGHT) {mScanning_right = false;}
+            else if (index == LEFT) {mScanning_left = false;}
+            mBluetoothAdapter.stopLeScan(mLeScanCallback);
+        }
     }
 
-    public  void getDeviceInfo_right(String mac_address, int index) {
-        // Get the device MAC address
-        String address = mac_address;
-        // Get the BluetoothDevice object
-        B1 = BA.getRemoteDevice(address);
-        Log.d(TAG, "Get Device Info(1) \n" + "address : " + address + "index: " + index);
-        try {
-            connect(B1, index);
-            Log.d(TAG, "Connect B1 \n" + "address : " + address);
-        } catch (IOException e) {
-            e.printStackTrace();
-=======
+    private BluetoothAdapter.LeScanCallback mLeScanCallback = new BluetoothAdapter.LeScanCallback() {
+        @Override
+        public void onLeScan(final BluetoothDevice device, final int rssi, byte[] scanRecord) {
+            Log.d(TAG, "onLeScan: " +device.getAddress());
+            act.runOnUiThread(new Runnable() {
+                public void run() {
+                    Log.d(TAG, "mScanning_rihgt = " + mScanning_right);
+                    Log.d(TAG, "mScanning_left = " + mScanning_left);
+
+                    if(mScanning_right && device.getAddress().equals(MAC_ADDR_right)) {
+                        Log.d(TAG, "LeScanCallback에서 connectThread실행 : " + device.getAddress());
+                        connectThread_right = new ConnectThread(device, bleCallbacks());
+                        connectThread_right.start();
+                    }
+                    else if(mScanning_left && device.getAddress().equals(MAC_ADDR_left)) {
+                        Log.d(TAG, "LeScanCallback에서 connectThread실행 : " + device.getAddress());
+                        connectThread_left = new ConnectThread(device, bleCallbacks());
+                        connectThread_left.start();
+                    }
+                }
+            });
+        }
+    };
+
+    public synchronized void connect(BluetoothDevice device, BleCallback _bleCallback) throws  IOException{
+
         if (mState == STATE_CONNECTING) {
             if(device == device_right && isConnected_right()) {
                 if(connectThread_right == null) { }
@@ -193,16 +239,9 @@ public class BluetoothService extends Service {
                 mBluetoothGatt_left.close();
                 mBluetoothGatt_left = null;
             }
->>>>>>> parent of ab5bef1... Revert "200821 YJH SLT_ble"
         }
-
     }
 
-<<<<<<< HEAD
-    public class ConnectThread extends Thread {
-        BluetoothSocket BS;
-        BluetoothDevice BD;
-=======
     public void readThreadStop(int index) {
         if (index == RIGHT && !readThread_right.isInterrupted()) {
             readThread_right.interrupt();
@@ -213,111 +252,67 @@ public class BluetoothService extends Service {
     }
 
     public boolean isReadyForScan(){
->>>>>>> parent of ab5bef1... Revert "200821 YJH SLT_ble"
 
-        int bluetooth_index;
-        ConnectedThread connectedThread;
+        return Permissions.checkPermisionStatus(act, Manifest.permission.BLUETOOTH)
+                && Permissions.checkPermisionStatus(act, Manifest.permission.BLUETOOTH_ADMIN)
+                && Permissions.checkPermisionStatus(act, Manifest.permission.ACCESS_COARSE_LOCATION) && Functions.getStatusGps(act);
+    }
 
-        ConnectThread(BluetoothDevice device , int index){
-            BD = device;
-            bluetooth_index = index;
+    public class ConnectThread extends  Thread {
+        BluetoothDevice device;
+        BleCallback bleCallback;
+        int index;
+
+        ConnectThread(BluetoothDevice _device, BleCallback _bleCallback) {
+            device = _device;
+            bleCallback = _bleCallback;
+            if(device.getAddress().equals(MAC_ADDR_right)) {
+                index = RIGHT;
+                device_right = device;
+            }
+            if(device.getAddress().equals(MAC_ADDR_left)) {
+                index = LEFT;
+                device_left = device;
+            }
         }
-
         public void run() {
             try {
-                BS = BD.createRfcommSocketToServiceRecord(SPP_UUID);
-                BS.connect();
-                Log.i(TAG, "BS.connect" + bluetooth_index);
-                connectedThread = new ConnectedThread(BS, bluetooth_index);
-                connectedThread.start();
-            } catch (IOException e) {
-                Log.e(TAG, "create() failed", e);
-                try {
-                    cancel();
-                } catch (IOException e1) {
-                    e1.printStackTrace();
-                }
+                Log.d(TAG, device.getName() + "쓰레드 안");
+                connect(device, bleCallbacks());
+            } catch (Exception e) {
+                disconnect(index);
+                Log.e(TAG, index + "connect fail", e);
+                e.printStackTrace();
             }
-            Log.d(TAG, "Connect Success");
         }
 
-
         public void cancel() throws IOException{
-            if(bluetooth_index == 0) {
-                if(BS != null) {
-                    BS.close();
-                    Log.d("BS"+bluetooth_index+" close", "ㅠㅠ");
-                    BS = null;
+            if(index == RIGHT) {
+                if(mBluetoothGatt_right != null) {
+                    mBluetoothGatt_right.close();
+                    Log.d(TAG,"Gatt_right Close");
+                    mBluetoothGatt_right = null;
                 }
             }
-            else if(bluetooth_index == 1) {
-                if(BS != null) {
-                    BS.close();
-                    Log.d("BS"+bluetooth_index+" close", "ㅠㅠ");
-                    BS = null;
-                }
-            }
-
-            if(mConnectedThread != null){
-                try {
-                    mConnectedThread.cancel();
-                } catch (IOException e1) {
-                    e1.printStackTrace();
+            else if(index == LEFT) {
+                if(mBluetoothGatt_left != null) {
+                    mBluetoothGatt_left.close();
+                    Log.d(TAG,"Gatt_left Close");
+                    mBluetoothGatt_left = null;
                 }
             }
         }
     }
 
+    public class ReadThread extends Thread {
+        int index = -1;
 
-    private class ConnectedThread extends Thread {
-        private InputStream in;
-
-        int bluetooth_index;
-
-        boolean is = false;
-
-        public ConnectedThread(BluetoothSocket socket, int index) {
-            bluetooth_index = index;
-
-            Log.d(TAG, "create ConnectedThread");
-            try {
-<<<<<<< HEAD
-                in = socket.getInputStream();
-                is = true;
-                if(bluetooth_index == 0){
-                    IsConnect0 = is;
-                    sendConnectMsg(0);
-                }
-                else if(bluetooth_index == 1){
-                    IsConnect1 = is;
-                    sendConnectMsg(1);
-                }
-
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+        public ReadThread(int _index) {
+            index = _index;
         }
 
         public void run() {
-            Log.i(TAG, "BEGIN mConnectedThread()");
-            if( in == null)
-            {
-                System.out.println("in is null");
-            }
-            BufferedReader Buffer_in = new BufferedReader(new InputStreamReader(in));
-            // Keep listening to the InputStream while connected
-            while (is) {
-                try {
-                    String s = Buffer_in.readLine();
-                    Log.i(TAG, "mConnectedThread(): " + s);
-                    if(!s.equals("")){
-                        sendMessage(TranslationFragment.MESSAGE_READ, s, bluetooth_index);
-                    }
-                } catch (IOException e) {
-                    Log.e(TAG, "disconnected", e);
-                    connectionLost();
-                    break;
-=======
+            try {
                 Thread.sleep(4000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
@@ -334,27 +329,14 @@ public class BluetoothService extends Service {
                 sendConnectMsg(LEFT);
                 while(isConnected_left() && !readThread_left.isInterrupted()) {
                     read(Constants.SERVICE_STRING, Constants.CHARACTERISTIC_STRING, LEFT);
->>>>>>> parent of ab5bef1... Revert "200821 YJH SLT_ble"
                 }
             }
         }
 
         public void cancel() throws IOException {
-<<<<<<< HEAD
-            is = false;
-
-            if (bluetooth_index == 0) IsConnect0 = is;
-            else IsConnect1 = is;
-
-            if (in != null) {
-                in.close();
-                in = null;
-            }
-            mHandler.obtainMessage(TranslationFragment.MESSAGE_STATE_CHANGE, STATE_NONE, -1).sendToTarget();
-=======
             if(index == RIGHT) {
                 readThread_right.interrupt();
-                }
+            }
 
             else if(index == LEFT) {
                 readThread_left.interrupt();
@@ -368,7 +350,6 @@ public class BluetoothService extends Service {
         }
         else if(index == LEFT) {
             mBluetoothGatt_left.readCharacteristic(mBluetoothGatt_left.getService(Constants.UUID_SERVICE).getCharacteristic(UUID_CHAR));
->>>>>>> parent of ab5bef1... Revert "200821 YJH SLT_ble"
         }
     }
 
@@ -380,85 +361,36 @@ public class BluetoothService extends Service {
         mHandler.obtainMessage(TranslationFragment.MESSAGE_STATE_CHANGE, state, -1).sendToTarget();
     }
 
-    public synchronized void connect(BluetoothDevice device, int index) throws IOException {
-        Log.d(TAG, "connect to: " + device);
 
-        if (mState == STATE_CONNECTING) {
-            if (device == B0 && IsConnect0 && index == 0) {
-                if (ConnectThread0 == null) {
-                } else {
-                    ConnectThread0.cancel();
-                    ConnectThread0 = null;
-                    setState(STATE_NONE);
+    // readThread 초기화
+    public synchronized void startRead(int index) throws IOException {
+        Log.d(TAG, "startRead");
 
-                    sendDisconnectMsg(0);
-                }
-            } else if (device == B1 && IsConnect1 && index == 1) {
-                if (ConnectThread1 == null) {
-                } else {
-                    ConnectThread1.cancel();
-                    ConnectThread1 = null;
-                    setState(STATE_NONE);
-
-                    sendDisconnectMsg(1);
-                }
-            }
-        }
-
-        // Cancel any thread currently running a connection
-        if (mConnectedThread == null) { }
-        else {
-            mConnectedThread.cancel();
-            mConnectedThread = null;
-        }
-
-        // Start the thread to connect with the given device
-        if(device == B0 && IsConnect0 == false) {
-            ConnectThread0 = new ConnectThread(device, 0);
-            ConnectThread0.start();
-            setState(STATE_CONNECTING);
-            sendConnectingMsg(0);
-        }
-
-        else if(device == B1 && IsConnect1==false ) {
-            ConnectThread1 = new ConnectThread(device,1);
-            ConnectThread1.start();
-            setState(STATE_CONNECTING);
-            sendConnectingMsg(1);
-
-        }
-    }
-
-
-    // ConnectedThread 초기화
-    public synchronized void connected(BluetoothSocket socket, int index) throws IOException {
-        Log.d(TAG, "connected");
         // Cancel the thread that completed the connection
-        if (ConnectThread0 == null) { }
+        if (connectThread_right == null) { }
         else {
-            ConnectThread0.cancel();
-            ConnectThread0 = null;
+            connectThread_right.cancel();
+            connectThread_right= null;
         }
 
-        if (ConnectThread1 == null) { }
+        if (connectThread_left == null) { }
         else {
-            ConnectThread1.cancel();
-            ConnectThread1 = null;
+            connectThread_left.cancel();
+            connectThread_left = null;
         }
 
         // Cancel any thread currently running a connection
-        if (mConnectedThread == null) { }
+        if (readThread_right == null) { }
         else {
-            mConnectedThread.cancel();
-            mConnectedThread = null;
+            readThread_right.cancel();
+            readThread_right = null;
+        }
+        if (readThread_left == null) {}
+        else {
+            readThread_left.cancel();
+            readThread_left = null;
         }
         // Start the thread to manage the connection and perform transmissions
-<<<<<<< HEAD
-        mConnectedThread = new ConnectedThread(socket, index);
-        mConnectedThread.start();
-        Log.d(TAG, "mConnectedThread.start()");
-        setState(STATE_CONNECTED);
-=======
         if(index == RIGHT) {
             setState(STATE_CONNECTED);
             readThread_right = new ReadThread(index);
@@ -473,40 +405,21 @@ public class BluetoothService extends Service {
             Log.d(TAG, "readThread_left.start()");
 
         }
->>>>>>> parent of ab5bef1... Revert "200821 YJH SLT_ble"
-    }
-    // 모든 thread stop
-    public synchronized void stop() throws IOException {
-        Log.d(TAG, "stop");
-        if (ConnectThread0 != null) {
-            ConnectThread0.cancel();
-            ConnectThread0 = null;
-        }
-        if (ConnectThread1 != null) {
-            ConnectThread1.cancel();
-            ConnectThread1 = null;
-        }
-        if (mConnectedThread != null) {
-            mConnectedThread.cancel();
-            mConnectedThread = null;
-        }
-        setState(STATE_NONE);
     }
 
-<<<<<<< HEAD
-    public void DIsconnectThread(int index) throws IOException {
-        if(index == 0) {
-            ConnectThread0.cancel();
-            ConnectThread0 = null;
-            IsConnect0 = false;
+    public void disconnectThread(int index) throws IOException {
+        if(index == RIGHT) {
+            connectThread_right.cancel();
+            connectThread_right = null;
+            state_right = STATE_DISCONNECTED;
         }
+        else if(index == LEFT) {
+            connectThread_left.cancel();
+            connectThread_left= null;
+            state_left = STATE_DISCONNECTED;
+        }
+    }
 
-        else if(index == 1) {
-            ConnectThread1.cancel();
-            ConnectThread1 = null;
-            IsConnect1 = false;
-        }
-=======
     private final BluetoothGattCallback mGattCallback;
     {
         mGattCallback = new BluetoothGattCallback() {
@@ -561,14 +474,13 @@ public class BluetoothService extends Service {
             }
 
         };
->>>>>>> parent of ab5bef1... Revert "200821 YJH SLT_ble"
     }
 
     // 연결 해제시 BluetoothDialog로 메시지
     public void sendDisconnectMsg(int index) {
         Message msg = new Message();
         msg.what = index;
-        msg.arg1 = BluetoothDialog.DISCONNECT;
+        msg.arg1 = STATE_DISCONNECTED;
         BluetoothDialog.handler.sendMessage(msg);
     }
 
@@ -576,7 +488,7 @@ public class BluetoothService extends Service {
     public void sendConnectingMsg(int index) {
         Message msg = new Message();
         msg.what = index;
-        msg.arg1 = BluetoothDialog.CONNECTING;
+        msg.arg1 = STATE_CONNECTING;
         BluetoothDialog.handler.sendMessage(msg);
     }
 
@@ -584,11 +496,11 @@ public class BluetoothService extends Service {
     public void sendConnectMsg(int index) {
         Message msg = new Message();
         msg.what = index;
-        msg.arg1 = BluetoothDialog.CONNECTED;
+        msg.arg1 = STATE_CONNECTED;
         BluetoothDialog.handler.sendMessage(msg);
     }
 
-    public void sendMessage(int arg, String s, int index){
+    public static void sendMessage(int arg, String s, int index){
         Message m = new Message();
         m.what = index;
         m.arg1 = arg;
@@ -605,6 +517,24 @@ public class BluetoothService extends Service {
     // 연결을 잃었을 때
     private void connectionLost() {
         setState(STATE_LISTEN);
+    }
+
+    public boolean isScanning_right() {return mScanning_right;}
+    public boolean isScanning_left(){ return mScanning_left;  }
+
+    public boolean isConnected_right() {
+        return state_right == STATE_CONNECTED;
+    }
+    public boolean isConnected_left() {
+        return state_left == STATE_CONNECTED;
+    }
+
+    public void setFilterService(String filterService){
+        FILTER_SERVICE = filterService;
+    }
+
+    public BluetoothGattCallback getGatt(){
+        return mGattCallback;
     }
 
     @Override
