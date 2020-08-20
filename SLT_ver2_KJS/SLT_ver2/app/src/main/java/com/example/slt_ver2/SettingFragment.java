@@ -1,91 +1,177 @@
 package com.example.slt_ver2;
 
+import android.bluetooth.BluetoothGatt;
 import android.os.Bundle;
+import android.os.Message;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.RadioButton;
 import android.widget.SeekBar;
+import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
 
 import static com.example.slt_ver2.MainActivity.speed;
+import static com.example.slt_ver2.utils.Constants.LEFT;
+import static com.example.slt_ver2.utils.Constants.RIGHT;
+import static com.example.slt_ver2.utils.Constants.STATE_CONNECTING;
+import static com.example.slt_ver2.utils.Constants.STATE_DISCONNECTED;
 
 
 public class SettingFragment extends Fragment implements View.OnClickListener {
 
-    RadioButton button_050;
-    RadioButton button_075;
-    RadioButton button_100;
-    RadioButton button_125;
-    RadioButton button_150;
+        RadioButton button_010;
+        RadioButton button_050;
+        RadioButton button_100;
+        RadioButton button_150;
+        RadioButton button_200;
 
-    SeekBar seekbar_volume;
+        ImageButton add_button;
+        ImageButton sub_button;
 
-    EditText edit_fontsize;
+        TextView text_font_size;
+        static int font_size = 15;
+        static float speed = 1;
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+        Button button_right;
+        Button button_left;
 
-//        final AudioManager audioManager = (AudioManager)this.getActivity().getApplicationContext().getSystemService(Context.AUDIO_SERVICE);
-//        int nMax = audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
-//        int nCurrentVolume = audioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
+        @Override
+        public void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
 
-//        seekbar_volume.setMax(nMax);
-//        seekbar_volume.setProgress(nCurrentVolume);
-//
-//        seekbar_volume.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-//            @Override
-//            public void onStopTrackingTouch(SeekBar seekBar) {
-//            }
-//
-//            @Override
-//            public void onStartTrackingTouch(SeekBar seekBar) {
-//            }
-//
-//            @Override
-//            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-//                audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, progress, 0);
-//            }
-//        });
+            System.out.println(text_font_size);
 
-//        final String fontsize = edit_fontsize.getText().toString();
-
-    }
-
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-//        Toast.makeText(this.getContext(), "This is SearchFragment", Toast.LENGTH_SHORT).show();
-        View v = inflater.inflate(R.layout.fragment_setting, container, false);
-
-        button_050 = (RadioButton)v.findViewById(R.id.Button_050);
-        button_075 = (RadioButton)v.findViewById(R.id.Button_075);
-        button_100 = (RadioButton)v.findViewById(R.id.Button_100);
-        button_125 = (RadioButton)v.findViewById(R.id.Button_125);
-        button_150 = (RadioButton)v.findViewById(R.id.Button_150);
-
-        seekbar_volume = (SeekBar)v.findViewById(R.id.seekbar_volume);
-
-        edit_fontsize = (EditText)v.findViewById(R.id.edit_fontsize);
-
-        return v;
-    }
-
-    @Override
-    public void onClick(View v) {
-        if (v.getId() == R.id.Button_050) {
-            speed = (float) 0.5;
-        } else if (v.getId() == R.id.Button_075) {
-            speed = (float) 0.75;
-        } else if (v.getId() == R.id.Button_100) {
-            speed = (float) 1.00;
-        } else if (v.getId() == R.id.Button_125) {
-            speed = (float) 1.25;
-        } else if (v.getId() == R.id.Button_150) {
-            speed = (float) 1.50;
         }
-    }
+
+        @Override
+        public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+//        Toast.makeText(this.getContext(), "This is SearchFragment", Toast.LENGTH_SHORT).show();
+            View v = inflater.inflate(R.layout.fragment_setting, container, false);
+
+            button_010 = (RadioButton)v.findViewById(R.id.Button_010);
+            button_050 = (RadioButton)v.findViewById(R.id.Button_050);
+            button_100 = (RadioButton)v.findViewById(R.id.Button_100);
+            button_150 = (RadioButton)v.findViewById(R.id.Button_150);
+            button_200 = (RadioButton)v.findViewById(R.id.Button_200);
+
+            button_right = (Button)v.findViewById(R.id.RightConnectButton);
+            button_left = (Button)v.findViewById(R.id.LeftConnectButton);
+
+            button_010.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    speed = (float) 0.1;
+                    System.out.println(speed);
+                }
+            });
+            button_050.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    speed = (float) 0.5;
+                    System.out.println(speed);
+                }
+            });
+            button_100.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    speed = (float) 1;
+                    System.out.println(speed);
+                }
+            });
+            button_150.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    speed = (float) 1.5;
+                    System.out.println(speed);
+                }
+            });
+            button_200.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    speed = (float) 2;
+                    System.out.println(speed);
+                }
+            });
+
+            text_font_size = (TextView)v.findViewById(R.id.text_font_size);
+            text_font_size.setText("15");
+
+            System.out.println(String.valueOf(text_font_size));
+            add_button = (ImageButton)v.findViewById(R.id.add_button);
+            add_button.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    font_size = font_size + 1;
+                    text_font_size.setText(String.valueOf(font_size));
+                    System.out.println(font_size);
+                    TranslationFragment.adapter.notifyDataSetChanged();
+                }
+            });
+            sub_button = (ImageButton)v.findViewById(R.id.sub_button);
+            sub_button.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    font_size = font_size - 1;
+                    text_font_size.setText(String.valueOf(font_size));
+                    System.out.println(font_size);
+                    TranslationFragment.adapter.notifyDataSetChanged();
+                }
+            });
+
+            button_right.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (MainActivity.bs.isConnected_right()) {
+                        MainActivity.bs.disconnect(RIGHT);
+
+                        Message m = new Message();
+                        m.what = RIGHT;
+                        m.arg1 = STATE_DISCONNECTED;
+                        BluetoothDialog.handler.sendMessage(m);
+                    } else {
+                        //블루투스 끊어진 상태
+                        Message m = new Message();
+                        m.what = RIGHT;
+                        m.arg1 = STATE_CONNECTING;
+                        BluetoothDialog.handler.sendMessage(m);
+                        BluetoothDialog.startConnect_right();
+                    }
+
+                }
+            });
+
+            button_left.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if ( MainActivity.bs.isConnected_left()) {
+                        MainActivity.bs.disconnect(LEFT);
+
+                        Message m = new Message();
+                        m.what = LEFT;
+                        m.arg1 = STATE_DISCONNECTED;
+                        BluetoothDialog.handler.sendMessage(m);
+                    } else {
+                        //블루투스 끊어진 상태
+                        Message m = new Message();
+                        m.what = LEFT;
+                        m.arg1 = STATE_CONNECTING;
+                        BluetoothDialog.handler.sendMessage(m);
+                        BluetoothDialog.startConnect_left();
+                    }
+                }
+            });
+
+            return v;
+        }
+
+        @Override
+        public void onClick(View v) {
+
+        }
+
 }
