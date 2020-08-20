@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">AppExample</string>
+    <string name="error_permission_denied">위치 권한 획득에 실패했습니다.</string>
+</resources>

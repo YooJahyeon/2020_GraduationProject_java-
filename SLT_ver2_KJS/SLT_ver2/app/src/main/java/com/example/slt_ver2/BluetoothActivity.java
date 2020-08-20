@@ -272,7 +272,8 @@ public class BluetoothActivity extends AppCompatActivity implements View.OnClick
 
             handler.sendMessage(m);
         }
-    }class ConnectedThread extends Thread{
+    }
+    class ConnectedThread extends Thread{
         InputStream in = null;
 
         int bluetooth_index;
