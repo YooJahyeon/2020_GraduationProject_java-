@@ -32,7 +32,8 @@ public class MainActivity extends AppCompatActivity {
     private Socket socket;  //소켓생성
     static BufferedReader in;      //서버로부터 온 데이터를 읽는다.
     static PrintWriter out;        //서버에 데이터를 전송한다.
-    static float speed;
+
+    static Boolean is_finish = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,6 +84,7 @@ public class MainActivity extends AppCompatActivity {
                         if(fc != null) fragmentManager.beginTransaction().hide(fc).commit();
                         ListFragment.startList = true;
 
+
                         return true;
                     case R.id.navigation_setting:
 //                        getFragmentManager().beginTransaction().replace(R.id.layout_container, new SettingFragment()).commit();
@@ -122,7 +124,7 @@ public class MainActivity extends AppCompatActivity {
         if(bluetoothService == null) {
             bluetoothService = new BluetoothService(this, handler);
         }
-        mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+//        mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
 
     }
 

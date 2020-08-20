@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:gravity="center"
-        android:layout_marginTop="80dp"
+        android:layout_marginTop="20dp"
         android:text="장치연결"
         android:textSize="20dp"
         />
@@ -23,7 +23,7 @@
         android:id="@+id/handLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="120dp"
+        android:layout_marginTop="50dp"
         android:orientation="vertical">
 
         <LinearLayout
@@ -92,7 +92,7 @@
         android:id="@+id/NextButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="80dp"
+        android:layout_marginTop="50dp"
         android:text="확인"
         android:onClick="onClick"
         android:layout_gravity="center"
