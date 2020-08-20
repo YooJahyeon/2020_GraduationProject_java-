@@ -14,4 +14,6 @@ public class BleCallback {
     public void onBleWrite(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic, int status){}
 
     public void onBleRead(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic, int status){}
+
+
 }

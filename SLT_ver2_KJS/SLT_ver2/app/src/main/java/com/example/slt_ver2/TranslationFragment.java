@@ -33,7 +33,7 @@ public class TranslationFragment extends ListFragment implements TextToSpeech.On
     public static final int MESSAGE_STATE_CHANGE = 1;
     public static final int MESSAGE_READ = 9999;
 
-    static ListViewAdapter adapter;
+    ListViewAdapter adapter;
     private String recv_data = "";
     private String pre_data = "";
 

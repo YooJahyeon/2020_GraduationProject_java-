@@ -32,12 +32,10 @@ import java.util.Arrays;
 import java.util.UUID;
 
 
-import static com.example.slt_ver2.MainActivity.bleCallbacks;
 import static com.example.slt_ver2.utils.Constants.LEFT;
 import static com.example.slt_ver2.utils.Constants.MAC_ADDR_left;
 import static com.example.slt_ver2.utils.Constants.MAC_ADDR_right;
 import static com.example.slt_ver2.utils.Constants.RIGHT;
-import static com.example.slt_ver2.utils.Constants.STATE_CONNECTED;
 import static com.example.slt_ver2.utils.Constants.STATE_CONNECTING;
 import static com.example.slt_ver2.utils.Constants.STATE_DISCONNECTED;
 import static com.example.slt_ver2.utils.Constants.STATE_LISTEN;
@@ -70,8 +68,12 @@ public class BluetoothService extends Service {
 
     private int mState;
 
+    // 상태를 나타내는 상태 변수
+    private static final int STATE_DISCONNECTED = 0;
+    private static final int STATE_CONNECTED    = 1;
 
-    private static long SCAN_PERIOD             = 1000;
+
+    private static long SCAN_PERIOD             = 3000;
     private static boolean mScanning_right            = false;
     private static boolean mScanning_left             = false;
     private static String FILTER_SERVICE        = "";
@@ -167,48 +169,22 @@ public class BluetoothService extends Service {
                     connectThread_right.cancel();
                     connectThread_right = null;
                     setState(STATE_DISCONNECTED);
+
                     sendDisconnectMsg(RIGHT);
                 }
             }
-            else if(device == device_left && isConnected_left()) {
-                if(connectThread_left == null) {}
-                else {
-                    connectThread_left.cancel();
-                    connectThread_left = null;
-                    setState(STATE_DISCONNECTED);
-                    sendDisconnectMsg(LEFT);
-                }
-            }
         }
-
         if(device == device_right) {
-            if(readThread_right == null) {}
-            else {
-                readThread_right.cancel();
-                readThread_right= null;
-            }
-        }
-        else if(device == device_left) {
-            if(readThread_left == null) {}
-            else {
-                readThread_left.cancel();
-                readThread_left = null;
-            }
-        }
-
-        if(device == device_right && !isConnected_right()) {
-            Log.d(TAG, "connect 안 = " + device.getName());
+            Log.d(TAG, "helper의 connect 안 = " + device.getName());
 
             if(mBluetoothGatt_right == null && !isConnected_right()) {
                 bleCallback = _bleCallback;
                 mBluetoothGatt_right = device.connectGatt(act, true, mGattCallback);
-
                 readThread_right = new ReadThread(RIGHT);
                 readThread_right.start();
-                Log.d(TAG, "readThread_right.start()");
             }
         }
-        else if(device == device_left && !isConnected_left()) {
+        else if(device == device_left) {
             Log.d(TAG, "helper의 connect 안 = " + device.getName());
 
             if(mBluetoothGatt_left == null && !isConnected_left()) {
@@ -216,7 +192,6 @@ public class BluetoothService extends Service {
                 mBluetoothGatt_left = device.connectGatt(act, true, mGattCallback);
                 readThread_left = new ReadThread(LEFT);
                 readThread_left.start();
-
             }
         }
     }
@@ -225,7 +200,6 @@ public class BluetoothService extends Service {
         if(index == RIGHT) {
             if(mBluetoothGatt_right != null && isConnected_right()) {
                 state_right = STATE_DISCONNECTED;
-                readThreadStop(RIGHT);
                 mBluetoothGatt_right.disconnect();
                 mBluetoothGatt_right.close();
                 mBluetoothGatt_right = null;
@@ -234,20 +208,10 @@ public class BluetoothService extends Service {
         else if(index == LEFT) {
             if(mBluetoothGatt_left != null && isConnected_left()) {
                 state_left = STATE_DISCONNECTED;
-                readThreadStop(LEFT);
                 mBluetoothGatt_left.disconnect();
                 mBluetoothGatt_left.close();
                 mBluetoothGatt_left = null;
             }
-        }
-    }
-
-    public void readThreadStop(int index) {
-        if (index == RIGHT && !readThread_right.isInterrupted()) {
-            readThread_right.interrupt();
-        }
-        else if (index == LEFT && !readThread_left.isInterrupted()) {
-            readThread_left.interrupt();
         }
     }
 
@@ -313,38 +277,31 @@ public class BluetoothService extends Service {
 
         public void run() {
             try {
-                Thread.sleep(4000);
+                Thread.sleep(5000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            Log.d(TAG, index + "ReadThread실행");
+            Log.d(TAG, index + "Read실행");
 
             if(index == RIGHT) {
-                sendConnectMsg(RIGHT);
-                while(isConnected_right() && !readThread_right.isInterrupted()) {
+                while(isConnected_right()) {
                     read(Constants.SERVICE_STRING, Constants.CHARACTERISTIC_STRING, RIGHT);
                 }
             }
             else if(index == LEFT) {
-                sendConnectMsg(LEFT);
-                while(isConnected_left() && !readThread_left.isInterrupted()) {
+                while(isConnected_left()) {
                     read(Constants.SERVICE_STRING, Constants.CHARACTERISTIC_STRING, LEFT);
                 }
             }
         }
 
         public void cancel() throws IOException {
-            if(index == RIGHT) {
-                readThread_right.interrupt();
-                }
 
-            else if(index == LEFT) {
-                readThread_left.interrupt();
-            }
         }
     }
 
     public void read(String service, String characteristic, int index){
+        Log.i(TAG, "Helper의 read 실행");
         if(index == RIGHT) {
             mBluetoothGatt_right.readCharacteristic(mBluetoothGatt_right.getService(Constants.UUID_SERVICE).getCharacteristic(UUID_CHAR));
         }
@@ -392,18 +349,16 @@ public class BluetoothService extends Service {
         }
         // Start the thread to manage the connection and perform transmissions
         if(index == RIGHT) {
-            setState(STATE_CONNECTED);
             readThread_right = new ReadThread(index);
             readThread_right.start();
             Log.d(TAG, "readThread_right.start()");
-
+            setState(STATE_CONNECTED);
         }
         else if(index == LEFT) {
-            setState(STATE_CONNECTED);
             readThread_left = new ReadThread(index);
             readThread_left.start();
             Log.d(TAG, "readThread_left.start()");
-
+            setState(STATE_CONNECTED);
         }
     }
 
@@ -423,7 +378,6 @@ public class BluetoothService extends Service {
     private final BluetoothGattCallback mGattCallback;
     {
         mGattCallback = new BluetoothGattCallback() {
-
             @Override
             public void onConnectionStateChange(BluetoothGatt gatt, int status, int newState) {
 
@@ -434,7 +388,6 @@ public class BluetoothService extends Service {
                     }
                     else if(gatt.getDevice().equals(device_left)) {
                         state_left = STATE_CONNECTED;
-
                     }
                 }
 
@@ -463,16 +416,95 @@ public class BluetoothService extends Service {
 
             @Override
             public void onCharacteristicRead(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic, int status) {
-                Log.i(TAG, "onCharacteristicRead");
+                Log.i(TAG, "Helper의 onCharacteristicRead");
                 bleCallback.onBleRead(gatt, characteristic, status);
             }
 
             @Override
             public void onCharacteristicChanged(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic) {
-                Log.i(TAG, "onCharacteristicChanged");
+                Log.i(TAG, "Helper의 onCharacteristicChanged");
                 bleCallback.onBleCharacteristicChange(gatt, characteristic);
+
+
             }
 
+        };
+    }
+
+    public static BleCallback bleCallbacks(){
+
+        return new BleCallback(){
+
+            @Override
+            public void onBleConnectionStateChange(BluetoothGatt gatt, int status, int newState) {
+                super.onBleConnectionStateChange(gatt, status, newState);
+
+                if (newState == BluetoothProfile.STATE_CONNECTED) {
+                    if(gatt.getDevice().equals(device_right)) {
+                        //오른쪽 연결
+                    }
+                    else {
+                        //왼쪽 연결
+                    }
+
+                }
+                if (newState == BluetoothProfile.STATE_DISCONNECTED) {
+                    if(gatt.getDevice().equals(device_right)) {
+                        //오른쪽 연결 해제
+                    }
+                    else {
+                        //왼쪽 연결 해제
+                    }
+                }
+            }
+
+            @Override
+            public void onBleServiceDiscovered(BluetoothGatt gatt, int status) {
+                super.onBleServiceDiscovered(gatt, status);
+                if (status != BluetoothGatt.GATT_SUCCESS) {
+                    Log.e("Ble ServiceDiscovered","onServicesDiscovered received: " + status);
+                }
+            }
+
+            @Override
+            public void onBleCharacteristicChange(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic) {
+                super.onBleCharacteristicChange(gatt, characteristic);
+                Log.i("BluetoothLEHelper","onCharacteristicChanged Value: " + Arrays.toString(characteristic.getValue()));
+                Log.i(TAG, "onBleCharacteristicChange");
+
+            }
+
+            @Override
+            public void onBleRead(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic, int status) {
+                super.onBleRead(gatt, characteristic, status);
+
+                if (status == BluetoothGatt.GATT_SUCCESS) {
+                    Log.i(TAG, "Main의 onBleRead");
+                    Log.i("TAG", Arrays.toString(characteristic.getValue()));
+                    byte[] readByte = characteristic.getValue();
+
+                    if(gatt.getDevice() == device_right) {
+                        recv_RightData = new String(readByte);
+                        Log.i("TAG", "오른손 데이터: " + recv_RightData);
+                        sendMessage(TranslationFragment.MESSAGE_READ, recv_RightData, RIGHT);
+                    }
+
+                    else if(gatt.getDevice() == device_left) {
+                        recv_LeftData = new String(readByte);
+                        Log.i("TAG", "왼손 데이터: " + recv_LeftData);
+                        sendMessage(TranslationFragment.MESSAGE_READ, recv_LeftData, LEFT);
+
+                    }
+
+
+//                    runOnUiThread(() -> Toast.makeText(MainActivity.this, "onBleRead : " + recv_RightData, Toast.LENGTH_SHORT).show());
+                }
+            }
+
+            @Override
+            public void onBleWrite(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic, int status) {
+                super.onBleWrite(gatt, characteristic, status);
+            }
         };
     }
 
