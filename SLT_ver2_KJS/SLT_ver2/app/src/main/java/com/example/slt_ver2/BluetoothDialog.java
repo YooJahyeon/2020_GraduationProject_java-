@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
@@ -15,13 +16,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
 import java.io.IOException;
-import java.util.UUID;
-
 
 import static com.example.slt_ver2.BluetoothService.state_left;
 import static com.example.slt_ver2.BluetoothService.state_right;
-import static com.example.slt_ver2.TranslateActivity.DISCONNECT;
-import static com.example.slt_ver2.TranslateActivity.IsConnect1;
 import static com.example.slt_ver2.utils.Constants.LEFT;
 import static com.example.slt_ver2.utils.Constants.RIGHT;
 import static com.example.slt_ver2.utils.Constants.STATE_CONNECTED;
@@ -32,8 +29,10 @@ public class BluetoothDialog extends AppCompatActivity implements View.OnClickLi
     private static Context context;
     static BluetoothService bs;
 
-    static Button connectbtn0; //연결 버튼(connect/disconnect)
-    static Button connectbtn1; //연결 버튼(connect/disconnect)
+    private static final String TAG = "BluetoothDialog";
+
+    static Button connectbtn_left; //연결 버튼(connect/disconnect)
+    static Button connectbtn_right; //연결 버튼(connect/disconnect)
     Button nextbutton; //다음 액티비티로 넘어가기 위한 버튼
 
     static ImageView lefthand; //왼손
@@ -47,15 +46,15 @@ public class BluetoothDialog extends AppCompatActivity implements View.OnClickLi
 
 
         //----------------------Find VIEW---------------------------------//
-        connectbtn0 = (Button) findViewById(R.id.LeftConnectButton);
-        connectbtn1 = (Button) findViewById(R.id.RightConnectButton);
+        connectbtn_left = (Button) findViewById(R.id.LeftConnectButton);
+        connectbtn_right = (Button) findViewById(R.id.RightConnectButton);
         nextbutton = (Button) findViewById(R.id.NextButton);
         lefthand = (ImageView) findViewById(R.id.LeftHand);
         righthand = (ImageView) findViewById(R.id.RightHand);
 
         //----------------------SET Listener---------------------------------//
-        connectbtn0.setOnClickListener(this);
-        connectbtn1.setOnClickListener(this);
+        connectbtn_left.setOnClickListener(this);
+        connectbtn_right.setOnClickListener(this);
 
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
@@ -90,46 +89,45 @@ public class BluetoothDialog extends AppCompatActivity implements View.OnClickLi
     static Handler handler = new Handler(new Handler.Callback() {
         @Override
         public boolean handleMessage(Message msg) {
-            if (msg.what == 0) {
+            if (msg.what == LEFT) {
                 switch (msg.arg1) {
                     case STATE_DISCONNECTED:
                         state_right = STATE_DISCONNECTED;
-                        connectbtn0.setText("CONNECT");
-                        connectbtn0.setBackgroundDrawable(ContextCompat.getDrawable(context, R.drawable.unconnected_button));
+                        connectbtn_left.setText("CONNECT");
+                        connectbtn_left.setBackgroundDrawable(ContextCompat.getDrawable(context, R.drawable.unconnected_button));
                         lefthand.setImageResource(R.drawable.ic_left_red);
                         break;
                     case STATE_CONNECTING:
-                        connectbtn0.setText("CONNECTING");
+                        connectbtn_left.setText("CONNECTING");
                         break;
                     case STATE_CONNECTED:
-                        state_right = STATE_CONNECTED;
 //                        connectbtn0.setEnabled(true);
-                        System.out.println("Right DISCONNECT : " + state_right);
-                        connectbtn0.setText("DISCONNECT");
-                        connectbtn0.setBackgroundDrawable(ContextCompat.getDrawable(context, R.drawable.connected_button));
+                        connectbtn_left.setText("DISCONNECT");
+                        connectbtn_left.setBackgroundDrawable(ContextCompat.getDrawable(context, R.drawable.connected_button));
                         lefthand.setImageResource(R.drawable.ic_left_green);
 
                         break;
 
                 }
 
-            } else {
+            }
+            else {
                 switch (msg.arg1) {
                     case STATE_DISCONNECTED:
                         state_left = STATE_DISCONNECTED;
-                        connectbtn1.setText("CONNECT");
-                        connectbtn1.setBackgroundDrawable(ContextCompat.getDrawable(context, R.drawable.unconnected_button));
+                        connectbtn_right.setText("CONNECT");
+                        connectbtn_right.setBackgroundDrawable(ContextCompat.getDrawable(context, R.drawable.unconnected_button));
                         righthand.setImageResource(R.drawable.ic_right_red);
                         break;
                     case STATE_CONNECTING:
-                        connectbtn1.setText("CONNECTING");
+                        connectbtn_right.setText("CONNECTING");
                         break;
                     case STATE_CONNECTED:
-                        state_left = STATE_CONNECTED;
+//                        state_left = STATE_CONNECTED;
 //                        connectbtn1.setEnabled(true);
-                        System.out.println("Left DISCONNECT : " + state_left);
-                        connectbtn1.setText("DISCONNECT");
-                        connectbtn1.setBackgroundDrawable(ContextCompat.getDrawable(context, R.drawable.connected_button));
+                        System.out.println("Right DISCONNECT : " + state_right);
+                        connectbtn_right.setText("DISCONNECT");
+                        connectbtn_right.setBackgroundDrawable(ContextCompat.getDrawable(context, R.drawable.connected_button));
                         righthand.setImageResource(R.drawable.ic_right_green);
                         break;
 
@@ -149,20 +147,17 @@ public class BluetoothDialog extends AppCompatActivity implements View.OnClickLi
 
             case R.id.LeftConnectButton:
                 if ( MainActivity.bs.isConnected_left()) {
-                    try {
-                       MainActivity.bs.disconnectThread(LEFT);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
+                    MainActivity.bs.disconnect(LEFT);
+
                     Message m = new Message();
-                    m.what = 0;
+                    m.what = LEFT;
                     m.arg1 = STATE_DISCONNECTED;
                     handler.sendMessage(m);
                     break;
                 } else {
                     //블루투스 끊어진 상태
                     Message m = new Message();
-                    m.what = 0;
+                    m.what = LEFT;
                     m.arg1 = STATE_CONNECTING;
                     handler.sendMessage(m);
                     startConnect_left();
@@ -170,21 +165,18 @@ public class BluetoothDialog extends AppCompatActivity implements View.OnClickLi
                 }
 
             case R.id.RightConnectButton:
-                if (IsConnect1) {
-                    try {
-                        MainActivity.bs.disconnectThread(RIGHT);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
+                if (MainActivity.bs.isConnected_right()) {
+                    MainActivity.bs.disconnect(RIGHT);
+
                     Message m = new Message();
-                    m.what = 1;
+                    m.what = RIGHT;
                     m.arg1 = STATE_DISCONNECTED;
                     handler.sendMessage(m);
                     break;
                 } else {
                     //블루투스 끊어진 상태
                     Message m = new Message();
-                    m.what = 1;
+                    m.what = RIGHT;
                     m.arg1 = STATE_CONNECTING;
                     handler.sendMessage(m);
                     startConnect_right();
@@ -193,12 +185,12 @@ public class BluetoothDialog extends AppCompatActivity implements View.OnClickLi
         }
     }
 
-    private void startConnect_right() {
+    public static void startConnect_right() {
         if(!MainActivity.bs.isScanning_right()) {
             MainActivity.bs.scanLeDevice(true, RIGHT);
         }
     }
-    private void startConnect_left() {
+    public static void startConnect_left() {
         if(!MainActivity.bs.isScanning_left()) {
             MainActivity.bs.scanLeDevice(true, LEFT);
         }

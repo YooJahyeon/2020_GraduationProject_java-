@@ -232,7 +232,6 @@ private void startConnect_left() {
     public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
         if (requestCode == LOCATION_PERMISSION_REQUEST_CODE) {
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                // BLE 스캐닝 넣을까 말까..
             }
         }
         // 권한 획득 실패했을 때
