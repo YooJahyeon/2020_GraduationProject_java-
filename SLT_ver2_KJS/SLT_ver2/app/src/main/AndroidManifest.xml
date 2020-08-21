@@ -29,7 +29,8 @@
         </activity>
         <activity
             android:name=".BluetoothDialog"
-            android:theme="@style/Theme.AppCompat.Light.Dialog.MinWidth" />
+            android:theme="@style/DialogTheme"
+            />
 
         <service
             android:name=".BluetoothService"

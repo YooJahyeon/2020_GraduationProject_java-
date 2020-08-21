@@ -23,6 +23,13 @@ import androidx.fragment.app.ListFragment;
 import com.github.kimkevin.hangulparser.HangulParser;
 import com.github.kimkevin.hangulparser.HangulParserException;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
+import java.net.Socket;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -67,6 +74,10 @@ public class TranslationFragment extends ListFragment implements TextToSpeech.On
     String comb_message = "";
     static String[] server_list_2;
 
+    private Socket socket;  //소켓생성
+    static BufferedReader in;      //서버로부터 온 데이터를 읽는다.
+    static PrintWriter out;        //서버에 데이터를 전송한다.
+
 
     @Override
     public void onResume() {
@@ -82,20 +93,46 @@ public class TranslationFragment extends ListFragment implements TextToSpeech.On
 
         message_buffer = ByteBuffer.allocate(1024);
 
-
+//        Thread main_socket = new Thread() {
+//            public void run() { //스레드 실행구문
+//                try {
+//                    //소켓을 생성하고 입출력 스트립을 소켓에 연결한다.
+//                    socket = new Socket("115.85.173.148", 9999); //소켓생성
+//                    out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(socket.getOutputStream())), true); //데이터를 전송시 stream 형태로 변환하여 전송한다.
+//                    in = new BufferedReader(new InputStreamReader(socket.getInputStream())); //데이터 수신시 stream을 받아들인다.
+//
+//                } catch (
+//                        IOException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        };
+//        main_socket.start();
 
         Thread worker = new Thread() {    //worker 를 Thread 로 생성
             public void run() { //스레드 실행구문
+                try {
+                    //소켓을 생성하고 입출력 스트립을 소켓에 연결한다.
+                    socket = new Socket("115.85.173.148", 9999); //소켓생성
+                    out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(socket.getOutputStream())), true); //데이터를 전송시 stream 형태로 변환하여 전송한다.
+                    in = new BufferedReader(new InputStreamReader(socket.getInputStream())); //데이터 수신시 stream을 받아들인다.
+                } catch (
+                        IOException e) {
+                    e.printStackTrace();
+                }
                 //소켓에서 데이터를 읽어서 화면에 표시한다.
                 try {
                     while (true) {
-                        data = MainActivity.in.readLine(); // in으로 받은 데이타를 String 형태로 읽어 data에 저장
-
+                        data = TranslationFragment.in.readLine(); // in으로 받은 데이타를 String 형태로 읽어 data에 저장
+                        System.out.println("데이터 들어오기 전"+check_finished);
                         System.out.println("데이터 :" + data);
                         if(data.equals("finish")){
                             check_finished = true;
                             System.out.println("translation " + check_finished);
                             data = "";
+                        }
+                        else{
+                            check_finished = false;
                         }
                         server_list_2 = data.split("\\s");
                         System.out.println("serverList :" + Arrays.toString(server_list_2));
@@ -109,6 +146,7 @@ public class TranslationFragment extends ListFragment implements TextToSpeech.On
                         start = System.currentTimeMillis();
                         Log.d("==start: ", Long.toString(start));
                         runTimer = false;
+                        check_finished = false;
 
                         recv_data = data;
                         if (switch_comb.isChecked() && (recv_data.equals("ㄱ") || recv_data.equals("ㄴ") || recv_data.equals("ㄷ") || recv_data.equals("ㄹ") || recv_data.equals("ㅁ")
@@ -119,6 +157,7 @@ public class TranslationFragment extends ListFragment implements TextToSpeech.On
                                 || recv_data.equals("ㅟ") || recv_data.equals("ㅢ"))) {  //데이터 버퍼에 넣기
                             jasoList.add(recv_data);
                             System.out.print(jasoList);
+                            Log.i("jaso=======", String.valueOf(jasoList));
                             System.out.println(jasoList.size());
                         }
 
@@ -204,6 +243,8 @@ public class TranslationFragment extends ListFragment implements TextToSpeech.On
                                 });
                             }
                         });
+
+//                        check_finished = false;
                     }
                 }catch (Exception ignored) {
                 }
@@ -217,11 +258,12 @@ public class TranslationFragment extends ListFragment implements TextToSpeech.On
                     while(true) {
                         end = System.currentTimeMillis();
 
-                        if((end - start) > 3000 && !recv_data.equals("") && !runTimer) {
+                        if((end - start) > 5000 && !recv_data.equals("") && !runTimer) {
+                            Log.d("=======end ", Long.toString(end));
                             Log.d("3초 경과", "YES");
                             runTimer = true;
 
-                            if( !jasoList.isEmpty() && switch_comb.isChecked()) {  //3초 시간이 경과되면 출력
+                            if( !jasoList.isEmpty() && switch_comb.isChecked()) {   //3초 시간이 경과되면 출력
                                 try {
                                     Log.d("==", "pass1");
                                     if(jasoList.size() > 2) {
@@ -265,7 +307,7 @@ public class TranslationFragment extends ListFragment implements TextToSpeech.On
                                     });
                                 }
 
-                                if(check_jo && switch_print.isChecked())
+                                if(check_jo && switch_comb.isChecked())
                                 {
                                     Log.d("==check_jo 5", String.valueOf(check_jo));
                                     adapter.addItem(ContextCompat.getDrawable(getActivity(), R.drawable.ic_jo),
@@ -274,7 +316,7 @@ public class TranslationFragment extends ListFragment implements TextToSpeech.On
                                     check_jo = false;
                                     Log.d("==check_jo 6", String.valueOf(check_jo));
                                 }
-                                else if(check_jo && !switch_print.isChecked())
+                                else if(check_jo && !switch_comb.isChecked())
                                 {
                                     Log.d("==check_jo 7", String.valueOf(check_jo));
                                     adapter.addItem(ContextCompat.getDrawable(getActivity(), R.drawable.ic_jo),
@@ -367,10 +409,10 @@ public class TranslationFragment extends ListFragment implements TextToSpeech.On
                 new Thread() {
                     public void run() {
                         if (readMessage0 != null && readMessage1 != null) {
-                            MainActivity.out.println(readMessage0); //data를   stream 형태로 변형하여 전송.  변환내용은 쓰레드에 담겨 있다.
-                            MainActivity.out.println(readMessage1); //data를   stream 형태로 변형하여 전송.  변환내용은 쓰레드에 담겨 있다.
-                            Log.d("=== in net0", readMessage0);
-                            Log.d("=== in net1", readMessage1);
+                            TranslationFragment.out.println(readMessage1); //data를   stream 형태로 변형하여 전송.  변환내용은 쓰레드에 담겨 있다.
+                            TranslationFragment.out.println(readMessage0); //data를   stream 형태로 변형하여 전송.  변환내용은 쓰레드에 담겨 있다.
+//                            Log.d("=== in net0", readMessage1);
+//                            Log.d("=== in net1", readMessage0);
                             System.out.println();
                         }
                     }

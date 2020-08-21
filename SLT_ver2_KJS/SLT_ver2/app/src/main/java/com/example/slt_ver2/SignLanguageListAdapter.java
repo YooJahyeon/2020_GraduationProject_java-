@@ -63,9 +63,10 @@ public class SignLanguageListAdapter extends RecyclerView.Adapter<SignLanguageLi
                             //예 눌렀을때의 이벤트 처리
                             new Thread() {
                                 public void run() {
-                                    MainActivity.out.println("delete " + signLanguageList.get(position).getSignLanguageName());
+                                    TranslationFragment.out.println("delete " + signLanguageList.get(position).getSignLanguageName());
                                     Log.d("====del ", signLanguageList.get(position).getSignLanguageName());
                                     signLanguageList.remove(position);
+                                    TranslationFragment.check_finished = false;
                                 }
                             }.start();
                             notifyDataSetChanged();

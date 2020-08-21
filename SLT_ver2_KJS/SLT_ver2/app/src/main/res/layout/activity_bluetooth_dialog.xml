@@ -8,22 +8,22 @@
     android:layout_gravity="center"
     android:background="@color/bg"
     tools:context=".BluetoothDialog">
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:gravity="center"
-        android:layout_marginTop="20dp"
-        android:text="장치연결"
-        android:textSize="20dp"
-        />
+    <!--<TextView-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_gravity="center"-->
+        <!--android:gravity="center"-->
+        <!--android:layout_marginTop="20dp"-->
+        <!--android:text="장치연결"-->
+        <!--android:textSize="20dp"-->
+        <!--/>-->
 
 
     <LinearLayout
         android:id="@+id/handLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="40dp"
         android:orientation="vertical">
 
         <LinearLayout
@@ -92,7 +92,8 @@
         android:id="@+id/NextButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="40dp"
+        android:layout_marginBottom="30dp"
         android:text="확인"
         android:onClick="onClick"
         android:layout_gravity="center"
